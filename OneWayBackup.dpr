@@ -7,7 +7,7 @@ uses
   madListProcesses,
   madListModules,
   Vcl.Forms,
-  UnitMainForm in 'Interface\UnitMainForm.pas' {MainForm},
+  UnitMainForm in 'Interface\UnitMainForm.pas' {MainForm} ,
   UnitFileCompare in 'File\UnitFileCompare.pas',
   UnitFileCopyPair in 'File\UnitFileCopyPair.pas',
   UnitProjectFile in 'Project\UnitProjectFile.pas',

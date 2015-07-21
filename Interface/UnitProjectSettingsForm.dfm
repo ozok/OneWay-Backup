@@ -3,7 +3,7 @@ object ProjectSettingsForm: TProjectSettingsForm
   Top = 0
   BorderStyle = bsToolWindow
   Caption = 'Project Settings'
-  ClientHeight = 173
+  ClientHeight = 187
   ClientWidth = 693
   Color = clBtnFace
   DoubleBuffered = True
@@ -18,7 +18,7 @@ object ProjectSettingsForm: TProjectSettingsForm
   OnShow = FormShow
   DesignSize = (
     693
-    173)
+    187)
   PixelsPerInch = 96
   TextHeight = 13
   object Label1: TLabel
@@ -29,8 +29,6 @@ object ProjectSettingsForm: TProjectSettingsForm
     Height = 13
     Align = alTop
     Caption = 'Source Folder:'
-    ExplicitLeft = 4
-    ExplicitTop = 90
     ExplicitWidth = 70
   end
   object Label2: TLabel
@@ -41,8 +39,6 @@ object ProjectSettingsForm: TProjectSettingsForm
     Height = 13
     Align = alTop
     Caption = 'Destination folder:'
-    ExplicitLeft = 4
-    ExplicitTop = 136
     ExplicitWidth = 89
   end
   object Label4: TLabel
@@ -53,8 +49,6 @@ object ProjectSettingsForm: TProjectSettingsForm
     Height = 13
     Align = alTop
     Caption = 'Project Name:'
-    ExplicitLeft = 4
-    ExplicitTop = 182
     ExplicitWidth = 68
   end
   object DestDirEdit: TJvDirectoryEdit
@@ -67,9 +61,6 @@ object ProjectSettingsForm: TProjectSettingsForm
     DialogKind = dkWin32
     TabOrder = 1
     Text = ''
-    ExplicitLeft = 4
-    ExplicitTop = 155
-    ExplicitWidth = 292
   end
   object ProjectNameEdit: TEdit
     AlignWithMargins = True
@@ -79,19 +70,17 @@ object ProjectSettingsForm: TProjectSettingsForm
     Height = 21
     Align = alTop
     TabOrder = 2
-    ExplicitLeft = 4
-    ExplicitTop = 201
-    ExplicitWidth = 292
   end
   object SaveProjectBtn: TButton
     Left = 560
-    Top = 141
+    Top = 154
     Width = 125
     Height = 25
-    Anchors = [akTop, akRight]
+    Anchors = [akRight, akBottom]
     Caption = 'Save'
     TabOrder = 3
     OnClick = SaveProjectBtnClick
+    ExplicitTop = 196
   end
   object SourceDirEdit: TJvDirectoryEdit
     AlignWithMargins = True
@@ -103,8 +92,15 @@ object ProjectSettingsForm: TProjectSettingsForm
     DialogKind = dkWin32
     TabOrder = 0
     Text = ''
-    ExplicitLeft = 4
-    ExplicitTop = 109
-    ExplicitWidth = 292
+  end
+  object DeleteFromDestBtn: TCheckBox
+    Left = 8
+    Top = 141
+    Width = 369
+    Height = 17
+    Caption = 
+      'Delete files in destination folder if they do not exist in sourc' +
+      'e folder'
+    TabOrder = 4
   end
 end

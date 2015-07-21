@@ -35,8 +35,6 @@ object MainForm: TMainForm
       Height = 318
       Align = alClient
       TabOrder = 0
-      ExplicitLeft = 301
-      ExplicitWidth = 782
       object JobsList: TListView
         Left = 1
         Top = 1
@@ -50,16 +48,16 @@ object MainForm: TMainForm
             Width = 200
           end
           item
-            Caption = 'Kaynak Klas'#246'r'
+            Caption = 'Source Folder'
           end
           item
-            Caption = 'Hedef Klas'#246'r'
+            Caption = 'Destination Folder'
           end>
         ReadOnly = True
         RowSelect = True
         TabOrder = 0
         ViewStyle = vsReport
-        ExplicitWidth = 780
+        OnMouseDown = JobsListMouseDown
       end
     end
     object RightPanel: TPanel
@@ -78,7 +76,6 @@ object MainForm: TMainForm
         Caption = 'Run Selected Jobs'
         TabOrder = 0
         OnClick = RunJobsBtnClick
-        ExplicitWidth = 298
       end
       object AddNewProjectBtn: TButton
         Left = 1
@@ -89,8 +86,6 @@ object MainForm: TMainForm
         Caption = 'Add A New Project'
         TabOrder = 1
         OnClick = AddNewProjectBtnClick
-        ExplicitTop = 41
-        ExplicitWidth = 298
       end
       object StopBtn: TButton
         Left = 1
@@ -102,8 +97,6 @@ object MainForm: TMainForm
         Enabled = False
         TabOrder = 2
         OnClick = StopBtnClick
-        ExplicitLeft = 3
-        ExplicitTop = 25
       end
       object EditProjectBtn: TButton
         Left = 1
@@ -114,7 +107,6 @@ object MainForm: TMainForm
         Caption = 'Edit Selected Project'
         TabOrder = 3
         OnClick = EditProjectBtnClick
-        ExplicitLeft = -3
       end
     end
   end
@@ -132,8 +124,7 @@ object MainForm: TMainForm
       Width = 1076
       Height = 13
       Align = alBottom
-      Caption = 'State:'
-      ExplicitWidth = 30
+      ExplicitWidth = 3
     end
     object ProjectNameLabel: TLabel
       AlignWithMargins = True
@@ -142,8 +133,7 @@ object MainForm: TMainForm
       Width = 1076
       Height = 13
       Align = alBottom
-      Caption = 'Current Project:'
-      ExplicitWidth = 78
+      ExplicitWidth = 3
     end
     object LogList: TListBox
       Left = 1
@@ -163,13 +153,13 @@ object MainForm: TMainForm
       TabOrder = 1
     end
   end
-  object SearchFile: TJvSearchFiles
+  object SearchSourceFiles: TJvSearchFiles
     Options = [soAllowDuplicates, soSearchDirs, soSearchFiles, soIncludeSystemHiddenDirs, soIncludeSystemHiddenFiles]
     DirParams.MinSize = 0
     DirParams.MaxSize = 0
     FileParams.MinSize = 0
     FileParams.MaxSize = 0
-    OnFindFile = SearchFileFindFile
+    OnFindFile = SearchSourceFilesFindFile
     Left = 488
     Top = 160
   end
@@ -183,10 +173,20 @@ object MainForm: TMainForm
   object OperationThread: TIdThreadComponent
     Active = False
     Loop = False
-    Priority = tpNormal
+    Priority = tpHighest
     StopMode = smTerminate
     OnRun = OperationThreadRun
-    Left = 661
-    Top = 209
+    Left = 673
+    Top = 201
+  end
+  object SearchDestFiles: TJvSearchFiles
+    Options = [soAllowDuplicates, soSearchDirs, soSearchFiles, soIncludeSystemHiddenDirs, soIncludeSystemHiddenFiles]
+    DirParams.MinSize = 0
+    DirParams.MaxSize = 0
+    FileParams.MinSize = 0
+    FileParams.MaxSize = 0
+    OnFindFile = SearchSourceFilesFindFile
+    Left = 488
+    Top = 96
   end
 end

@@ -6,12 +6,12 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ComCtrls, Vcl.ExtCtrls, Vcl.StdCtrls,
   JvComponentBase, JvSearchFiles, UnitFileCompare, UnitFileCopyPair, UnitProjectFile,
-  Vcl.Mask, JvExMask, JvToolEdit, IdBaseComponent, IdThreadComponent;
+  Vcl.Mask, JvExMask, JvToolEdit, IdBaseComponent, IdThreadComponent, CommCtrl;
 
 type
   TMainForm = class(TForm)
     JobsList: TListView;
-    SearchFile: TJvSearchFiles;
+    SearchSourceFiles: TJvSearchFiles;
     ProgressTimer: TTimer;
     RightPanel: TPanel;
     LeftPanel: TPanel;
@@ -22,14 +22,15 @@ type
     StateLabel: TLabel;
     RunJobsBtn: TButton;
     ProjectNameLabel: TLabel;
-    OperationThread: TIdThreadComponent;
     AddNewProjectBtn: TButton;
     StopBtn: TButton;
     EditProjectBtn: TButton;
+    OperationThread: TIdThreadComponent;
+    SearchDestFiles: TJvSearchFiles;
     procedure FormCreate(Sender: TObject);
     procedure RunJobsBtnClick(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
-    procedure SearchFileFindFile(Sender: TObject; const AName: string);
+    procedure SearchSourceFilesFindFile(Sender: TObject; const AName: string);
     procedure ProgressTimerTimer(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure OperationThreadRun(Sender: TIdThreadComponent);
@@ -38,6 +39,8 @@ type
     procedure AddNewProjectBtnClick(Sender: TObject);
     procedure EditProjectBtnClick(Sender: TObject);
     procedure StopBtnClick(Sender: TObject);
+    procedure JobsListMouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
   private
     { Private declarations }
     FFiles: TStringList;
@@ -45,6 +48,7 @@ type
     FTotalCMDCount: integer;
     FInfo: string;
     FStateMsg: string;
+    FProgress: integer;
     FStop: Boolean;
 
     procedure LoadProjects;
@@ -87,6 +91,7 @@ begin
   if JobsList.ItemIndex > -1 then
   begin
     ProjectSettingsForm.FProjectFile := FProjects[JobsList.ItemIndex].IniFilePath;
+    ProjectSettingsForm.FItemIndex := JobsList.ItemIndex;
     ProjectSettingsForm.Show;
     Self.Enabled := False;
   end;
@@ -99,6 +104,8 @@ begin
   AddNewProjectBtn.Enabled  := True;
   EditProjectBtn.Enabled := True;
   StopBtn.Enabled := False;
+  StateLabel.Caption := '';
+  ProjectNameLabel.Caption := '';
 end;
 
 procedure TMainForm.FormClose(Sender: TObject; var Action: TCloseAction);
@@ -113,7 +120,8 @@ procedure TMainForm.FormCreate(Sender: TObject);
 var
   I: Integer;
 begin
-  SearchFile.RecurseDepth := MaxInt;
+  SearchSourceFiles.RecurseDepth := MaxInt;
+  SearchDestFiles.RecurseDepth := MaxInt;
   FFiles := TStringList.Create;
   FFileCompare := TFileComperator.Create;
   FProjects := TProjectFiles.Create;
@@ -142,6 +150,31 @@ begin
   LoadProjects;
 end;
 
+procedure TMainForm.JobsListMouseDown(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+var
+  LListItem: TListItem;
+  LHitTest: THitTests;
+begin
+  if JobsList.Items.Count > 0 then
+  begin
+    LListItem := JobsList.GetItemAt(x, y);
+    if LListItem <> nil then
+    begin
+      if LListItem.Selected = false then
+        LListItem.Selected := true;
+    end
+    else
+      exit;
+    LHitTest := JobsList.GetHitTestInfoAt(x, y);
+    if LHitTest = [htOnStateIcon] then
+    begin
+      FProjects[LListItem.Index].Active := JobsList.Items[LListItem.Index].Checked;
+      FProjects[LListItem.Index].Save;
+    end;
+  end;
+end;
+
 procedure TMainForm.LoadProjects;
 var
   LSR: TSearchRec;
@@ -160,7 +193,7 @@ begin
         LItem.Caption := LProjectFile.ProjectName;
         LItem.SubItems.Add(LProjectFile.SourceFolder);
         LItem.SubItems.Add(LProjectFile.DestFolder);
-        LItem.Checked := True;
+        LItem.Checked := LProjectFile.Active;
       until FindNext(LSR) <> 0;
       FindClose(LSR);
     end;
@@ -188,11 +221,12 @@ var
   LFileCopyPair: TFileCopyPair;
   LFileCopyPairs: TFileCopyPairs;
   LDateTime: TDateTime;
-  LError: integer;
+  LFilesToDelete: TStringList;
 begin
   LDateTime := Now;
   ProgressTimer.Enabled := True;
   try
+    JobsList.ItemIndex := -1;
     for J := 0 to FProjects.Count-1 do
     begin
       Application.ProcessMessages;
@@ -202,28 +236,39 @@ begin
       end;
       if JobsList.Items[J].Checked then
       begin
-        ProjectNameLabel.Caption := 'Current Project: ' + FProjects[J].ProjectName;
+        // loop through all available projects
+        JobsList.ItemIndex := J;
+        if J > 0 then
+        begin
+          JobsList.Items[J-1].Selected := False;
+        end;
+
+        JobsList.Items[J].Selected := True;
+        JobsList.Items[J].MakeVisible(False);
+
+        ProjectNameLabel.Caption := FProjects[J].ProjectName;
         Log('Starting ' + FProjects[J].ProjectName);
-        ProgressBar1.Position := 0;
+        FProgress := 0;
         FFiles.Clear;
         if DirectoryExists(FProjects[J].SourceFolder) then
         begin
-          SearchFile.RootDirectory := FProjects[J].SourceFolder;
-          SearchFile.Search;
+          SearchSourceFiles.RootDirectory := FProjects[J].SourceFolder;
+          SearchSourceFiles.Search;
           Log('Found ' + FFiles.Count.ToString() + ' files');
           LCopiedCount := 0;
           FTotalCMDCount := 0;
           LFileCopyPairs := TFileCopyPairs.Create;
           try
+            ProgressBar1.Max := FFiles.Count;
             for I := 0 to FFiles.Count-1 do
             begin
-              Application.ProcessMessages;
+              FProgress := i+1;
               if FStop then
               begin
                 Break;
               end;
               LSourceFile := FFiles[i].Trim;
-              FStateMsg := 'State: Looking for changes ' + i.ToString + '/' + FFiles.Count.ToString + ' (' + LSourceFile + ')';
+              FStateMsg := 'Looking for changes ' + i.ToString + '/' + FFiles.Count.ToString + ' (' + LSourceFile + ')';
 
               LCopy := false;
               LDestFile := LSourceFile.Replace(FProjects[J].SourceFolder, FProjects[J].DestFolder);
@@ -233,28 +278,29 @@ begin
               end
               else
               begin
-                LCopy := not FFileCompare.CompareFiles(LError, LSourceFile, LDestFile, 16384);
+                LCopy := not FFileCompare.CompareFiles(LSourceFile, LDestFile, 131072*1024);
               end;
 
               if LCopy then
               begin
-                try
-                  if not DirectoryExists(ExtractFileDir(LDestFile)) then
-                  begin
-                    ForceDirectories(ExtractFileDir(LDestFile));
-                  end;
-                  LFileCopyPair.SourceFile := LSourceFile;
-                  LFileCopyPair.DestFile := LDestFile;
-                  LFileCopyPairs.Add(LFileCopyPair);
-                except on E: Exception do
-                  begin
-                    LogList.Items.Add(E.Message)
-                  end;
+                if not DirectoryExists(ExtractFileDir(LDestFile)) then
+                begin
+                  ForceDirectories(ExtractFileDir(LDestFile));
                 end;
+                LFileCopyPair.SourceFile := LSourceFile;
+                LFileCopyPair.DestFile := LDestFile;
+                LFileCopyPairs.Add(LFileCopyPair);
               end;
             end;
 
-            Log('Files to be copied: ' + LFileCopyPairs.Count.ToString());
+            if LFileCopyPairs.Count > 0 then
+            begin
+              Log('Files to be copied: ' + LFileCopyPairs.Count.ToString());
+            end
+            else
+            begin
+              Log('No changes found.');
+            end;
             ProgressBar1.Max := LFileCopyPairs.Count;
             for I := 0 to LFileCopyPairs.Count-1 do
             begin
@@ -265,10 +311,10 @@ begin
                 Break;
               end;
 
-              ProgressBar1.Position := i+1;
+              FProgress := i+1;
               if (i mod 10) = 0 then
               begin
-                FStateMsg := 'State: Copying ' + i.ToString + '/' + LFileCopyPairs.Count.ToString + ' (' + LFileCopyPairs[i].DestFile + ')';
+                FStateMsg := 'Copying ' + i.ToString + '/' + LFileCopyPairs.Count.ToString + ' (' + LFileCopyPairs[i].DestFile + ')';
               end;
               try
                 if not CopyFile(PWideChar(LFileCopyPairs[i].SourceFile), PWideChar(LFileCopyPairs[i].DestFile), false) then
@@ -276,7 +322,55 @@ begin
                   RaiseLastOSError;
                 end;
               except on E: Exception do
-                Log('Error: ' + E.Message + ' ' + LFileCopyPairs[i].SourceFile);
+                Log('Copy error: ' + E.Message + ' ' + LFileCopyPairs[i].SourceFile);
+              end;
+            end;
+
+            if not FStop then
+            begin
+              if FProjects[J].DeleteFromDest then
+              begin
+                FFiles.Clear;
+                Log('Searching destination for files to be deleted.');
+                SearchDestFiles.RootDirectory :=  FProjects[J].DestFolder;
+                SearchDestFiles.Search;
+
+                LFilesToDelete := TStringList.Create();
+                try
+                  ProgressBar1.Max := FFiles.Count;
+                  for I := 0 to FFiles.Count-1 do
+                  begin
+                    if FStop then
+                    begin
+                      Break;
+                    end;
+                    FProgress := I + 1;
+                    LDestFile := FFiles[i].Trim;
+                    FStateMsg := 'Searching file in source folder ' + i.ToString + '/' + FFiles.Count.ToString + ' (' + LDestFile + ')';
+
+                    LSourceFile := LDestFile.Replace(FProjects[J].DestFolder, FProjects[J].SourceFolder);
+                    if not FileExists(LSourceFile) then
+                    begin
+                      LFilesToDelete.Add(LDestFile);
+                    end;
+                  end;
+                finally
+                  if LFilesToDelete.Count > 0 then
+                  begin
+                    Log(LFilesToDelete.Count.ToString() + ' files from destination will be deleted.');
+                    ProgressBar1.Max := LFilesToDelete.Count;
+                    for I := 0 to LFilesToDelete.Count-1 do
+                    begin
+                      FProgress := I + 1;
+                      try
+                        DeleteFile(LFilesToDelete[i]);
+                      Except on E: Exception do
+                        Log('Delete error: ' + E.Message + ' ' + LFilesToDelete[i]);
+                      end;
+                    end;
+                  end;
+                  LFilesToDelete.Free;
+                end;
               end;
             end;
           finally
@@ -292,8 +386,15 @@ begin
   finally
     ProgressTimer.Enabled := False;
     StateLabel.Caption := FStateMsg;
-    Log('Took ' + FormatDateTime('hh:nn:ss.zzz', Now - LDateTime));
     EnableUI;
+    if FStop then
+    begin
+      Log('Stopped by user.');
+    end
+    else
+    begin
+      Log('Took ' + FormatDateTime('hh:nn:ss.zzz', Now - LDateTime));
+    end;
     OperationThread.Terminate;
   end;
 end;
@@ -301,24 +402,35 @@ end;
 procedure TMainForm.ProgressTimerTimer(Sender: TObject);
 begin
   StateLabel.Caption := FStateMsg;
+  ProgressBar1.Position := FProgress;
 end;
 
 procedure TMainForm.RunJobsBtnClick(Sender: TObject);
 begin
   FStop := False;
   DisableUI;
+  LogList.Items.Clear;
   OperationThread.Start;
 end;
 
-procedure TMainForm.SearchFileFindFile(Sender: TObject; const AName: string);
+procedure TMainForm.SearchSourceFilesFindFile(Sender: TObject; const AName: string);
 begin
   FFiles.Add(AName);
-  FStateMsg := 'State: Found ' + FFiles.Count.ToString + ' files';
+  FStateMsg := 'Found ' + FFiles.Count.ToString + ' files';
 end;
 
 procedure TMainForm.StopBtnClick(Sender: TObject);
 begin
   FStop := True;
+  if SearchSourceFiles.Searching then
+  begin
+    SearchSourceFiles.Abort;
+  end;
+  if SearchDestFiles.Searching then
+  begin
+    SearchDestFiles.Abort;
+  end;
+  FFileCompare.Stop := True;
 end;
 
 end.

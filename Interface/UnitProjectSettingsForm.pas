@@ -16,6 +16,7 @@ type
     ProjectNameEdit: TEdit;
     SaveProjectBtn: TButton;
     SourceDirEdit: TJvDirectoryEdit;
+    DeleteFromDestBtn: TCheckBox;
     procedure SaveProjectBtnClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormShow(Sender: TObject);
@@ -24,6 +25,7 @@ type
   public
     { Public declarations }
     FProjectFile: string;
+    FItemIndex: integer;
   end;
 
 var
@@ -52,6 +54,7 @@ begin
     SourceDirEdit.Text := LProjectFile.SourceFolder;
     DestDirEdit.Text := LProjectFile.DestFolder;
     ProjectNameEdit.Text := LProjectFile.ProjectName;
+    DeleteFromDestBtn.Checked := LProjectFile.DeleteFromDest;
   end;
 end;
 
@@ -82,14 +85,24 @@ begin
         LProjectFile.SourceFolder := SourceDirEdit.Text;
         LProjectFile.DestFolder := DestDirEdit.Text;
         LProjectFile.ProjectName := ProjectNameEdit.Text;
+        LProjectFile.DeleteFromDest := DeleteFromDestBtn.Checked;
         LProjectFile.Save();
         MainForm.FProjects.Add(LProjectFile);
 
-        LItem := MainForm.JobsList.Items.Add;
+        if Length(FProjectFile) = 0 then
+        begin
+          LItem := MainForm.JobsList.Items.Add;
+        end
+        else
+        begin
+          LItem := MainForm.JobsList.Items[FItemIndex];
+        end;
+
+
         LItem.Caption := LProjectFile.ProjectName;
         LItem.SubItems.Add(LProjectFile.SourceFolder);
         LItem.SubItems.Add(LProjectFile.DestFolder);
-        LItem.Checked := True;
+        LItem.Checked := LProjectFile.Active;
         Self.Close;
       end;
     end;
