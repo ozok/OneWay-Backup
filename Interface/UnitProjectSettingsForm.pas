@@ -5,7 +5,7 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Mask, JvExMask,
-  JvToolEdit, UnitProjectFile, Vcl.ComCtrls;
+  JvToolEdit, UnitProjectFile, Vcl.ComCtrls, JvSpin;
 
 type
   TProjectSettingsForm = class(TForm)
@@ -17,6 +17,8 @@ type
     SaveProjectBtn: TButton;
     SourceDirEdit: TJvDirectoryEdit;
     DeleteFromDestBtn: TCheckBox;
+    BufferEdit: TJvSpinEdit;
+    Label3: TLabel;
     procedure SaveProjectBtnClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormShow(Sender: TObject);
@@ -24,7 +26,6 @@ type
     { Private declarations }
   public
     { Public declarations }
-    FProjectFile: string;
     FItemIndex: integer;
   end;
 
@@ -45,25 +46,21 @@ begin
 end;
 
 procedure TProjectSettingsForm.FormShow(Sender: TObject);
-var
-  LProjectFile: TProjectFile;
 begin
-  if Length(FProjectFile) > 0 then
+  if FItemIndex > -1 then
   begin
-    LProjectFile := TProjectFile.Create(FProjectFile);
-    SourceDirEdit.Text := LProjectFile.SourceFolder;
-    DestDirEdit.Text := LProjectFile.DestFolder;
-    ProjectNameEdit.Text := LProjectFile.ProjectName;
-    DeleteFromDestBtn.Checked := LProjectFile.DeleteFromDest;
+    SourceDirEdit.Text := MainForm.FProjects[FItemIndex].SourceFolder;
+    DestDirEdit.Text := MainForm.FProjects[FItemIndex].DestFolder;
+    ProjectNameEdit.Text := MainForm.FProjects[FItemIndex].ProjectName;
+    DeleteFromDestBtn.Checked := MainForm.FProjects[FItemIndex].DeleteFromDest;
+    BufferEdit.Value := MainForm.FProjects[FItemIndex].BufferSize;
   end;
 end;
 
 procedure TProjectSettingsForm.SaveProjectBtnClick(Sender: TObject);
 var
   LProjectFile: TProjectFile;
-  LGUID: TGUID;
   LItem: TListItem;
-  LProjectFilePath: string;
 begin
   if Length(SourceDirEdit.Text) > 0 then
   begin
@@ -71,25 +68,23 @@ begin
     begin
       if Length(ProjectNameEdit.Text) > 0 then
       begin
-        if Length(FProjectFile) > 0 then
-        begin
-          LProjectFilePath := FProjectFile;
-        end
-        else
-        begin
-          CreateGUID(LGUID);
-          LProjectFilePath := ExtractFileDir(Application.ExeName) + '\jobs\' + GUIDToString(LGUID) + '.ini';
-        end;
-
-        LProjectFile := TProjectFile.Create(LProjectFilePath);
+        LProjectFile := TProjectFile.Create();
         LProjectFile.SourceFolder := SourceDirEdit.Text;
         LProjectFile.DestFolder := DestDirEdit.Text;
         LProjectFile.ProjectName := ProjectNameEdit.Text;
         LProjectFile.DeleteFromDest := DeleteFromDestBtn.Checked;
-        LProjectFile.Save();
-        MainForm.FProjects.Add(LProjectFile);
-
-        if Length(FProjectFile) = 0 then
+        LProjectFile.BufferSize := Round(BufferEdit.Value);
+        LProjectFile.Active := True;
+        if FItemIndex > -1 then
+        begin
+          MainForm.FProjects[FItemIndex] := LProjectFile;
+        end
+        else
+        begin
+          MainForm.FProjects.Add(LProjectFile);
+        end;
+        MainForm.SaveProjects;
+        if FItemIndex = -1 then
         begin
           LItem := MainForm.JobsList.Items.Add;
         end
@@ -98,10 +93,10 @@ begin
           LItem := MainForm.JobsList.Items[FItemIndex];
         end;
 
-
         LItem.Caption := LProjectFile.ProjectName;
         LItem.SubItems.Add(LProjectFile.SourceFolder);
         LItem.SubItems.Add(LProjectFile.DestFolder);
+        LItem.SubItems.Add(LProjectFile.BufferSize.ToString());
         LItem.Checked := LProjectFile.Active;
         Self.Close;
       end;

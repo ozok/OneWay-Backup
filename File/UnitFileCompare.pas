@@ -7,18 +7,22 @@ uses Classes, SysUtils, Windows, IOUtils, DateUtils;
 type
   TFileComperator = class
   private
-    function StreamsAreIdentical(const FileStream1, FileStream2: TStream; const BlockSize: Integer = 4096): Boolean;
-    function DoFilesHaveSameLastModifiedTime(const FilePath1: string; const FilePath2: string): Boolean;
+    function StreamsAreIdentical(const FileStream1, FileStream2: TStream;
+      const BlockSize: Integer): Boolean;
+    function DoFilesHaveSameLastModifiedTime(const FilePath1: string;
+      const FilePath2: string): Boolean;
   public
     Stop: Boolean;
-    function CompareFiles(const FileName1, FileName2: String; const BlockSize: Integer = 4096): Boolean;
+    function CompareFiles(const FileName1, FileName2: String;
+      const BlockSize: Integer): Boolean;
   end;
 
 implementation
 
 { TFileComperator }
 
-function TFileComperator.CompareFiles(const FileName1, FileName2: String; const BlockSize: Integer = 4096): Boolean;
+function TFileComperator.CompareFiles(const FileName1, FileName2: String;
+  const BlockSize: Integer): Boolean;
 var
   LFS1, LFS2: TFileStream;
 begin
@@ -46,7 +50,8 @@ begin
   end;
 end;
 
-function TFileComperator.DoFilesHaveSameLastModifiedTime(const FilePath1, FilePath2: string): Boolean;
+function TFileComperator.DoFilesHaveSameLastModifiedTime(const FilePath1,
+  FilePath2: string): Boolean;
 var
   LDate1, LDate2: TDateTime;
 begin
@@ -55,11 +60,12 @@ begin
   Result := CompareDateTime(LDate1, LDate2) = 0;
 end;
 
-function TFileComperator.StreamsAreIdentical(const FileStream1, FileStream2: TStream; const BlockSize: Integer): Boolean;
+function TFileComperator.StreamsAreIdentical(const FileStream1,
+  FileStream2: TStream; const BlockSize: Integer): Boolean;
 var
   LBuffer1: array of byte;
   LBuffer2: array of byte;
-  LBuffer1Readed, LBuffer2Readed, lBlockSize: integer;
+  LBuffer1Readed, LBuffer2Readed, LBlockSize: integer;
 begin
   Result := False;
   if FileStream1.Size <> FileStream2.Size then
@@ -69,12 +75,12 @@ begin
   FileStream2.Position := 0;
 
   if BlockSize > 0 then
-    lBlockSize := BlockSize
+    LBlockSize := BlockSize
   else
-    lBlockSize := 4096;
+    LBlockSize := 4096;
 
-  SetLength(LBuffer1, lBlockSize);
-  SetLength(LBuffer2, lBlockSize);
+  SetLength(LBuffer1, LBlockSize);
+  SetLength(LBuffer2, LBlockSize);
 
   LBuffer1Readed := 1; // just for entering while
 
@@ -84,10 +90,12 @@ begin
     begin
       Break;
     end;
-    LBuffer1Readed := FileStream1.Read(LBuffer1[0], lBlockSize);
-    LBuffer2Readed := FileStream2.Read(LBuffer2[0], lBlockSize);
+    LBuffer1Readed := FileStream1.Read(LBuffer1[0], LBlockSize);
+    LBuffer2Readed := FileStream2.Read(LBuffer2[0], LBlockSize);
 
-    if (LBuffer1Readed <> LBuffer2Readed) or ((LBuffer1Readed <> lBlockSize) and (FileStream1.Position < FileStream1.Size)) then
+    if (LBuffer1Readed <> LBuffer2Readed) or
+      ((LBuffer1Readed <> LBlockSize) and
+      (FileStream1.Position < FileStream1.Size)) then
       Exit;
 
     if not CompareMem(@LBuffer1[0], @LBuffer2[0], LBuffer1Readed) then

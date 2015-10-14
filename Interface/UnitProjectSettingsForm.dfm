@@ -3,7 +3,7 @@ object ProjectSettingsForm: TProjectSettingsForm
   Top = 0
   BorderStyle = bsToolWindow
   Caption = 'Project Settings'
-  ClientHeight = 187
+  ClientHeight = 217
   ClientWidth = 693
   Color = clBtnFace
   DoubleBuffered = True
@@ -18,7 +18,7 @@ object ProjectSettingsForm: TProjectSettingsForm
   OnShow = FormShow
   DesignSize = (
     693
-    187)
+    217)
   PixelsPerInch = 96
   TextHeight = 13
   object Label1: TLabel
@@ -51,6 +51,13 @@ object ProjectSettingsForm: TProjectSettingsForm
     Caption = 'Project Name:'
     ExplicitWidth = 68
   end
+  object Label3: TLabel
+    Left = 8
+    Top = 167
+    Width = 103
+    Height = 13
+    Caption = 'Buffer Length (bayt):'
+  end
   object DestDirEdit: TJvDirectoryEdit
     AlignWithMargins = True
     Left = 3
@@ -73,14 +80,13 @@ object ProjectSettingsForm: TProjectSettingsForm
   end
   object SaveProjectBtn: TButton
     Left = 560
-    Top = 154
+    Top = 184
     Width = 125
     Height = 25
     Anchors = [akRight, akBottom]
     Caption = 'Save'
     TabOrder = 3
     OnClick = SaveProjectBtnClick
-    ExplicitTop = 196
   end
   object SourceDirEdit: TJvDirectoryEdit
     AlignWithMargins = True
@@ -102,5 +108,18 @@ object ProjectSettingsForm: TProjectSettingsForm
       'Delete files in destination folder if they do not exist in sourc' +
       'e folder'
     TabOrder = 4
+  end
+  object BufferEdit: TJvSpinEdit
+    Left = 117
+    Top = 164
+    Width = 100
+    Height = 21
+    CheckOptions = [coCheckOnExit, coCropBeyondLimit]
+    CheckMaxValue = False
+    Alignment = taCenter
+    ButtonKind = bkClassic
+    MinValue = 1.000000000000000000
+    Value = 8192.000000000000000000
+    TabOrder = 5
   end
 end
