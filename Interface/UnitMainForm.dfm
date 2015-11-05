@@ -2,8 +2,8 @@ object MainForm: TMainForm
   Left = 0
   Top = 0
   Caption = 'OneWay Backup'
-  ClientHeight = 615
-  ClientWidth = 1084
+  ClientHeight = 515
+  ClientWidth = 871
   Color = clBtnFace
   DoubleBuffered = True
   Font.Charset = DEFAULT_CHARSET
@@ -23,8 +23,8 @@ object MainForm: TMainForm
   object TopPanel: TPanel
     Left = 0
     Top = 0
-    Width = 1084
-    Height = 385
+    Width = 871
+    Height = 285
     Align = alClient
     BevelOuter = bvNone
     Caption = 'TopPanel'
@@ -32,16 +32,16 @@ object MainForm: TMainForm
     object LeftPanel: TPanel
       Left = 0
       Top = 60
-      Width = 1084
-      Height = 325
+      Width = 871
+      Height = 225
       Align = alClient
       BevelOuter = bvNone
       TabOrder = 0
       object JobsList: TListView
         Left = 0
         Top = 25
-        Width = 1084
-        Height = 300
+        Width = 871
+        Height = 200
         Align = alClient
         Checkboxes = True
         Columns = <
@@ -70,7 +70,7 @@ object MainForm: TMainForm
       object ActivatePanel: TPanel
         Left = 0
         Top = 0
-        Width = 1084
+        Width = 871
         Height = 25
         Align = alTop
         TabOrder = 1
@@ -136,13 +136,16 @@ object MainForm: TMainForm
     object RightPanel: TPanel
       Left = 0
       Top = 0
-      Width = 1084
+      Width = 871
       Height = 60
       Align = alTop
       BevelOuter = bvNone
       TabOrder = 1
+      DesignSize = (
+        871
+        60)
       object RunJobsBtn: TButton
-        Left = 959
+        Left = 746
         Top = 0
         Width = 125
         Height = 60
@@ -162,7 +165,7 @@ object MainForm: TMainForm
         OnClick = AddNewProjectBtnClick
       end
       object StopBtn: TButton
-        Left = 834
+        Left = 621
         Top = 0
         Width = 125
         Height = 60
@@ -182,12 +185,21 @@ object MainForm: TMainForm
         TabOrder = 3
         OnClick = EditProjectBtnClick
       end
+      object ShutdownWhenDoneBtn: TCheckBox
+        Left = 494
+        Top = 21
+        Width = 121
+        Height = 17
+        Anchors = [akTop, akRight]
+        Caption = 'Shutdown when done'
+        TabOrder = 4
+      end
     end
   end
   object BottomPanel: TPanel
     Left = 0
-    Top = 385
-    Width = 1084
+    Top = 285
+    Width = 871
     Height = 230
     Align = alBottom
     TabOrder = 1
@@ -195,7 +207,7 @@ object MainForm: TMainForm
       AlignWithMargins = True
       Left = 4
       Top = 196
-      Width = 1076
+      Width = 863
       Height = 13
       Align = alBottom
       ExplicitWidth = 3
@@ -204,7 +216,7 @@ object MainForm: TMainForm
       AlignWithMargins = True
       Left = 4
       Top = 177
-      Width = 1076
+      Width = 863
       Height = 13
       Align = alBottom
       ExplicitWidth = 3
@@ -212,7 +224,7 @@ object MainForm: TMainForm
     object ProgressBar1: TProgressBar
       Left = 1
       Top = 212
-      Width = 1082
+      Width = 869
       Height = 17
       Align = alBottom
       TabOrder = 0
@@ -220,7 +232,7 @@ object MainForm: TMainForm
     object LogsPages: TJvPageControl
       Left = 1
       Top = 1
-      Width = 1082
+      Width = 869
       Height = 173
       ActivePage = TabSheet1
       Align = alClient
@@ -230,7 +242,7 @@ object MainForm: TMainForm
         object LogList: TListView
           Left = 0
           Top = 0
-          Width = 1074
+          Width = 861
           Height = 145
           Align = alClient
           Columns = <
@@ -254,14 +266,10 @@ object MainForm: TMainForm
       object TabSheet2: TTabSheet
         Caption = 'Error Log'
         ImageIndex = 1
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
         object ErrorLog: TListView
           Left = 0
           Top = 0
-          Width = 1074
+          Width = 861
           Height = 145
           Align = alClient
           Columns = <
@@ -284,14 +292,10 @@ object MainForm: TMainForm
       object TabSheet3: TTabSheet
         Caption = 'Full Log'
         ImageIndex = 2
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
         object FullLogList: TListView
           Left = 0
           Top = 0
-          Width = 1074
+          Width = 861
           Height = 145
           Align = alClient
           Columns = <
@@ -321,15 +325,15 @@ object MainForm: TMainForm
     FileParams.MaxSize = 0
     OnFindFile = SearchSourceFilesFindFile
     OnFindDirectory = SearchSourceFilesFindDirectory
-    Left = 488
-    Top = 144
+    Left = 160
+    Top = 168
   end
   object ProgressTimer: TTimer
     Enabled = False
     Interval = 100
     OnTimer = ProgressTimerTimer
-    Left = 392
-    Top = 96
+    Left = 72
+    Top = 120
   end
   object OperationThread: TIdThreadComponent
     Active = False
@@ -338,8 +342,8 @@ object MainForm: TMainForm
     StopMode = smTerminate
     OnException = OperationThreadException
     OnRun = OperationThreadRun
-    Left = 593
-    Top = 97
+    Left = 273
+    Top = 105
   end
   object SearchDestFiles: TJvSearchFiles
     Options = [soAllowDuplicates, soSearchDirs, soSearchFiles, soIncludeSystemHiddenDirs, soIncludeSystemHiddenFiles]
@@ -349,18 +353,18 @@ object MainForm: TMainForm
     FileParams.MaxSize = 0
     OnFindFile = SearchSourceFilesFindFile
     OnFindDirectory = SearchDestFilesFindDirectory
-    Left = 488
+    Left = 168
     Top = 96
   end
   object Taskbar1: TTaskbar
     TaskBarButtons = <>
     ProgressState = Normal
     TabProperties = []
-    Left = 688
+    Left = 392
     Top = 104
   end
   object JobListMenu: TPopupMenu
-    Left = 792
+    Left = 488
     Top = 100
     object O1: TMenuItem
       Caption = 'Open Source Directory'

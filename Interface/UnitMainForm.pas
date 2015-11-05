@@ -50,6 +50,7 @@ type
     SelectAllLabel: TLabel;
     SelectNoneLabel: TLabel;
     SelectReverseLabel: TLabel;
+    ShutdownWhenDoneBtn: TCheckBox;
     procedure FormCreate(Sender: TObject);
     procedure RunJobsBtnClick(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -94,6 +95,7 @@ type
     FGeneralLogItems: TLogItems;
     FErrorLogItems: TLogItems;
     FFullLogItems: TLogItems;
+    FAll, FRun, FExit: Boolean;
 
     procedure LoadProjects;
     procedure Log(const Str: string);
@@ -102,6 +104,7 @@ type
     procedure AddToLog();
     procedure AddToErrorLog();
     procedure AddToFullLog();
+    procedure CloseQueue();
 
     procedure UpdateMaxProgres();
     procedure JumpToItem();
@@ -149,6 +152,14 @@ end;
 procedure TMainForm.AddToLog;
 begin
   Log(FLogLineToAdd);
+end;
+
+procedure TMainForm.CloseQueue;
+begin
+  if FRun and FExit then
+  begin
+    Self.Close;
+  end;
 end;
 
 procedure TMainForm.DisableUI;
@@ -209,8 +220,6 @@ begin
 end;
 
 procedure TMainForm.FormCreate(Sender: TObject);
-var
-  I: Integer;
 begin
   SearchSourceFiles.RecurseDepth := MaxInt;
   SearchDestFiles.RecurseDepth := MaxInt;
@@ -253,8 +262,38 @@ begin
 end;
 
 procedure TMainForm.FormShow(Sender: TObject);
+var
+  I: Integer;
+  LParamStr: string;
 begin
   LoadProjects;
+
+  FAll := False;
+  FRun := False;
+  FExit := False;
+
+  for I := 1 to ParamCount do
+  begin
+    LParamStr := LowerCase(ParamStr(i));
+
+    if LParamStr = '/all' then
+    begin
+      FAll := True;
+    end
+    else if LParamStr = '/run' then
+    begin
+      FRun := True;
+    end
+    else if LParamStr = '/exit' then
+    begin
+      FExit := True;
+    end;
+  end;
+
+  if FRun then
+  begin
+    RunJobsBtnClick(Self);
+  end;
 end;
 
 procedure TMainForm.FullLogListData(Sender: TObject; Item: TListItem);
@@ -305,7 +344,6 @@ end;
 
 procedure TMainForm.LoadProjects;
 var
-  LSR: TSearchRec;
   LProject: TProjectFile;
   LItem: TListItem;
   LProjectFile: TStringList;
@@ -446,7 +484,7 @@ end;
 
 procedure TMainForm.OperationThreadRun(Sender: TIdThreadComponent);
 var
-  I, J, M: Integer;
+  I, J: Integer;
   LSourceFile: string;
   LDestFile: string;
   LCopy: Boolean;
@@ -459,7 +497,6 @@ var
   LDirToCreate: TFolderCreatePair;
   LDirsToCreate: TFolderCreatePairs;
   LSourceDir, LDestDir: string;
-  LProgress: integer;
   LLogFilePath: string;
   LLogFile: TStringList;
   LLogItem: TLogItem;
@@ -474,7 +511,7 @@ begin
       begin
         Break;
       end;
-      if FProjects[J].Active then
+      if FProjects[J].Active or (FRun and FAll) then
       begin
         // loop through all available projects
         FItemIndex := J;
@@ -895,6 +932,7 @@ begin
       LLogFile.SaveToFile(LLogFilePath, TEncoding.UTF8);
       LLogFile.Free;
     end;
+    OperationThread.Synchronize(CloseQueue);
     OperationThread.Terminate;
   end;
 end;
