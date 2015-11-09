@@ -101,7 +101,7 @@ begin
     LSourceFile := FFilesToCompare[i];
     LDestFile := LSourceFile.Replace(FSourceDir, FDestDir);
     FStateMsg := ' (' + LSourceFile + ')';
-    if not FFileComparetor.CompareFiles(LSourceFile, LDestFile, FBuffer) then
+    if not FFileComparetor.CompareFiles(LSourceFile, LDestFile, FBuffer, 0) then
     begin
       LCopyPair.SourceFile := LSourceFile;
       LCopyPair.DestFile := LDestFile;

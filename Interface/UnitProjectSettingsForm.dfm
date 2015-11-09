@@ -3,9 +3,9 @@ object ProjectSettingsForm: TProjectSettingsForm
   Top = 0
   BorderStyle = bsToolWindow
   Caption = 'Project Settings'
-  ClientHeight = 217
+  ClientHeight = 269
   ClientWidth = 693
-  Color = clBtnFace
+  Color = 13353918
   DoubleBuffered = True
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -18,10 +18,10 @@ object ProjectSettingsForm: TProjectSettingsForm
   OnShow = FormShow
   DesignSize = (
     693
-    217)
+    269)
   PixelsPerInch = 96
   TextHeight = 13
-  object Label1: TLabel
+  object Label1: TsLabel
     AlignWithMargins = True
     Left = 3
     Top = 3
@@ -31,7 +31,7 @@ object ProjectSettingsForm: TProjectSettingsForm
     Caption = 'Source Folder:'
     ExplicitWidth = 70
   end
-  object Label2: TLabel
+  object Label2: TsLabel
     AlignWithMargins = True
     Left = 3
     Top = 49
@@ -41,7 +41,7 @@ object ProjectSettingsForm: TProjectSettingsForm
     Caption = 'Destination folder:'
     ExplicitWidth = 89
   end
-  object Label4: TLabel
+  object Label4: TsLabel
     AlignWithMargins = True
     Left = 3
     Top = 95
@@ -51,75 +51,158 @@ object ProjectSettingsForm: TProjectSettingsForm
     Caption = 'Project Name:'
     ExplicitWidth = 68
   end
-  object Label3: TLabel
+  object Label3: TsLabel
     Left = 8
-    Top = 167
+    Top = 213
     Width = 103
     Height = 13
     Caption = 'Buffer Length (bayt):'
   end
-  object DestDirEdit: TJvDirectoryEdit
+  object Label5: TsLabel
     AlignWithMargins = True
     Left = 3
-    Top = 68
+    Top = 141
     Width = 687
-    Height = 21
+    Height = 13
     Align = alTop
-    DialogKind = dkWin32
-    TabOrder = 1
-    Text = ''
+    Caption = 'Ignore these file types (separate with ; example: .mp3;.jpeg)'
+    ExplicitWidth = 296
   end
-  object ProjectNameEdit: TEdit
+  object ProjectNameEdit: TsEdit
     AlignWithMargins = True
     Left = 3
     Top = 114
     Width = 687
     Height = 21
     Align = alTop
+    Color = 15921906
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clBlack
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
     TabOrder = 2
   end
-  object SaveProjectBtn: TButton
+  object SaveProjectBtn: TsButton
     Left = 560
-    Top = 184
+    Top = 236
     Width = 125
     Height = 25
     Anchors = [akRight, akBottom]
     Caption = 'Save'
-    TabOrder = 3
+    TabOrder = 5
     OnClick = SaveProjectBtnClick
   end
-  object SourceDirEdit: TJvDirectoryEdit
+  object DeleteFromDestBtn: TsCheckBox
+    Left = 8
+    Top = 187
+    Width = 349
+    Height = 19
+    Caption = 
+      'Delete files in destination folder if they do not exist in sourc' +
+      'e folder'
+    TabOrder = 4
+    ImgChecked = 0
+    ImgUnchecked = 0
+  end
+  object IgnoreTypesEdit: TsEdit
+    AlignWithMargins = True
+    Left = 3
+    Top = 160
+    Width = 687
+    Height = 21
+    Align = alTop
+    Color = 15921906
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clBlack
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 3
+  end
+  object SourceDirEdit: TsDirectoryEdit
     AlignWithMargins = True
     Left = 3
     Top = 22
     Width = 687
     Height = 21
     Align = alTop
-    DialogKind = dkWin32
+    AutoSize = False
+    Color = 15921906
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clBlack
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    MaxLength = 255
+    ParentFont = False
     TabOrder = 0
     Text = ''
+    CheckOnExit = True
+    GlyphMode.Blend = 0
+    GlyphMode.Grayed = False
+    Root = 'rfDesktop'
+    ExplicitLeft = 8
+    ExplicitTop = 14
+    ExplicitWidth = 693
   end
-  object DeleteFromDestBtn: TCheckBox
-    Left = 8
-    Top = 141
-    Width = 369
-    Height = 17
-    Caption = 
-      'Delete files in destination folder if they do not exist in sourc' +
-      'e folder'
-    TabOrder = 4
-  end
-  object BufferEdit: TJvSpinEdit
-    Left = 117
-    Top = 164
-    Width = 100
+  object DestDirEdit: TsDirectoryEdit
+    AlignWithMargins = True
+    Left = 3
+    Top = 68
+    Width = 687
     Height = 21
-    CheckOptions = [coCheckOnExit, coCropBeyondLimit]
-    CheckMaxValue = False
+    Align = alTop
+    AutoSize = False
+    Color = 15921906
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clBlack
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    MaxLength = 255
+    ParentFont = False
+    TabOrder = 1
+    Text = ''
+    CheckOnExit = True
+    GlyphMode.Blend = 0
+    GlyphMode.Grayed = False
+    Root = 'rfDesktop'
+    ExplicitLeft = 8
+    ExplicitTop = 60
+  end
+  object BufferEdit: TsSpinEdit
+    Left = 117
+    Top = 210
+    Width = 121
+    Height = 21
     Alignment = taCenter
-    ButtonKind = bkClassic
-    MinValue = 1.000000000000000000
-    Value = 8192.000000000000000000
-    TabOrder = 5
+    Color = 15921906
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clBlack
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    NumbersOnly = True
+    ParentFont = False
+    TabOrder = 6
+    Text = '8192'
+    MaxValue = 0
+    MinValue = 0
+    Value = 8192
+  end
+  object sSkinProvider1: TsSkinProvider
+    AddedTitle.Font.Charset = DEFAULT_CHARSET
+    AddedTitle.Font.Color = clNone
+    AddedTitle.Font.Height = -11
+    AddedTitle.Font.Name = 'Tahoma'
+    AddedTitle.Font.Style = []
+    FormHeader.AdditionalHeight = 0
+    SkinData.SkinSection = 'FORM'
+    TitleButtons = <>
+    Left = 368
+    Top = 152
   end
 end

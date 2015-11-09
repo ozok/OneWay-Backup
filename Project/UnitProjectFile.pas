@@ -12,6 +12,7 @@ type
     Active: Boolean;
     DeleteFromDest: Boolean;
     BufferSize: integer;
+    IgnoredFileTypes: string;
   end;
 
   TProjectFiles = TList<TProjectFile>;

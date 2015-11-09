@@ -3,22 +3,27 @@ unit UnitProjectSettingsForm;
 interface
 
 uses
-  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Mask, JvExMask,
-  JvToolEdit, UnitProjectFile, Vcl.ComCtrls, JvSpin;
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, 
+  System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, 
+  Vcl.Mask, JvExMask, JvToolEdit, UnitProjectFile, Vcl.ComCtrls, JvSpin,
+  sSkinProvider, sCheckBox, sButton, sEdit, sLabel, sSpinEdit, sMaskEdit,
+  sCustomComboEdit, sToolEdit;
 
 type
   TProjectSettingsForm = class(TForm)
-    DestDirEdit: TJvDirectoryEdit;
-    Label1: TLabel;
-    Label2: TLabel;
-    Label4: TLabel;
-    ProjectNameEdit: TEdit;
-    SaveProjectBtn: TButton;
-    SourceDirEdit: TJvDirectoryEdit;
-    DeleteFromDestBtn: TCheckBox;
-    BufferEdit: TJvSpinEdit;
-    Label3: TLabel;
+    Label1: TsLabel;
+    Label2: TsLabel;
+    Label4: TsLabel;
+    ProjectNameEdit: TsEdit;
+    SaveProjectBtn: TsButton;
+    DeleteFromDestBtn: TsCheckBox;
+    Label3: TsLabel;
+    Label5: TsLabel;
+    IgnoreTypesEdit: TsEdit;
+    sSkinProvider1: TsSkinProvider;
+    SourceDirEdit: TsDirectoryEdit;
+    DestDirEdit: TsDirectoryEdit;
+    BufferEdit: TsSpinEdit;
     procedure SaveProjectBtnClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormShow(Sender: TObject);
@@ -54,6 +59,7 @@ begin
     ProjectNameEdit.Text := MainForm.FProjects[FItemIndex].ProjectName;
     DeleteFromDestBtn.Checked := MainForm.FProjects[FItemIndex].DeleteFromDest;
     BufferEdit.Value := MainForm.FProjects[FItemIndex].BufferSize;
+    IgnoreTypesEdit.Text := MainForm.FProjects[FItemIndex].IgnoredFileTypes;
   end;
 end;
 
@@ -74,6 +80,7 @@ begin
         LProjectFile.ProjectName := ProjectNameEdit.Text;
         LProjectFile.DeleteFromDest := DeleteFromDestBtn.Checked;
         LProjectFile.BufferSize := Round(BufferEdit.Value);
+        LProjectFile.IgnoredFileTypes := IgnoreTypesEdit.Text;
         LProjectFile.Active := True;
         if FItemIndex > -1 then
         begin
@@ -104,4 +111,4 @@ begin
   end;
 end;
 
-end.
+end.
