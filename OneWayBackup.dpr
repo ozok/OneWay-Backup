@@ -14,7 +14,8 @@ uses
   UnitProjectSettingsForm in 'Interface\UnitProjectSettingsForm.pas' {ProjectSettingsForm} ,
   UnitFolderCreatePair in 'File\UnitFolderCreatePair.pas',
   Vcl.Themes,
-  Vcl.Styles;
+  Vcl.Styles,
+  UnitEmailConfig in 'Interface\UnitEmailConfig.pas' {EmailConfForm};
 
 {$R *.res}
 
@@ -24,6 +25,7 @@ begin
   // ReportMemoryLeaksOnShutdown := True;
   Application.CreateForm(TMainForm, MainForm);
   Application.CreateForm(TProjectSettingsForm, ProjectSettingsForm);
+  Application.CreateForm(TEmailConfForm, EmailConfForm);
   Application.Run;
 
 end.

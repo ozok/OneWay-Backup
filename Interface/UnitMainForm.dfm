@@ -214,6 +214,16 @@ object MainForm: TMainForm
           'MD5'
           'Compare Sizes')
       end
+      object ConfEmailBtn: TsButton
+        Left = 250
+        Top = 0
+        Width = 125
+        Height = 60
+        Align = alLeft
+        Caption = 'Configure Email'
+        TabOrder = 5
+        OnClick = ConfEmailBtnClick
+      end
     end
   end
   object BottomPanel: TsPanel
@@ -230,7 +240,6 @@ object MainForm: TMainForm
       Width = 863
       Height = 13
       Align = alBottom
-      ExplicitTop = 208
       ExplicitWidth = 3
     end
     object ProjectNameLabel: TsLabel
@@ -240,7 +249,6 @@ object MainForm: TMainForm
       Width = 863
       Height = 13
       Align = alBottom
-      ExplicitTop = 189
       ExplicitWidth = 3
     end
     object ChangesLabel: TsLabel
@@ -250,7 +258,6 @@ object MainForm: TMainForm
       Width = 863
       Height = 13
       Align = alBottom
-      ExplicitTop = 227
       ExplicitWidth = 3
     end
     object SpeedLabel: TsLabel
@@ -260,7 +267,6 @@ object MainForm: TMainForm
       Width = 863
       Height = 13
       Align = alBottom
-      ExplicitTop = 246
       ExplicitWidth = 3
     end
     object TimeLabel: TsLabel
@@ -270,7 +276,6 @@ object MainForm: TMainForm
       Width = 863
       Height = 13
       Align = alBottom
-      ExplicitTop = 265
       ExplicitWidth = 3
     end
     object ProgressBar1: TsGauge
@@ -297,7 +302,6 @@ object MainForm: TMainForm
         Caption = 'General Log'
         SkinData.CustomColor = False
         SkinData.CustomFont = False
-        ExplicitHeight = 157
         object LogList: TsListView
           Left = 0
           Top = 0
@@ -333,7 +337,6 @@ object MainForm: TMainForm
         ImageIndex = 1
         SkinData.CustomColor = False
         SkinData.CustomFont = False
-        ExplicitHeight = 157
         object ErrorLog: TsListView
           Left = 0
           Top = 0
@@ -368,7 +371,6 @@ object MainForm: TMainForm
         ImageIndex = 2
         SkinData.CustomColor = False
         SkinData.CustomFont = False
-        ExplicitHeight = 157
         object FullLogList: TsListView
           Left = 0
           Top = 0
@@ -451,10 +453,10 @@ object MainForm: TMainForm
     end
   end
   object IdSMTP1: TIdSMTP
-    Host = 'mail.bysharing.com'
+    IOHandler = IdSSLIOHandlerSocketOpenSSL1
     SASLMechanisms = <>
-    Left = 784
-    Top = 124
+    Left = 792
+    Top = 84
   end
   object IdMessage1: TIdMessage
     AttachmentEncoding = 'UUE'
@@ -467,8 +469,8 @@ object MainForm: TMainForm
     Recipients = <>
     ReplyTo = <>
     ConvertPreamble = True
-    Left = 720
-    Top = 124
+    Left = 728
+    Top = 84
   end
   object TimeTimer: TJvThreadTimer
     OnTimer = TimeTimerTimer
@@ -2173,5 +2175,16 @@ object MainForm: TMainForm
     TitleButtons = <>
     Left = 605
     Top = 169
+  end
+  object IdSSLIOHandlerSocketOpenSSL1: TIdSSLIOHandlerSocketOpenSSL
+    Destination = ':25'
+    MaxLineAction = maException
+    Port = 25
+    DefaultPort = 0
+    SSLOptions.Mode = sslmUnassigned
+    SSLOptions.VerifyMode = []
+    SSLOptions.VerifyDepth = 0
+    Left = 752
+    Top = 152
   end
 end

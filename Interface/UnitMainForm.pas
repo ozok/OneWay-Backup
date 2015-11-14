@@ -12,7 +12,8 @@ uses
   IdMessage, IdComponent, IdTCPConnection, IdTCPClient, 
   IdExplicitTLSClientServerBase, IdMessageClient, IdSMTPBase, IdSMTP, JvThreadTimer,
   sSkinProvider, sSkinManager, sPageControl, acProgressBar, sComboBox, sButton,
-  sLabel, sListView, sPanel, sGauge;
+  sLabel, sListView, sPanel, sGauge, IdIOHandler, IdIOHandlerSocket,
+  IdIOHandlerStack, IdSSL, IdSSLOpenSSL, IniFiles;
 
 type
   TLogItem = record
@@ -63,11 +64,12 @@ type
     sSkinManager1: TsSkinManager;
     sSkinProvider1: TsSkinProvider;
     ProgressBar1: TsGauge;
+    IdSSLIOHandlerSocketOpenSSL1: TIdSSLIOHandlerSocketOpenSSL;
+    ConfEmailBtn: TsButton;
     procedure FormCreate(Sender: TObject);
     procedure RunJobsBtnClick(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure SearchSourceFilesFindFile(Sender: TObject; const AName: string);
-    procedure ProgressTimerTimer(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure OperationThreadRun(Sender: TIdThreadComponent);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -93,6 +95,7 @@ type
     procedure SelectReverseLabelClick(Sender: TObject);
     procedure TimeTimerTimer(Sender: TObject);
     procedure PassedTimeTimerTimer(Sender: TObject);
+    procedure ConfEmailBtnClick(Sender: TObject);
   private
     { Private declarations }
     FFiles: TStringList;
@@ -127,6 +130,7 @@ type
     procedure UpdateChangeCount();
     procedure UpdateProgress();
     procedure UpdateState();
+    procedure StopTimeTimer();
 
     procedure UpdateMaxProgres();
     procedure JumpToItem();
@@ -149,7 +153,7 @@ implementation
 
 {$R *.dfm}
 
-uses UnitProjectSettingsForm;
+uses UnitProjectSettingsForm, UnitEmailConfig;
 
 procedure TMainForm.AddNewProjectBtnClick(Sender: TObject);
 begin
@@ -227,6 +231,12 @@ begin
   end;
 end;
 
+procedure TMainForm.ConfEmailBtnClick(Sender: TObject);
+begin
+  Self.Enabled := False;
+  EmailConfForm.Show;
+end;
+
 procedure TMainForm.DisableUI;
 begin
   JobsList.Enabled := False;
@@ -235,6 +245,7 @@ begin
   EditProjectBtn.Enabled := False;
   StopBtn.Enabled := True;
   ActivatePanel.Enabled := False;
+  ConfEmailBtn.Enabled := False;
 end;
 
 procedure TMainForm.EditProjectBtnClick(Sender: TObject);
@@ -255,6 +266,7 @@ begin
   EditProjectBtn.Enabled := True;
   StopBtn.Enabled := False;
   ActivatePanel.Enabled := True;
+  ConfEmailBtn.Enabled := True;
   StateLabel.Caption := '';
   ProjectNameLabel.Caption := '';
   ChangesLabel.Caption := '';
@@ -592,6 +604,8 @@ var
   LLogFile: TStringList;
   LLogItem: TLogItem;
   LDiffReason: string;
+  LEmailSetFile: TIniFile;
+  LFrom, LTo, LHost, LPort, LPass, LUser: string;
 begin
   LDateTime := Now;
 //  ProgressTimer.Enabled := True;
@@ -624,7 +638,6 @@ begin
           // list all the files in the source folder
           SearchSourceFiles.RootDirectory := FProjects[J].SourceFolder;
           SearchSourceFiles.Search;
-
           FLogLineToAdd := 'Found ' + FFiles.Count.ToString() + ' files';
           OperationThread.Synchronize(AddToLog);
 
@@ -698,12 +711,15 @@ begin
                     Break;
 
                   FProgress := i + 1;
-              OperationThread.Synchronize(UpdateProgress);
+                  OperationThread.Synchronize(UpdateProgress);
                   LSourceDir := FFolders[i].Trim;
 
                   // check if directory exists in destination
-                  FStateMsg := 'Checking directory ' + LSourceDir;
-              OperationThread.Synchronize(UpdateState);
+                  if (FProgress mod 50) = 0 then
+                  begin
+                    FStateMsg := 'Checking directory ' + LSourceDir;
+                    OperationThread.Synchronize(UpdateState);
+                  end;
                   LDestDir := LSourceDir.Replace(FProjects[J].SourceFolder, FProjects[J].DestFolder);
                   if not DirectoryExists(LDestDir) then
                   begin
@@ -732,9 +748,12 @@ begin
                     Break;
 
                   FProgress := i + 1;
-              OperationThread.Synchronize(UpdateProgress);
-                  FStateMsg := 'Creating directory ' + LDirsToCreate[i].Directory;
-              OperationThread.Synchronize(UpdateState);
+                  if (FProgress mod 50) = 0 then
+                  begin
+                    OperationThread.Synchronize(UpdateProgress);
+                    FStateMsg := 'Creating directory ' + LDirsToCreate[i].Directory;
+                  end;
+                  OperationThread.Synchronize(UpdateState);
                   try
                     if not DirectoryExists(LDirsToCreate[i].Directory) then
                     begin
@@ -785,10 +804,10 @@ begin
 
                 FProgress := i+1;
               OperationThread.Synchronize(UpdateProgress);
-                if (i mod 10) = 0 then
+                if (i mod 20) = 0 then
                 begin
                   FStateMsg := 'Copying ' + i.ToString + '/' + LFileCopyPairs.Count.ToString + ' (' + LFileCopyPairs[i].DestFile + ')';
-              OperationThread.Synchronize(UpdateState);
+                  OperationThread.Synchronize(UpdateState);
                 end;
                 try
                   if FileExists(LFileCopyPairs[i].DestFile) then
@@ -839,10 +858,13 @@ begin
                       Break;
                     end;
                     FProgress := I + 1;
-              OperationThread.Synchronize(UpdateProgress);
+                    OperationThread.Synchronize(UpdateProgress);
                     LDestFile := FFiles[i].Trim;
-                    FStateMsg := 'Searching file in source folder ' + i.ToString + '/' + FFiles.Count.ToString + ' (' + LDestFile + ')';
-              OperationThread.Synchronize(UpdateState);
+                    if (FProgress mod 50) = 0 then
+                    begin
+                      FStateMsg := 'Searching file in source folder ' + i.ToString + '/' + FFiles.Count.ToString + ' (' + LDestFile + ')';
+                      OperationThread.Synchronize(UpdateState);
+                    end;
 
                     LSourceFile := LDestFile.Replace(FProjects[J].DestFolder, FProjects[J].SourceFolder);
                     if not FileExists(LSourceFile) then
@@ -898,10 +920,13 @@ begin
                       Break;
 
                     FProgress := I + 1;
-              OperationThread.Synchronize(UpdateProgress);
+                    OperationThread.Synchronize(UpdateProgress);
                     LDestDir := FFolders[i].Trim;
-                    FStateMsg := 'Searching folder in source folder ' + i.ToString + '/' + FFolders.Count.ToString + ' (' + LDestDir + ')';
-              OperationThread.Synchronize(UpdateState);
+                    if (FProgress mod 50) = 0 then
+                    begin
+                      FStateMsg := 'Searching folder in source folder ' + i.ToString + '/' + FFolders.Count.ToString + ' (' + LDestDir + ')';
+                      OperationThread.Synchronize(UpdateState);
+                    end;
 
                     LSourceDir := LDestDir.Replace(FProjects[J].DestFolder, FProjects[J].SourceFolder);
                     if not DirectoryExists(LSourceDir) then
@@ -968,12 +993,15 @@ begin
                     Break;
 
                   FProgress := i + 1;
-              OperationThread.Synchronize(UpdateProgress);
+                  OperationThread.Synchronize(UpdateProgress);
                   LSourceDir := FFolders[i].Trim;
 
                   // check if directory exists in destination
-                  FStateMsg := 'Checking directory ' + LSourceDir;
-              OperationThread.Synchronize(UpdateState);
+                  if (FProgress mod 50) = 0 then
+                  begin
+                    FStateMsg := 'Checking directory ' + LSourceDir;
+                    OperationThread.Synchronize(UpdateState);
+                  end;
                   LDestDir := LSourceDir.Replace(FProjects[J].SourceFolder, FProjects[J].DestFolder);
                   if DirectoryExists(LDestDir) then
                   begin
@@ -1002,9 +1030,12 @@ begin
                     Break;
 
                   FProgress := i + 1;
-              OperationThread.Synchronize(UpdateProgress);
-                  FStateMsg := 'Writing attribute to ' + LDirsToCreate[i].Directory;
-              OperationThread.Synchronize(UpdateState);
+                  OperationThread.Synchronize(UpdateProgress);
+                  if (FProgress mod 50) = 0 then
+                  begin
+                    FStateMsg := 'Writing attribute to ' + LDirsToCreate[i].Directory;
+                    OperationThread.Synchronize(UpdateState);
+                  end;
                   try
                     FileSetAttr(LDirsToCreate[i].Directory, LDirsToCreate[i].Attributes);
                   except on E: Exception do
@@ -1021,6 +1052,8 @@ begin
             LFileCopyPairs.Free;
           end;
         end;
+        FLogLineToAdd := 'Finished ' + FProjects[J].ProjectName;
+        OperationThread.Synchronize(AddToLog);
         FLogLineToAdd := '';
         OperationThread.Synchronize(AddToLog);
       end
@@ -1045,6 +1078,7 @@ begin
       FLogLineToAdd := 'Took ' + FormatDateTime('hh:nn:ss.zzz', Now - LDateTime);
       OperationThread.Synchronize(AddToLog);
     end;
+    FStop := True;
     LLogFile := TStringList.Create;
     try
       for LLogItem in FFullLogItems do
@@ -1052,13 +1086,46 @@ begin
         LLogFile.Add('[' + DateTimeToStr(LLogItem.LogDate) + '] ' + LLogItem.LogStr);
       end;
     finally
+      LEmailSetFile := TIniFile.Create(ExtractFileDir(Application.ExeName) + '\email.ini');
+      try
+        with LEmailSetFile do
+        begin
+          LFrom := ReadString('EMail', 'From', '');
+          LTo := ReadString('EMail', 'To', '');
+          LHost := ReadString('EMail', 'Host', '');
+          LPort := ReadString('EMail', 'Port', '');
+          LUser := ReadString('EMail', 'User', '');
+          LPass := ReadString('EMail', 'Pass', '');
 
+          if (Length(LFrom) > 0) and (Length(LTo) > 0) and (Length(LHost) > 0) and (Length(LPort) > 0) and (Length(LUser) > 0) and (Length(LPass) > 0) then
+          begin
+            IdMessage1.From.Address := LFrom;
+            IdMessage1.Recipients.EMailAddresses := LTo;
+            IdMessage1.Body.Text := LLogFile.Text;
+            IdMessage1.Subject := 'OneWay Backup Report';
+            try
+              IdSMTP1.Host := LHost;
+              IdSMTP1.Port := StrToInt(LPort);
+              IdSMTP1.AuthType := satDefault;
+              IdSMTP1.Username := LUser;
+              IdSMTP1.Password := LPass;
+              IdSMTP1.Connect;
+              IdSMTP1.Send(IdMessage1);
+            except on E: Exception do
+              begin
+                LLogFile.Add(E.Message);
+              end;
+            end;
+          end;
+        end;
+      finally
+        LEmailSetFile.Free;
+      end;
 
       LLogFile.SaveToFile(LLogFilePath, TEncoding.UTF8);
-
       LLogFile.Free;
     end;
-    PassedTimeTimer.Enabled := False;
+    OperationThread.Synchronize(StopTimeTimer);
     OperationThread.Synchronize(ShutDown);
     OperationThread.Synchronize(CloseQueue);
     OperationThread.Terminate;
@@ -1067,21 +1134,10 @@ end;
 
 procedure TMainForm.PassedTimeTimerTimer(Sender: TObject);
 begin
-  Inc(FTotalTimeCounter);
-  TimeLabel.Caption := 'Time: ' + Format('%.2d:%.2d', [FTotalTimeCounter div 60, FTotalTimeCounter mod 60]);
-end;
-
-procedure TMainForm.ProgressTimerTimer(Sender: TObject);
-var
-  LProgress: Extended;
-begin
-  StateLabel.Caption := FStateMsg;
-  ProgressBar1.Progress := FProgress;
-  Taskbar1.ProgressValue := FProgress;
-  if FMaxProgress > 0 then
+  if not FStop then
   begin
-    LProgress := (10000 * FProgress) / FMaxProgress;
-    Self.Caption := Format('%.2f', [LProgress/100]) + '% [OneWay Backup]';
+    Inc(FTotalTimeCounter);
+    TimeLabel.Caption := 'Time: ' + Format('%.2d:%.2d', [FTotalTimeCounter div 60, FTotalTimeCounter mod 60]);
   end;
 end;
 
@@ -1147,9 +1203,9 @@ begin
   if CheckIfFileCanBeAdded(AName, FIgnoreTypeString) then
   begin
     FFiles.Add(AName);
-    FStateMsg := 'Found ' + FFiles.Count.ToString + ' files';
     if (FFiles.Count mod 100) = 0 then
     begin
+      FStateMsg := 'Found ' + FFiles.Count.ToString + ' files';
       UpdateState;
     end;
   end;
@@ -1220,6 +1276,11 @@ begin
     SearchDestFiles.Abort;
   end;
   FFileCompare.Stop := True;
+end;
+
+procedure TMainForm.StopTimeTimer;
+begin
+  PassedTimeTimer.Enabled := False;
 end;
 
 procedure TMainForm.TimeTimerTimer(Sender: TObject);
