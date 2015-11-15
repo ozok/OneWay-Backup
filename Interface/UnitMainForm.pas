@@ -57,7 +57,7 @@ type
     IdMessage1: TIdMessage;
     ChangesLabel: TsLabel;
     SpeedLabel: TsLabel;
-    TimeTimer: TJvThreadTimer;
+    SpeedTimer: TJvThreadTimer;
     CompareMethodList: TsComboBox;
     TimeLabel: TsLabel;
     PassedTimeTimer: TJvThreadTimer;
@@ -93,7 +93,7 @@ type
     procedure SelectAllLabelClick(Sender: TObject);
     procedure SelectNoneLabelClick(Sender: TObject);
     procedure SelectReverseLabelClick(Sender: TObject);
-    procedure TimeTimerTimer(Sender: TObject);
+    procedure SpeedTimerTimer(Sender: TObject);
     procedure PassedTimeTimerTimer(Sender: TObject);
     procedure ConfEmailBtnClick(Sender: TObject);
   private
@@ -130,7 +130,10 @@ type
     procedure UpdateChangeCount();
     procedure UpdateProgress();
     procedure UpdateState();
-    procedure StopTimeTimer();
+    procedure StopPassedTimeTimer();
+    procedure StartSpeedTimer();
+    procedure StopSpeedTimer();
+
 
     procedure UpdateMaxProgres();
     procedure JumpToItem();
@@ -288,7 +291,16 @@ end;
 
 procedure TMainForm.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
-  StopBtnClick(Self);
+  FStop := True;
+  if SearchSourceFiles.Searching then
+  begin
+    SearchSourceFiles.Abort;
+  end;
+  if SearchDestFiles.Searching then
+  begin
+    SearchDestFiles.Abort;
+  end;
+  FFileCompare.Stop := True;
   if not OperationThread.Terminated then
   begin
     OperationThread.Terminate;
@@ -651,7 +663,7 @@ begin
 
 {$REGION 'singlethreaded compare'}
             // compare all source files with their destination counterparts
-            TimeTimer.Enabled := True;
+            OperationThread.Synchronize(StartSpeedTimer);
             for I := 0 to FFiles.Count-1 do
             begin
               FProgress := i+1;
@@ -677,7 +689,15 @@ begin
               end
               else
               begin
-                LCopy := not FFileCompare.CompareFiles(LSourceFile, LDestFile, FProjects[J].BufferSize, CompareMethodList.ItemIndex, LDiffReason);
+                try
+                  LCopy := not FFileCompare.CompareFiles(LSourceFile, LDestFile, FProjects[J].BufferSize, CompareMethodList.ItemIndex, LDiffReason);
+                except on E: Exception do
+                  begin
+                    FLogLineToAdd := 'File read error: ' + E.Message + '[' + LSourceFile + ']';
+                    OperationThread.Synchronize(AddToErrorLog);
+                    Continue;
+                  end;
+                end;
               end;
 
               if LCopy then
@@ -695,7 +715,7 @@ begin
                 OperationThread.Synchronize(UpdateChangeCount);
               end;
             end;
-            TimeTimer.Enabled := False;
+            OperationThread.Synchronize(StopSpeedTimer);
 {$ENDREGION}
 
             // list directories that will be created at destination
@@ -794,6 +814,7 @@ begin
 
               FMaxProgress := LFileCopyPairs.Count;
               OperationThread.Synchronize(UpdateMaxProgres);
+              OperationThread.Synchronize(StartSpeedTimer);
               for I := 0 to LFileCopyPairs.Count-1 do
               begin
 
@@ -803,7 +824,7 @@ begin
                 end;
 
                 FProgress := i+1;
-              OperationThread.Synchronize(UpdateProgress);
+                OperationThread.Synchronize(UpdateProgress);
                 if (i mod 20) = 0 then
                 begin
                   FStateMsg := 'Copying ' + i.ToString + '/' + LFileCopyPairs.Count.ToString + ' (' + LFileCopyPairs[i].DestFile + ')';
@@ -832,6 +853,7 @@ begin
                   end;
                 end;
               end;
+              OperationThread.Synchronize(StopSpeedTimer);
             end;
 
             if not FStop then
@@ -1064,7 +1086,7 @@ begin
     end;
   finally
 //    ProgressTimer.Enabled := False;
-    TimeTimer.Enabled := false;
+    OperationThread.Synchronize(StopSpeedTimer);
     OperationThread.Synchronize(UpdateState);
     OperationThread.Synchronize(EnableUI);
     LLogFilePath := ExtractFileDir(Application.ExeName) + '\logs\' + DateTimeToStr(Now).Replace('.', '').Replace(':', '').Replace(' ', '').Trim + '.log';
@@ -1125,7 +1147,7 @@ begin
       LLogFile.SaveToFile(LLogFilePath, TEncoding.UTF8);
       LLogFile.Free;
     end;
-    OperationThread.Synchronize(StopTimeTimer);
+    OperationThread.Synchronize(StopPassedTimeTimer);
     OperationThread.Synchronize(ShutDown);
     OperationThread.Synchronize(CloseQueue);
     OperationThread.Terminate;
@@ -1153,6 +1175,7 @@ begin
   SpeedLabel.Caption := 'Speed: N/A';
   ChangesLabel.Caption := 'Changes found: 0';
   TimeLabel.Caption := 'Time: 00:00';
+  LogsPages.Pages[1].Caption := 'Error Log';
   FTimeCounter := 0;
   FTotalTimeCounter := 0;
 
@@ -1264,26 +1287,40 @@ begin
   end;
 end;
 
-procedure TMainForm.StopBtnClick(Sender: TObject);
+procedure TMainForm.StartSpeedTimer;
 begin
-  FStop := True;
-  if SearchSourceFiles.Searching then
-  begin
-    SearchSourceFiles.Abort;
-  end;
-  if SearchDestFiles.Searching then
-  begin
-    SearchDestFiles.Abort;
-  end;
-  FFileCompare.Stop := True;
+  SpeedTimer.Enabled := True;
 end;
 
-procedure TMainForm.StopTimeTimer;
+procedure TMainForm.StopBtnClick(Sender: TObject);
+begin
+  if ID_YES = Application.MessageBox('Do you want to stop backup process?', 'Question', MB_ICONQUESTION or MB_YESNO) then
+  begin
+    FStop := True;
+    if SearchSourceFiles.Searching then
+    begin
+      SearchSourceFiles.Abort;
+    end;
+    if SearchDestFiles.Searching then
+    begin
+      SearchDestFiles.Abort;
+    end;
+    FFileCompare.Stop := True;
+  end;
+end;
+
+procedure TMainForm.StopPassedTimeTimer;
 begin
   PassedTimeTimer.Enabled := False;
 end;
 
-procedure TMainForm.TimeTimerTimer(Sender: TObject);
+procedure TMainForm.StopSpeedTimer;
+begin
+  SpeedTimer.Enabled := False;
+   FTimeCounter := 0;
+end;
+
+procedure TMainForm.SpeedTimerTimer(Sender: TObject);
 var
   LValue: Double;
 begin

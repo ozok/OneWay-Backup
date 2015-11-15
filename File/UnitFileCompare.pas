@@ -25,15 +25,14 @@ implementation
 
 function TFileComperator.CalculateMD5(const FS: TStream): string;
 var
-  idmd5: TIdHashMessageDigest5;
-  hash: T4x4LongWordRecord;
+  LMD5: TIdHashMessageDigest5;
 begin
-  idmd5 := TIdHashMessageDigest5.Create;
+  LMD5 := TIdHashMessageDigest5.Create;
   try
-    Result := idmd5.HashStreamAsHex(FS);
+    Result := LMD5.HashStreamAsHex(FS);
   finally
     FS.Free;
-    idmd5.Free;
+    LMD5.Free;
   end;
 end;
 
@@ -81,8 +80,14 @@ begin
       Reason := '';
     end;
   finally
-    LFS2.Free;
-    LFS1.Free;
+    if Assigned(LFS1) then
+    begin
+      LFS1.Free;
+    end;
+    if Assigned(LFS2) then
+    begin
+      LFS2.Free;
+    end;
   end;
 end;
 

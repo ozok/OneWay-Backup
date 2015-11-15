@@ -418,6 +418,7 @@ object MainForm: TMainForm
     Loop = False
     Priority = tpIdle
     StopMode = smTerminate
+    OnException = OperationThreadException
     OnRun = OperationThreadRun
     Left = 273
     Top = 105
@@ -472,8 +473,8 @@ object MainForm: TMainForm
     Left = 728
     Top = 84
   end
-  object TimeTimer: TJvThreadTimer
-    OnTimer = TimeTimerTimer
+  object SpeedTimer: TJvThreadTimer
+    OnTimer = SpeedTimerTimer
     Left = 256
     Top = 172
   end
