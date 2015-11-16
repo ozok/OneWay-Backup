@@ -13,6 +13,7 @@ type
     DeleteFromDest: Boolean;
     BufferSize: integer;
     IgnoredFileTypes: string;
+    CompareMethod: integer;
   end;
 
   TProjectFiles = TList<TProjectFile>;

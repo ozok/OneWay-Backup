@@ -7,7 +7,7 @@ uses
   System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, 
   Vcl.Mask, JvExMask, JvToolEdit, UnitProjectFile, Vcl.ComCtrls, JvSpin,
   sSkinProvider, sCheckBox, sButton, sEdit, sLabel, sSpinEdit, sMaskEdit,
-  sCustomComboEdit, sToolEdit;
+  sCustomComboEdit, sToolEdit, sComboBox;
 
 type
   TProjectSettingsForm = class(TForm)
@@ -24,6 +24,7 @@ type
     SourceDirEdit: TsDirectoryEdit;
     DestDirEdit: TsDirectoryEdit;
     BufferEdit: TsSpinEdit;
+    CompareMethodList: TsComboBox;
     procedure SaveProjectBtnClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormShow(Sender: TObject);
@@ -60,6 +61,7 @@ begin
     DeleteFromDestBtn.Checked := MainForm.FProjects[FItemIndex].DeleteFromDest;
     BufferEdit.Value := MainForm.FProjects[FItemIndex].BufferSize;
     IgnoreTypesEdit.Text := MainForm.FProjects[FItemIndex].IgnoredFileTypes;
+    CompareMethodList.ItemIndex := MainForm.FProjects[FItemIndex].CompareMethod;
   end;
 end;
 
@@ -81,6 +83,7 @@ begin
         LProjectFile.DeleteFromDest := DeleteFromDestBtn.Checked;
         LProjectFile.BufferSize := Round(BufferEdit.Value);
         LProjectFile.IgnoredFileTypes := IgnoreTypesEdit.Text;
+        LProjectFile.CompareMethod := CompareMethodList.ItemIndex;
         LProjectFile.Active := True;
         if FItemIndex > -1 then
         begin
@@ -104,7 +107,14 @@ begin
         LItem.SubItems.Add(LProjectFile.SourceFolder);
         LItem.SubItems.Add(LProjectFile.DestFolder);
         LItem.SubItems.Add(LProjectFile.BufferSize.ToString());
+        LItem.SubItems.Add(LProjectFile.IgnoredFileTypes);
+        LItem.SubItems.Add(MainForm.CompareMethodToStr(LProjectFile.CompareMethod));
         LItem.Checked := LProjectFile.Active;
+
+        MainForm.JobsList.Items.Clear;
+        MainForm.FProjects.Clear;
+        MainForm.LoadProjects;
+
         Self.Close;
       end;
     end;

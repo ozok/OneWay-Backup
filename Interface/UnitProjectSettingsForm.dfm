@@ -3,9 +3,9 @@ object ProjectSettingsForm: TProjectSettingsForm
   Top = 0
   BorderStyle = bsToolWindow
   Caption = 'Project Settings'
-  ClientHeight = 269
+  ClientHeight = 274
   ClientWidth = 693
-  Color = 13353918
+  Color = clBtnFace
   DoubleBuffered = True
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -18,7 +18,7 @@ object ProjectSettingsForm: TProjectSettingsForm
   OnShow = FormShow
   DesignSize = (
     693
-    269)
+    274)
   PixelsPerInch = 96
   TextHeight = 13
   object Label1: TsLabel
@@ -75,7 +75,7 @@ object ProjectSettingsForm: TProjectSettingsForm
     Width = 687
     Height = 21
     Align = alTop
-    Color = 15921906
+    Color = 16119285
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clBlack
     Font.Height = -11
@@ -85,9 +85,9 @@ object ProjectSettingsForm: TProjectSettingsForm
     TabOrder = 2
   end
   object SaveProjectBtn: TsButton
-    Left = 560
-    Top = 236
-    Width = 125
+    Left = 540
+    Top = 241
+    Width = 145
     Height = 25
     Anchors = [akRight, akBottom]
     Caption = 'Save'
@@ -97,7 +97,7 @@ object ProjectSettingsForm: TProjectSettingsForm
   object DeleteFromDestBtn: TsCheckBox
     Left = 8
     Top = 187
-    Width = 349
+    Width = 347
     Height = 19
     Caption = 
       'Delete files in destination folder if they do not exist in sourc' +
@@ -113,7 +113,7 @@ object ProjectSettingsForm: TProjectSettingsForm
     Width = 687
     Height = 21
     Align = alTop
-    Color = 15921906
+    Color = 16119285
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clBlack
     Font.Height = -11
@@ -130,7 +130,7 @@ object ProjectSettingsForm: TProjectSettingsForm
     Height = 21
     Align = alTop
     AutoSize = False
-    Color = 15921906
+    Color = 16119285
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clBlack
     Font.Height = -11
@@ -144,9 +144,6 @@ object ProjectSettingsForm: TProjectSettingsForm
     GlyphMode.Blend = 0
     GlyphMode.Grayed = False
     Root = 'rfDesktop'
-    ExplicitLeft = 8
-    ExplicitTop = 14
-    ExplicitWidth = 693
   end
   object DestDirEdit: TsDirectoryEdit
     AlignWithMargins = True
@@ -156,7 +153,7 @@ object ProjectSettingsForm: TProjectSettingsForm
     Height = 21
     Align = alTop
     AutoSize = False
-    Color = 15921906
+    Color = 16119285
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clBlack
     Font.Height = -11
@@ -170,8 +167,6 @@ object ProjectSettingsForm: TProjectSettingsForm
     GlyphMode.Blend = 0
     GlyphMode.Grayed = False
     Root = 'rfDesktop'
-    ExplicitLeft = 8
-    ExplicitTop = 60
   end
   object BufferEdit: TsSpinEdit
     Left = 117
@@ -179,7 +174,7 @@ object ProjectSettingsForm: TProjectSettingsForm
     Width = 121
     Height = 21
     Alignment = taCenter
-    Color = 15921906
+    Color = 16119285
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clBlack
     Font.Height = -11
@@ -193,6 +188,32 @@ object ProjectSettingsForm: TProjectSettingsForm
     MinValue = 0
     Value = 8192
   end
+  object CompareMethodList: TsComboBox
+    Left = 540
+    Top = 210
+    Width = 145
+    Height = 21
+    Anchors = [akTop, akRight]
+    Alignment = taLeftJustify
+    BoundLabel.Active = True
+    BoundLabel.Caption = 'File Compare Method:'
+    VerticalAlignment = taAlignTop
+    Style = csDropDownList
+    Color = 16119285
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = 16119285
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ItemIndex = 0
+    ParentFont = False
+    TabOrder = 7
+    Text = 'Full File Search'
+    Items.Strings = (
+      'Full File Search'
+      'MD5'
+      'Compare Sizes')
+  end
   object sSkinProvider1: TsSkinProvider
     AddedTitle.Font.Charset = DEFAULT_CHARSET
     AddedTitle.Font.Color = clNone
@@ -202,7 +223,7 @@ object ProjectSettingsForm: TProjectSettingsForm
     FormHeader.AdditionalHeight = 0
     SkinData.SkinSection = 'FORM'
     TitleButtons = <>
-    Left = 368
-    Top = 152
+    Left = 376
+    Top = 128
   end
 end

@@ -31,7 +31,6 @@ begin
   try
     Result := LMD5.HashStreamAsHex(FS);
   finally
-    FS.Free;
     LMD5.Free;
   end;
 end;
@@ -50,7 +49,8 @@ begin
   else if DoFilesHaveSameLastModifiedTime(FileName1, FileName2) then
   begin
     Reason := '[DateDiff' + DateTimeToStr(TFile.GetCreationTimeUtc(FileName1)) + '/' + DateTimeToStr(TFile.GetCreationTimeUtc(FileName2)) + '] ';
-    Result := not DoFilesHaveSameLastModifiedTime(FileName1, FileName2)
+    Result := not DoFilesHaveSameLastModifiedTime(FileName1, FileName2);
+    exit;
   end;
 
   try
