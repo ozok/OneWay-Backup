@@ -39,6 +39,8 @@ object ProjectSettingsForm: TProjectSettingsForm
     Height = 13
     Align = alTop
     Caption = 'Destination folder:'
+    Color = clBtnFace
+    ParentColor = False
     ExplicitWidth = 89
   end
   object Label4: TsLabel
@@ -49,6 +51,8 @@ object ProjectSettingsForm: TProjectSettingsForm
     Height = 13
     Align = alTop
     Caption = 'Project Name:'
+    Color = clBtnFace
+    ParentColor = False
     ExplicitWidth = 68
   end
   object Label3: TsLabel
@@ -66,6 +70,8 @@ object ProjectSettingsForm: TProjectSettingsForm
     Height = 13
     Align = alTop
     Caption = 'Ignore these file types (separate with ; example: .mp3;.jpeg)'
+    Color = clBtnFace
+    ParentColor = False
     ExplicitWidth = 296
   end
   object ProjectNameEdit: TsEdit
@@ -75,13 +81,7 @@ object ProjectSettingsForm: TProjectSettingsForm
     Width = 687
     Height = 21
     Align = alTop
-    Color = 16119285
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clBlack
-    Font.Height = -11
-    Font.Name = 'Tahoma'
-    Font.Style = []
-    ParentFont = False
+    Color = clBtnFace
     TabOrder = 2
   end
   object SaveProjectBtn: TsButton
@@ -97,8 +97,8 @@ object ProjectSettingsForm: TProjectSettingsForm
   object DeleteFromDestBtn: TsCheckBox
     Left = 8
     Top = 187
-    Width = 347
-    Height = 19
+    Width = 342
+    Height = 20
     Caption = 
       'Delete files in destination folder if they do not exist in sourc' +
       'e folder'
@@ -113,13 +113,7 @@ object ProjectSettingsForm: TProjectSettingsForm
     Width = 687
     Height = 21
     Align = alTop
-    Color = 16119285
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clBlack
-    Font.Height = -11
-    Font.Name = 'Tahoma'
-    Font.Style = []
-    ParentFont = False
+    Color = clBtnFace
     TabOrder = 3
   end
   object SourceDirEdit: TsDirectoryEdit
@@ -130,14 +124,8 @@ object ProjectSettingsForm: TProjectSettingsForm
     Height = 21
     Align = alTop
     AutoSize = False
-    Color = 16119285
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clBlack
-    Font.Height = -11
-    Font.Name = 'Tahoma'
-    Font.Style = []
+    Color = clBtnFace
     MaxLength = 255
-    ParentFont = False
     TabOrder = 0
     Text = ''
     CheckOnExit = True
@@ -153,14 +141,8 @@ object ProjectSettingsForm: TProjectSettingsForm
     Height = 21
     Align = alTop
     AutoSize = False
-    Color = 16119285
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clBlack
-    Font.Height = -11
-    Font.Name = 'Tahoma'
-    Font.Style = []
+    Color = clBtnFace
     MaxLength = 255
-    ParentFont = False
     TabOrder = 1
     Text = ''
     CheckOnExit = True
@@ -175,13 +157,7 @@ object ProjectSettingsForm: TProjectSettingsForm
     Height = 21
     Alignment = taCenter
     Color = 16119285
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clBlack
-    Font.Height = -11
-    Font.Name = 'Tahoma'
-    Font.Style = []
     NumbersOnly = True
-    ParentFont = False
     TabOrder = 6
     Text = '8192'
     MaxValue = 0
@@ -199,14 +175,8 @@ object ProjectSettingsForm: TProjectSettingsForm
     BoundLabel.Caption = 'File Compare Method:'
     VerticalAlignment = taAlignTop
     Style = csDropDownList
-    Color = 16119285
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = 16119285
-    Font.Height = -11
-    Font.Name = 'Tahoma'
-    Font.Style = []
+    Color = clBtnFace
     ItemIndex = 0
-    ParentFont = False
     TabOrder = 7
     Text = 'Full File Search'
     Items.Strings = (

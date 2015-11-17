@@ -160,6 +160,9 @@ type
 var
   MainForm: TMainForm;
 
+const
+  PROGRAM_TITLE = 'OneWay Backup - Early Beta';
+
 implementation
 
 {$R *.dfm}
@@ -297,7 +300,7 @@ begin
   TimeLabel.Caption := '';
   ProgressBar1.Progress := 0;
   Taskbar1.ProgressValue := 0;
-  Self.Caption := 'OneWay Backup';
+  Self.Caption := PROGRAM_TITLE;
 end;
 
 procedure TMainForm.ErrorLogData(Sender: TObject; Item: TListItem);
@@ -380,6 +383,7 @@ var
   I: Integer;
   LParamStr: string;
 begin
+  Self.Caption := PROGRAM_TITLE;
   LoadProjects;
 
   FAll := False;
@@ -1406,7 +1410,7 @@ begin
   if FMaxProgress > 0 then
   begin
     LProgress := (10000 * FProgress) / FMaxProgress;
-    Self.Caption := Format('%.2f', [LProgress/100]) + '% [OneWay Backup]';
+    Self.Caption := Format('%.2f', [LProgress/100]) + '% [' + PROGRAM_TITLE + ']';
   end;
 end;
 

@@ -29,8 +29,6 @@ object MainForm: TMainForm
     BevelOuter = bvNone
     Caption = 'TopPanel'
     TabOrder = 0
-    ExplicitWidth = 871
-    ExplicitHeight = 216
     object LeftPanel: TsPanel
       Left = 0
       Top = 60
@@ -39,8 +37,6 @@ object MainForm: TMainForm
       Align = alClient
       BevelOuter = bvNone
       TabOrder = 0
-      ExplicitWidth = 871
-      ExplicitHeight = 156
       object JobsList: TsListView
         Left = 0
         Top = 25
@@ -48,7 +44,6 @@ object MainForm: TMainForm
         Height = 227
         Align = alClient
         Checkboxes = True
-        Color = 16119285
         Columns = <
           item
             Caption = 'Project Name'
@@ -76,7 +71,7 @@ object MainForm: TMainForm
             Width = 100
           end>
         Font.Charset = DEFAULT_CHARSET
-        Font.Color = clBlack
+        Font.Color = clWindowText
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
@@ -95,7 +90,6 @@ object MainForm: TMainForm
         Height = 25
         Align = alTop
         TabOrder = 1
-        ExplicitWidth = 871
         object SelectAllLabel: TsLabel
           AlignWithMargins = True
           Left = 4
@@ -164,7 +158,6 @@ object MainForm: TMainForm
       BevelOuter = bvNone
       TabOrder = 1
       SkinData.SkinSection = 'TOOLBAR'
-      ExplicitWidth = 871
       object RunJobsBtn: TsButton
         Left = 933
         Top = 0
@@ -179,7 +172,6 @@ object MainForm: TMainForm
         TabOrder = 0
         OnClick = RunJobsBtnClick
         SkinData.SkinSection = 'TOOLBUTTON'
-        ExplicitLeft = 746
       end
       object AddNewProjectBtn: TsButton
         Left = 110
@@ -195,7 +187,6 @@ object MainForm: TMainForm
         TabOrder = 1
         OnClick = AddNewProjectBtnClick
         SkinData.SkinSection = 'TOOLBUTTON'
-        ExplicitLeft = 125
       end
       object StopBtn: TsButton
         Left = 823
@@ -212,7 +203,6 @@ object MainForm: TMainForm
         TabOrder = 2
         OnClick = StopBtnClick
         SkinData.SkinSection = 'TOOLBUTTON'
-        ExplicitLeft = 636
       end
       object EditProjectBtn: TsButton
         Left = 0
@@ -244,7 +234,6 @@ object MainForm: TMainForm
         TabOrder = 4
         OnClick = ConfEmailBtnClick
         SkinData.SkinSection = 'TOOLBUTTON'
-        ExplicitLeft = 250
       end
     end
   end
@@ -255,8 +244,6 @@ object MainForm: TMainForm
     Height = 299
     Align = alBottom
     TabOrder = 1
-    ExplicitTop = 216
-    ExplicitWidth = 871
     object StateLabel: TsLabel
       AlignWithMargins = True
       Left = 4
@@ -264,7 +251,6 @@ object MainForm: TMainForm
       Width = 1035
       Height = 13
       Align = alBottom
-      ExplicitTop = 210
       ExplicitWidth = 3
     end
     object ProjectNameLabel: TsLabel
@@ -274,7 +260,6 @@ object MainForm: TMainForm
       Width = 1035
       Height = 13
       Align = alBottom
-      ExplicitTop = 191
       ExplicitWidth = 3
     end
     object ChangesLabel: TsLabel
@@ -284,7 +269,6 @@ object MainForm: TMainForm
       Width = 1035
       Height = 13
       Align = alBottom
-      ExplicitTop = 229
       ExplicitWidth = 3
     end
     object SpeedLabel: TsLabel
@@ -294,7 +278,6 @@ object MainForm: TMainForm
       Width = 1035
       Height = 13
       Align = alBottom
-      ExplicitTop = 248
       ExplicitWidth = 3
     end
     object TimeLabel: TsLabel
@@ -304,7 +287,6 @@ object MainForm: TMainForm
       Width = 1035
       Height = 13
       Align = alBottom
-      ExplicitTop = 267
       ExplicitWidth = 3
     end
     object ProgressBar1: TsGauge
@@ -327,20 +309,16 @@ object MainForm: TMainForm
       ActivePage = TabSheet1
       Align = alClient
       TabOrder = 0
-      ExplicitHeight = 187
       object TabSheet1: TsTabSheet
         Caption = 'General Log'
         SkinData.CustomColor = False
         SkinData.CustomFont = False
-        ExplicitWidth = 861
-        ExplicitHeight = 159
         object LogList: TsListView
           Left = 0
           Top = 0
           Width = 1033
           Height = 156
           Align = alClient
-          Color = 16119285
           Columns = <
             item
               Width = 125
@@ -349,7 +327,7 @@ object MainForm: TMainForm
               Width = 500
             end>
           Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
+          Font.Color = clWindowText
           Font.Height = -11
           Font.Name = 'Tahoma'
           Font.Style = []
@@ -363,7 +341,6 @@ object MainForm: TMainForm
           TabOrder = 0
           ViewStyle = vsReport
           OnData = LogListData
-          ExplicitHeight = 159
         end
       end
       object TabSheet2: TsTabSheet
@@ -371,15 +348,12 @@ object MainForm: TMainForm
         ImageIndex = 1
         SkinData.CustomColor = False
         SkinData.CustomFont = False
-        ExplicitWidth = 861
-        ExplicitHeight = 159
         object ErrorLog: TsListView
           Left = 0
           Top = 0
           Width = 1033
           Height = 156
           Align = alClient
-          Color = 16119285
           Columns = <
             item
               Width = 125
@@ -387,7 +361,7 @@ object MainForm: TMainForm
             item
             end>
           Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
+          Font.Color = clWindowText
           Font.Height = -11
           Font.Name = 'Tahoma'
           Font.Style = []
@@ -401,7 +375,6 @@ object MainForm: TMainForm
           TabOrder = 0
           ViewStyle = vsReport
           OnData = ErrorLogData
-          ExplicitHeight = 159
         end
       end
       object TabSheet3: TsTabSheet
@@ -409,15 +382,12 @@ object MainForm: TMainForm
         ImageIndex = 2
         SkinData.CustomColor = False
         SkinData.CustomFont = False
-        ExplicitWidth = 861
-        ExplicitHeight = 159
         object FullLogList: TsListView
           Left = 0
           Top = 0
           Width = 1033
           Height = 156
           Align = alClient
-          Color = 16119285
           Columns = <
             item
               Width = 125
@@ -425,7 +395,7 @@ object MainForm: TMainForm
             item
             end>
           Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
+          Font.Color = clWindowText
           Font.Height = -11
           Font.Name = 'Tahoma'
           Font.Style = []
@@ -439,7 +409,6 @@ object MainForm: TMainForm
           TabOrder = 0
           ViewStyle = vsReport
           OnData = FullLogListData
-          ExplicitHeight = 159
         end
       end
     end
@@ -526,6 +495,7 @@ object MainForm: TMainForm
     Top = 172
   end
   object sSkinManager1: TsSkinManager
+    Active = False
     Brightness = -10
     InternalSkins = <
       item
@@ -1560,7 +1530,7 @@ object MainForm: TMainForm
     MenuSupport.ExtraLineFont.Style = []
     SkinDirectory = 'H:\delphi\Skins'
     SkinName = 'Office2007 Black (internal)'
-    SkinInfo = '10'
+    SkinInfo = 'N/A'
     ThirdParty.ThirdEdits = ' '
     ThirdParty.ThirdButtons = 'TButton'
     ThirdParty.ThirdBitBtns = ' '
