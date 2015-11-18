@@ -14,7 +14,7 @@ uses
   sSkinProvider, sSkinManager, sPageControl, acProgressBar, sComboBox, sButton,
   sLabel, sListView, sPanel, sGauge, IdIOHandler, IdIOHandlerSocket,
   IdIOHandlerStack, IdSSL, IdSSLOpenSSL, IniFiles, System.ImageList,
-  Vcl.ImgList, acAlphaImageList, Vcl.Buttons, sBitBtn;
+  Vcl.ImgList, acAlphaImageList, Vcl.Buttons, sBitBtn, sCheckBox;
 
 type
   TLogItem = record
@@ -63,13 +63,15 @@ type
     PassedTimeTimer: TJvThreadTimer;
     sSkinManager1: TsSkinManager;
     sSkinProvider1: TsSkinProvider;
-    ProgressBar1: TsGauge;
     IdSSLIOHandlerSocketOpenSSL1: TIdSSLIOHandlerSocketOpenSSL;
     ConfEmailBtn: TsButton;
     sAlphaImageList1: TsAlphaImageList;
     ProgressTimer: TTimer;
     DeleteBtn: TsBitBtn;
     PreviewBtn: TsButton;
+    ProgressBar: TsProgressBar;
+    PercentageLabel: TsLabel;
+    SendEmailBtn: TsCheckBox;
     procedure FormCreate(Sender: TObject);
     procedure RunJobsBtnClick(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -103,6 +105,7 @@ type
     procedure ProgressTimerTimer(Sender: TObject);
     procedure DeleteBtnClick(Sender: TObject);
     procedure PreviewBtnClick(Sender: TObject);
+    procedure LogBtnClick(Sender: TObject);
   private
     { Private declarations }
     FFiles: TStringList;
@@ -118,7 +121,6 @@ type
     FCurrentProjectName: string;
     FGeneralLogItems: TLogItems;
     FErrorLogItems: TLogItems;
-    FFullLogItems: TLogItems;
     FAll, FRun, FExit, FShutDown: Boolean;
     FIgnoreTypeString: string;
     FChangeCount: integer;
@@ -143,6 +145,7 @@ type
     procedure StopSpeedTimer();
     procedure StartProgressTimer();
     procedure StopProgressTimer();
+    procedure ShowPreviewResults();
 
 
     procedure UpdateMaxProgres();
@@ -156,6 +159,8 @@ type
   public
     { Public declarations }
     FProjects: TProjectFiles;
+    FFullLogItems: TLogItems;
+
     procedure SaveProjects;
     procedure LoadProjects;
 
@@ -172,7 +177,7 @@ implementation
 
 {$R *.dfm}
 
-uses UnitProjectSettingsForm, UnitEmailConfig;
+uses UnitProjectSettingsForm, UnitEmailConfig, UnitLog;
 
 procedure TMainForm.AddNewProjectBtnClick(Sender: TObject);
 begin
@@ -323,7 +328,7 @@ begin
   ChangesLabel.Caption := '';
   SpeedLabel.Caption := '';
   TimeLabel.Caption := '';
-  ProgressBar1.Progress := 0;
+  ProgressBar.Position := 0;
   Taskbar1.ProgressValue := 0;
   Self.Caption := PROGRAM_TITLE;
   DeleteBtn.Enabled := True;
@@ -410,6 +415,16 @@ var
   I: Integer;
   LParamStr: string;
 begin
+  PercentageLabel.Parent := ProgressBar;
+  PercentageLabel.AutoSize := False;
+  PercentageLabel.Transparent := True;
+  PercentageLabel.Top :=  0;
+  PercentageLabel.Left :=  0;
+  PercentageLabel.Width := ProgressBar.ClientWidth;
+  PercentageLabel.Height := ProgressBar.ClientHeight;
+  PercentageLabel.Alignment := taCenter;
+  PercentageLabel.Layout := tlCenter;
+
   Self.Caption := PROGRAM_TITLE;
   LoadProjects;
 
@@ -580,6 +595,12 @@ begin
 
   LogList.Items[LogList.Items.Count-1].MakeVisible(False);
   FullLogList.Items[FullLogList.Items.Count-1].MakeVisible(False);
+end;
+
+procedure TMainForm.LogBtnClick(Sender: TObject);
+begin
+  LogForm.LogList.Items.Count := FFullLogItems.Count;
+  LogForm.Show;
 end;
 
 procedure TMainForm.LogError(const Str: string);
@@ -1194,7 +1215,7 @@ begin
         LLogFile.Add('[' + DateTimeToStr(LLogItem.LogDate) + '] ' + LLogItem.LogStr);
       end;
     finally
-      if not FPreview then
+      if (not FPreview) and SendEmailBtn.Checked then
       begin
         // send emails
         LEmailSetFile := TIniFile.Create(ExtractFileDir(Application.ExeName) + '\email.ini');
@@ -1246,6 +1267,7 @@ begin
     OperationThread.Synchronize(StopPassedTimeTimer);
     OperationThread.Synchronize(StopProgressTimer);
     OperationThread.Synchronize(EnableUI);
+    OperationThread.Synchronize(ShowPreviewResults);
     OperationThread.Synchronize(ShutDown);
     OperationThread.Synchronize(CloseQueue);
     OperationThread.Terminate;
@@ -1406,6 +1428,21 @@ begin
   end;
 end;
 
+procedure TMainForm.ShowPreviewResults;
+begin
+  if FPreview then
+  begin
+    if not FShutDown then
+    begin
+      if not FExit then
+      begin
+        LogForm.LogList.Items.Count := FFullLogItems.Count;
+        LogForm.Show;
+      end;
+    end;
+  end;
+end;
+
 procedure TMainForm.ShutDown;
 begin
   if FShutDown then
@@ -1473,20 +1510,23 @@ end;
 
 procedure TMainForm.UpdateMaxProgres;
 begin
-  ProgressBar1.MaxValue := FMaxProgress;
+  ProgressBar.Max := FMaxProgress;
   Taskbar1.ProgressMaxValue := FMaxProgress;
 end;
 
 procedure TMainForm.UpdateProgress;
 var
   LProgress: Extended;
+  LProgressStr: string;
 begin
-  ProgressBar1.Progress := FProgress;
+  ProgressBar.Position := FProgress;
   Taskbar1.ProgressValue := FProgress;
   if FMaxProgress > 0 then
   begin
     LProgress := (10000 * FProgress) / FMaxProgress;
-    Self.Caption := Format('%.2f', [LProgress/100]) + '% [' + PROGRAM_TITLE + ']';
+    LProgressStr :=  Format('%.2f', [LProgress/100]) + '%';
+    Self.Caption := LProgressStr + ' [' + PROGRAM_TITLE + ']';
+    PercentageLabel.Caption := LProgressStr;
   end;
 end;
 

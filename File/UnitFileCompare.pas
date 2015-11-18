@@ -45,11 +45,11 @@ begin
   begin
     Reason := '[DestDoesntExist] ';
     Exit;
-  end
-  else if DoFilesHaveSameLastModifiedTime(FileName1, FileName2) then
+  end;
+  if not DoFilesHaveSameLastModifiedTime(FileName1, FileName2) then
   begin
-    Reason := '[DateDiff' + DateTimeToStr(TFile.GetCreationTimeUtc(FileName1)) + '/' + DateTimeToStr(TFile.GetCreationTimeUtc(FileName2)) + '] ';
-    Result := not DoFilesHaveSameLastModifiedTime(FileName1, FileName2);
+    Reason := '[DateDiff ' + DateTimeToStr(TFile.GetCreationTimeUtc(FileName1)) + '/' + DateTimeToStr(TFile.GetCreationTimeUtc(FileName2)) + '] ';
+    Result := false;
     Exit;
   end;
 
@@ -108,10 +108,20 @@ end;
 function TFileComperator.DoFilesHaveSameLastModifiedTime(const FilePath1, FilePath2: string): Boolean;
 var
   LDate1, LDate2: TDateTime;
+  LDTI1, LDTI2: TDateTimeInfoRec;
 begin
-  LDate1 := TFile.GetCreationTimeUtc(FilePath1);
-  LDate2 := TFile.GetCreationTimeUtc(FilePath2);
-  Result := CompareDateTime(LDate1, LDate2) = 0;
+  if FileGetDateTimeInfo(FilePath1, LDTI1, False) and FileGetDateTimeInfo(FilePath2, LDTI2, False) then
+  begin
+    LDate1 := TFile.GetLastWriteTimeUtc(FilePath1);
+    LDate2 := TFile.GetLastWriteTimeUtc(FilePath2);
+//    LDate1 := LDTI1.TimeStamp;
+//    LDate2 := LDTI2.TimeStamp;
+    Result := CompareDateTime(LDate1, LDate2) = 0;
+  end
+  else
+  begin
+    Result := False;
+  end;
 end;
 
 function TFileComperator.GetSizeOfFile(const FileName: String): Int64;
