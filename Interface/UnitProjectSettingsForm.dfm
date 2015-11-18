@@ -3,7 +3,7 @@ object ProjectSettingsForm: TProjectSettingsForm
   Top = 0
   BorderStyle = bsToolWindow
   Caption = 'Project Settings'
-  ClientHeight = 274
+  ClientHeight = 303
   ClientWidth = 693
   Color = clBtnFace
   DoubleBuffered = True
@@ -18,81 +18,32 @@ object ProjectSettingsForm: TProjectSettingsForm
   OnShow = FormShow
   DesignSize = (
     693
-    274)
+    303)
   PixelsPerInch = 96
   TextHeight = 13
-  object Label1: TsLabel
-    AlignWithMargins = True
-    Left = 3
-    Top = 3
-    Width = 687
-    Height = 13
-    Align = alTop
-    Caption = 'Source Folder:'
-    ExplicitWidth = 70
-  end
-  object Label2: TsLabel
-    AlignWithMargins = True
-    Left = 3
-    Top = 49
-    Width = 687
-    Height = 13
-    Align = alTop
-    Caption = 'Destination folder:'
-    Color = clBtnFace
-    ParentColor = False
-    ExplicitWidth = 89
-  end
-  object Label4: TsLabel
-    AlignWithMargins = True
-    Left = 3
-    Top = 95
-    Width = 687
-    Height = 13
-    Align = alTop
-    Caption = 'Project Name:'
-    Color = clBtnFace
-    ParentColor = False
-    ExplicitWidth = 68
-  end
-  object Label3: TsLabel
-    Left = 8
-    Top = 213
-    Width = 103
-    Height = 13
-    Caption = 'Buffer Length (bayt):'
-  end
-  object Label5: TsLabel
-    AlignWithMargins = True
-    Left = 3
-    Top = 141
-    Width = 687
-    Height = 13
-    Align = alTop
-    Caption = 'Ignore these file types (separate with ; example: .mp3;.jpeg)'
-    Color = clBtnFace
-    ParentColor = False
-    ExplicitWidth = 296
-  end
   object ProjectNameEdit: TsEdit
     AlignWithMargins = True
-    Left = 3
+    Left = 8
     Top = 114
-    Width = 687
+    Width = 677
     Height = 21
-    Align = alTop
-    Color = clBtnFace
+    AutoSize = False
+    Color = clWhite
     TabOrder = 2
+    BoundLabel.Active = True
+    BoundLabel.Caption = 'Project Name:'
+    BoundLabel.Layout = sclTopLeft
   end
   object SaveProjectBtn: TsButton
     Left = 540
-    Top = 241
+    Top = 270
     Width = 145
     Height = 25
     Anchors = [akRight, akBottom]
     Caption = 'Save'
     TabOrder = 5
     OnClick = SaveProjectBtnClick
+    ExplicitTop = 241
   end
   object DeleteFromDestBtn: TsCheckBox
     Left = 8
@@ -108,66 +59,75 @@ object ProjectSettingsForm: TProjectSettingsForm
   end
   object IgnoreTypesEdit: TsEdit
     AlignWithMargins = True
-    Left = 3
+    Left = 8
     Top = 160
-    Width = 687
+    Width = 677
     Height = 21
-    Align = alTop
-    Color = clBtnFace
+    AutoSize = False
+    Color = clWhite
     TabOrder = 3
+    BoundLabel.Active = True
+    BoundLabel.Caption = 'Ignore these file types (separate with ; example: .mp3;.jpeg)'
+    BoundLabel.Layout = sclTopLeft
   end
   object SourceDirEdit: TsDirectoryEdit
     AlignWithMargins = True
-    Left = 3
+    Left = 8
     Top = 22
-    Width = 687
+    Width = 593
     Height = 21
-    Align = alTop
     AutoSize = False
-    Color = clBtnFace
+    Color = clWhite
     MaxLength = 255
     TabOrder = 0
     Text = ''
     CheckOnExit = True
+    BoundLabel.Active = True
+    BoundLabel.Caption = 'Source folder:'
+    BoundLabel.Layout = sclTopLeft
     GlyphMode.Blend = 0
     GlyphMode.Grayed = False
     Root = 'rfDesktop'
   end
   object DestDirEdit: TsDirectoryEdit
     AlignWithMargins = True
-    Left = 3
+    Left = 8
     Top = 68
-    Width = 687
+    Width = 593
     Height = 21
-    Align = alTop
     AutoSize = False
-    Color = clBtnFace
+    Color = clWhite
     MaxLength = 255
     TabOrder = 1
     Text = ''
     CheckOnExit = True
+    BoundLabel.Active = True
+    BoundLabel.Caption = 'Destination folder:'
+    BoundLabel.Layout = sclTopLeft
     GlyphMode.Blend = 0
     GlyphMode.Grayed = False
     Root = 'rfDesktop'
   end
   object BufferEdit: TsSpinEdit
     Left = 117
-    Top = 210
+    Top = 213
     Width = 121
     Height = 21
     Alignment = taCenter
-    Color = 16119285
+    Color = clWhite
     NumbersOnly = True
     TabOrder = 6
     Text = '8192'
+    BoundLabel.Active = True
+    BoundLabel.Caption = 'Buffer length (bytes):'
     MaxValue = 0
     MinValue = 0
     Value = 8192
   end
   object CompareMethodList: TsComboBox
-    Left = 540
-    Top = 210
-    Width = 145
+    Left = 117
+    Top = 240
+    Width = 121
     Height = 21
     Anchors = [akTop, akRight]
     Alignment = taLeftJustify
@@ -175,7 +135,7 @@ object ProjectSettingsForm: TProjectSettingsForm
     BoundLabel.Caption = 'File Compare Method:'
     VerticalAlignment = taAlignTop
     Style = csDropDownList
-    Color = clBtnFace
+    Color = clWhite
     ItemIndex = 0
     TabOrder = 7
     Text = 'Full File Search'
@@ -183,6 +143,16 @@ object ProjectSettingsForm: TProjectSettingsForm
       'Full File Search'
       'MD5'
       'Compare Sizes')
+  end
+  object SwapFoldersBTn: TsButton
+    Left = 607
+    Top = 22
+    Width = 78
+    Height = 67
+    Anchors = [akTop, akRight]
+    Caption = 'Switch Source with Destination'
+    TabOrder = 8
+    OnClick = SwapFoldersBTnClick
   end
   object sSkinProvider1: TsSkinProvider
     AddedTitle.Font.Charset = DEFAULT_CHARSET

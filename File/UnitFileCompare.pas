@@ -50,7 +50,7 @@ begin
   begin
     Reason := '[DateDiff' + DateTimeToStr(TFile.GetCreationTimeUtc(FileName1)) + '/' + DateTimeToStr(TFile.GetCreationTimeUtc(FileName2)) + '] ';
     Result := not DoFilesHaveSameLastModifiedTime(FileName1, FileName2);
-    exit;
+    Exit;
   end;
 
   try

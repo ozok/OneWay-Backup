@@ -11,23 +11,20 @@ uses
 
 type
   TProjectSettingsForm = class(TForm)
-    Label1: TsLabel;
-    Label2: TsLabel;
-    Label4: TsLabel;
     ProjectNameEdit: TsEdit;
     SaveProjectBtn: TsButton;
     DeleteFromDestBtn: TsCheckBox;
-    Label3: TsLabel;
-    Label5: TsLabel;
     IgnoreTypesEdit: TsEdit;
     sSkinProvider1: TsSkinProvider;
     SourceDirEdit: TsDirectoryEdit;
     DestDirEdit: TsDirectoryEdit;
     BufferEdit: TsSpinEdit;
     CompareMethodList: TsComboBox;
+    SwapFoldersBTn: TsButton;
     procedure SaveProjectBtnClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormShow(Sender: TObject);
+    procedure SwapFoldersBTnClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -119,6 +116,14 @@ begin
       end;
     end;
   end;
+end;
+
+procedure TProjectSettingsForm.SwapFoldersBTnClick(Sender: TObject);var
+  LTmpStr: string;
+begin
+  LTmpStr := SourceDirEdit.Text;
+  SourceDirEdit.Text := DestDirEdit.Text;
+  DestDirEdit.TExt := LTmpStr;
 end;
 
 end.
