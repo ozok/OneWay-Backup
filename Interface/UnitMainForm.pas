@@ -1196,7 +1196,7 @@ begin
   finally
     OperationThread.Synchronize(StopSpeedTimer);
     OperationThread.Synchronize(UpdateState);
-    LLogFilePath := ExtractFileDir(Application.ExeName) + '\logs\' + DateTimeToStr(Now).Replace('.', '').Replace(':', '').Replace(' ', '').Trim + '.log';
+    LLogFilePath := ExtractFileDir(Application.ExeName) + '\logs\' + DateTimeToStr(Now).Replace('.', '').Replace(':', '').Replace(' ', '').Replace('\', '').Trim + '.log';
     if FStop then
     begin
       FLogLineToAdd := 'Stopped by user.';
