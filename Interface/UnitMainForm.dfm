@@ -29,8 +29,6 @@ object MainForm: TMainForm
     BevelOuter = bvNone
     Caption = 'TopPanel'
     TabOrder = 0
-    ExplicitWidth = 1043
-    ExplicitHeight = 312
     object LeftPanel: TsPanel
       Left = 0
       Top = 60
@@ -39,8 +37,6 @@ object MainForm: TMainForm
       Align = alClient
       BevelOuter = bvNone
       TabOrder = 0
-      ExplicitWidth = 1043
-      ExplicitHeight = 252
       object JobsList: TsListView
         Left = 0
         Top = 25
@@ -86,8 +82,6 @@ object MainForm: TMainForm
         TabOrder = 0
         ViewStyle = vsReport
         OnMouseDown = JobsListMouseDown
-        ExplicitWidth = 1043
-        ExplicitHeight = 227
       end
       object ActivatePanel: TsPanel
         Left = 0
@@ -96,7 +90,6 @@ object MainForm: TMainForm
         Height = 25
         Align = alTop
         TabOrder = 1
-        ExplicitWidth = 1043
         object SelectAllLabel: TsLabel
           AlignWithMargins = True
           Left = 4
@@ -165,7 +158,6 @@ object MainForm: TMainForm
       BevelOuter = bvNone
       TabOrder = 1
       SkinData.SkinSection = 'TOOLBAR'
-      ExplicitWidth = 1043
       object RunJobsBtn: TsButton
         Left = 788
         Top = 0
@@ -180,7 +172,6 @@ object MainForm: TMainForm
         TabOrder = 0
         OnClick = RunJobsBtnClick
         SkinData.SkinSection = 'TOOLBUTTON'
-        ExplicitLeft = 933
       end
       object AddNewProjectBtn: TsButton
         Left = 0
@@ -212,8 +203,6 @@ object MainForm: TMainForm
         TabOrder = 2
         OnClick = StopBtnClick
         SkinData.SkinSection = 'TOOLBUTTON'
-        ExplicitLeft = 942
-        ExplicitTop = -6
       end
       object EditProjectBtn: TsButton
         Left = 110
@@ -273,7 +262,6 @@ object MainForm: TMainForm
         Images = sAlphaImageList1
         TabOrder = 6
         OnClick = PreviewBtnClick
-        ExplicitLeft = 823
       end
       object SendEmailBtn: TsCheckBox
         Left = 436
@@ -294,8 +282,6 @@ object MainForm: TMainForm
     Height = 299
     Align = alBottom
     TabOrder = 1
-    ExplicitTop = 312
-    ExplicitWidth = 1043
     object StateLabel: TsLabel
       AlignWithMargins = True
       Left = 4
@@ -303,7 +289,6 @@ object MainForm: TMainForm
       Width = 1000
       Height = 13
       Align = alBottom
-      ExplicitTop = 207
       ExplicitWidth = 3
     end
     object ProjectNameLabel: TsLabel
@@ -313,7 +298,6 @@ object MainForm: TMainForm
       Width = 1000
       Height = 13
       Align = alBottom
-      ExplicitTop = 188
       ExplicitWidth = 3
     end
     object ChangesLabel: TsLabel
@@ -323,7 +307,6 @@ object MainForm: TMainForm
       Width = 1000
       Height = 13
       Align = alBottom
-      ExplicitTop = 226
       ExplicitWidth = 3
     end
     object SpeedLabel: TsLabel
@@ -333,7 +316,6 @@ object MainForm: TMainForm
       Width = 1000
       Height = 13
       Align = alBottom
-      ExplicitTop = 245
       ExplicitWidth = 3
     end
     object TimeLabel: TsLabel
@@ -343,7 +325,6 @@ object MainForm: TMainForm
       Width = 1000
       Height = 13
       Align = alBottom
-      ExplicitTop = 264
       ExplicitWidth = 3
     end
     object PercentageLabel: TsLabel
@@ -364,14 +345,10 @@ object MainForm: TMainForm
       ActivePage = TabSheet1
       Align = alClient
       TabOrder = 0
-      ExplicitWidth = 1041
-      ExplicitHeight = 184
       object TabSheet1: TsTabSheet
         Caption = 'General Log'
         SkinData.CustomColor = False
         SkinData.CustomFont = False
-        ExplicitWidth = 1033
-        ExplicitHeight = 156
         object LogList: TsListView
           Left = 0
           Top = 0
@@ -400,8 +377,6 @@ object MainForm: TMainForm
           TabOrder = 0
           ViewStyle = vsReport
           OnData = LogListData
-          ExplicitWidth = 1033
-          ExplicitHeight = 156
         end
       end
       object TabSheet2: TsTabSheet
@@ -409,8 +384,6 @@ object MainForm: TMainForm
         ImageIndex = 1
         SkinData.CustomColor = False
         SkinData.CustomFont = False
-        ExplicitWidth = 1033
-        ExplicitHeight = 156
         object ErrorLog: TsListView
           Left = 0
           Top = 0
@@ -438,8 +411,6 @@ object MainForm: TMainForm
           TabOrder = 0
           ViewStyle = vsReport
           OnData = ErrorLogData
-          ExplicitWidth = 1033
-          ExplicitHeight = 156
         end
       end
       object TabSheet3: TsTabSheet
@@ -447,8 +418,6 @@ object MainForm: TMainForm
         ImageIndex = 2
         SkinData.CustomColor = False
         SkinData.CustomFont = False
-        ExplicitWidth = 1033
-        ExplicitHeight = 156
         object FullLogList: TsListView
           Left = 0
           Top = 0
@@ -476,8 +445,6 @@ object MainForm: TMainForm
           TabOrder = 0
           ViewStyle = vsReport
           OnData = FullLogListData
-          ExplicitWidth = 1033
-          ExplicitHeight = 156
         end
       end
     end
@@ -488,8 +455,6 @@ object MainForm: TMainForm
       Height = 17
       Align = alBottom
       TabOrder = 1
-      ExplicitLeft = -2
-      ExplicitTop = 282
     end
   end
   object SearchSourceFiles: TJvSearchFiles
@@ -916,9 +881,9 @@ object MainForm: TMainForm
   end
   object ProgressTimer: TTimer
     Enabled = False
-    Interval = 100
+    Interval = 250
     OnTimer = ProgressTimerTimer
-    Left = 424
-    Top = 184
+    Left = 416
+    Top = 208
   end
 end
