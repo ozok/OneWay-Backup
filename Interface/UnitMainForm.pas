@@ -161,6 +161,7 @@ type
     { Public declarations }
     FProjects: TProjectFiles;
     FFullLogItems: TLogItems;
+    LastLogFilePath: string;
 
     procedure SaveProjects;
     procedure LoadProjects;
@@ -331,6 +332,7 @@ begin
   TimeLabel.Caption := '';
   ProgressBar.Position := 0;
   Taskbar1.ProgressValue := 0;
+  PercentageLabel.Caption := '0%';
   Self.Caption := PROGRAM_TITLE;
   DeleteBtn.Enabled := True;
   PreviewBtn.Enabled := True;
@@ -1267,7 +1269,17 @@ begin
         end;
       end;
 
-      LLogFile.SaveToFile(LLogFilePath, TEncoding.UTF8);
+      try
+        LLogFile.SaveToFile(LLogFilePath, TEncoding.UTF8);
+        LastLogFilePath := LLogFilePath;
+
+      except on E: Exception do
+        begin
+          FLogLineToAdd := 'Log save error: ' + E.Message;
+          OperationThread.Synchronize(AddToErrorLog);
+          raise E;
+        end;
+      end;
       LLogFile.Free;
     end;
     OperationThread.Synchronize(StopPassedTimeTimer);
