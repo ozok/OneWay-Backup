@@ -128,6 +128,7 @@ type
     FTotalTimeCounter: integer;
     FCompareMethodId: integer;
     FPreview: Boolean;
+    FSendEmail: Boolean;
 
     procedure Log(const Str: string);
     procedure LogError(const Str: string);
@@ -433,6 +434,7 @@ begin
   FExit := False;
   FShutDown := False;
   FCompareMethodId := -1;
+  FSendEmail := False;
 
   for I := 1 to ParamCount do
   begin
@@ -453,6 +455,10 @@ begin
     else if LParamStr = '/shutdown' then
     begin
       FShutDown := True;
+    end
+    else if LParamStr = '/sendmail' then
+    begin
+      FSendEmail := True;
     end
     else if LParamStr = '/method0' then
     begin
@@ -1215,7 +1221,7 @@ begin
         LLogFile.Add('[' + DateTimeToStr(LLogItem.LogDate) + '] ' + LLogItem.LogStr);
       end;
     finally
-      if (not FPreview) and SendEmailBtn.Checked then
+      if (not FPreview) and (SendEmailBtn.Checked or FSendEmail) then
       begin
         // send emails
         LEmailSetFile := TIniFile.Create(ExtractFileDir(Application.ExeName) + '\email.ini');

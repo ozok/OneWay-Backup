@@ -15,6 +15,7 @@ OneWay Backup can be called with command line parameters which makes it ideal fo
 * /all: Run all jobs, both active and passive jobs
 * /exit: Close the program when all jobs are done
 * /shutdown: Shutdown the whole system when all jobs are done
+* /sendmail: Send email when done using options set in Email Configuration window
 * /methodX: Use comparing method x where is 0, 1, 2
    * /method0: Full file search: Reads whole content of files
    * /method1: Uses MD5 checksums for comparesion
