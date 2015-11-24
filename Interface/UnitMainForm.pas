@@ -173,7 +173,11 @@ var
   MainForm: TMainForm;
 
 const
+<<<<<<< .mine
   PROGRAM_TITLE = 'OneWay Backup - Beta';
+=======
+  PROGRAM_TITLE = 'OneWay Backup - Beta 1';
+>>>>>>> .theirs
 
 implementation
 
