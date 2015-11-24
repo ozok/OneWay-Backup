@@ -5,7 +5,10 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, sButton, sLabel,
-  sSpinEdit, sEdit, IniFiles;
+  sSpinEdit, sEdit, IniFiles, IdIOHandler, IdIOHandlerSocket, IdIOHandlerStack,
+  IdSSL, IdSSLOpenSSL, IdComponent, IdTCPConnection, IdTCPClient,
+  IdExplicitTLSClientServerBase, IdMessageClient, IdSMTPBase, IdSMTP,
+  IdBaseComponent, IdMessage;
 
 type
   TEmailConfForm = class(TForm)
@@ -19,10 +22,14 @@ type
     SaveBtn: TsButton;
     CancelBtn: TsButton;
     SendTestBtn: TsButton;
+    IdMessage1: TIdMessage;
+    IdSMTP1: TIdSMTP;
+    IdSSLIOHandlerSocketOpenSSL1: TIdSSLIOHandlerSocketOpenSSL;
     procedure CancelBtnClick(Sender: TObject);
     procedure SaveBtnClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormShow(Sender: TObject);
+    procedure SendTestBtnClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -88,6 +95,31 @@ begin
     end;
   finally
     LEmailSetFile.Free;
+  end;
+end;
+
+procedure TEmailConfForm.SendTestBtnClick(Sender: TObject);
+begin
+  if (Length(FromEdit.Text) > 0) and (Length(ToEdit.Text) > 0) and (Length(HostEdit.Text) > 0) and (Length(PortEdit.Text) > 0) and (Length(UserNameEdit.Text) > 0) and (Length(PassEdit.Text) > 0) then
+  begin
+    IdMessage1.From.Address := FromEdit.Text;
+    IdMessage1.Recipients.EMailAddresses := ToEdit.Text;
+    IdMessage1.Body.Text := 'OneWay Backup Test Mail';
+    IdMessage1.Subject := 'OneWay Backup Test Mail';
+    try
+      IdSMTP1.Host := HostEdit.Text;
+      IdSMTP1.Port := PortEdit.Value;
+      IdSMTP1.AuthType := satDefault;
+      IdSMTP1.Username := UserNameEdit.Text;
+      IdSMTP1.Password := PassEdit.Text;
+      IdSMTP1.Connect;
+      IdSMTP1.Send(IdMessage1);
+      Application.MessageBox('Sent test email.', 'Info', MB_ICONINFORMATION);
+    except on E: Exception do
+      begin
+        Application.MessageBox(PWideChar(E.Message), 'Error', MB_ICONERROR);
+      end;
+    end;
   end;
 end;
 

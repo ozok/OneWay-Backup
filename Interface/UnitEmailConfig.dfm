@@ -23,7 +23,7 @@ object EmailConfForm: TEmailConfForm
   object sLabel1: TsLabel
     Left = 64
     Top = 191
-    Width = 291
+    Width = 281
     Height = 14
     Anchors = [akLeft, akTop, akRight]
     Caption = '!!!Your password will be saved in plain text!!!'
@@ -33,7 +33,6 @@ object EmailConfForm: TEmailConfForm
     Font.Height = -12
     Font.Name = 'Tahoma'
     Font.Style = [fsBold, fsUnderline]
-    ExplicitWidth = 281
   end
   object FromEdit: TsEdit
     Left = 64
@@ -44,7 +43,6 @@ object EmailConfForm: TEmailConfForm
     TabOrder = 0
     BoundLabel.Active = True
     BoundLabel.Caption = 'From:'
-    ExplicitWidth = 281
   end
   object ToEdit: TsEdit
     Left = 64
@@ -55,7 +53,6 @@ object EmailConfForm: TEmailConfForm
     TabOrder = 1
     BoundLabel.Active = True
     BoundLabel.Caption = 'To:'
-    ExplicitWidth = 281
   end
   object HostEdit: TsEdit
     Left = 64
@@ -66,7 +63,6 @@ object EmailConfForm: TEmailConfForm
     TabOrder = 2
     BoundLabel.Active = True
     BoundLabel.Caption = 'Host:'
-    ExplicitWidth = 281
   end
   object UserNameEdit: TsEdit
     Left = 64
@@ -77,7 +73,6 @@ object EmailConfForm: TEmailConfForm
     TabOrder = 3
     BoundLabel.Active = True
     BoundLabel.Caption = 'User Name:'
-    ExplicitWidth = 281
   end
   object PassEdit: TsEdit
     Left = 64
@@ -113,8 +108,6 @@ object EmailConfForm: TEmailConfForm
     Caption = 'Save'
     TabOrder = 6
     OnClick = SaveBtnClick
-    ExplicitLeft = 276
-    ExplicitTop = 435
   end
   object CancelBtn: TsButton
     Left = 205
@@ -125,8 +118,6 @@ object EmailConfForm: TEmailConfForm
     Caption = 'Cancel'
     TabOrder = 7
     OnClick = CancelBtnClick
-    ExplicitLeft = 195
-    ExplicitTop = 435
   end
   object SendTestBtn: TsButton
     Left = 8
@@ -136,6 +127,37 @@ object EmailConfForm: TEmailConfForm
     Anchors = [akLeft, akBottom]
     Caption = 'Send Test Mail'
     TabOrder = 8
-    ExplicitTop = 220
+    OnClick = SendTestBtnClick
+  end
+  object IdMessage1: TIdMessage
+    AttachmentEncoding = 'UUE'
+    BccList = <>
+    CCList = <>
+    Encoding = meDefault
+    FromList = <
+      item
+      end>
+    Recipients = <>
+    ReplyTo = <>
+    ConvertPreamble = True
+    Left = 181
+    Top = 68
+  end
+  object IdSMTP1: TIdSMTP
+    IOHandler = IdSSLIOHandlerSocketOpenSSL1
+    SASLMechanisms = <>
+    Left = 117
+    Top = 68
+  end
+  object IdSSLIOHandlerSocketOpenSSL1: TIdSSLIOHandlerSocketOpenSSL
+    Destination = ':25'
+    MaxLineAction = maException
+    Port = 25
+    DefaultPort = 0
+    SSLOptions.Mode = sslmUnassigned
+    SSLOptions.VerifyMode = []
+    SSLOptions.VerifyDepth = 0
+    Left = 181
+    Top = 136
   end
 end

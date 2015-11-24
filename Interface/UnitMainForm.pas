@@ -129,6 +129,7 @@ type
     FCompareMethodId: integer;
     FPreview: Boolean;
     FSendEmail: Boolean;
+    FAppDataFolder: string;
 
     procedure Log(const Str: string);
     procedure LogError(const Str: string);
@@ -147,7 +148,6 @@ type
     procedure StartProgressTimer();
     procedure StopProgressTimer();
     procedure ShowPreviewResults();
-
 
     procedure UpdateMaxProgres();
     procedure JumpToItem();
@@ -173,7 +173,7 @@ var
   MainForm: TMainForm;
 
 const
-  PROGRAM_TITLE = 'OneWay Backup - Early Beta';
+  PROGRAM_TITLE = 'OneWay Backup - Beta';
 
 implementation
 

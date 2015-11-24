@@ -13,7 +13,7 @@ type
     function CompareMD5(const FileStream1, FileStream2: TStream): Boolean;
     function CalculateMD5(const FS: TStream): string;
     function CompareSizes(const FS1: TStream; const FS2: TStream): Boolean;
-    function GetFileLastModifiedDate(const FilePath: string):_FILETIME;
+    function GetFileLastModifiedDate(const FilePath: string): _FILETIME;
     function GetFileLastModDate(filename: string): TDateTime;
   public
     Stop: Boolean;
@@ -52,8 +52,8 @@ begin
   if not DoFilesHaveSameLastModifiedTime(FileName1, FileName2) then
   begin
     Reason := '[DateDiff] ';
-    Result := false;
-    exit;
+    Result := False;
+    Exit;
   end;
 
   try
@@ -128,8 +128,7 @@ begin
     Result := FileDateToDateTime(fileDate);
 end;
 
-function TFileComperator.GetFileLastModifiedDate(
-  const FilePath: string): _FILETIME;
+function TFileComperator.GetFileLastModifiedDate(const FilePath: string): _FILETIME;
 var
   LDate: TWin32FileAttributeData;
 begin
