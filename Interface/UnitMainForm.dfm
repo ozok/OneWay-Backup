@@ -469,6 +469,7 @@ object MainForm: TMainForm
   end
   object SearchSourceFiles: TJvSearchFiles
     Options = [soAllowDuplicates, soSearchDirs, soSearchFiles, soIncludeSystemHiddenDirs, soIncludeSystemHiddenFiles]
+    ErrorResponse = erIgnore
     DirParams.MinSize = 0
     DirParams.MaxSize = 0
     FileParams.MinSize = 0
@@ -490,6 +491,7 @@ object MainForm: TMainForm
   end
   object SearchDestFiles: TJvSearchFiles
     Options = [soAllowDuplicates, soSearchDirs, soSearchFiles, soIncludeSystemHiddenDirs, soIncludeSystemHiddenFiles]
+    ErrorResponse = erIgnore
     DirParams.MinSize = 0
     DirParams.MaxSize = 0
     FileParams.MinSize = 0

@@ -813,7 +813,7 @@ begin
         FFiles.Clear;
         FFolders.Clear;
         FChangeCount := 0;
-        OperationThread.Synchronize(UpdateChangeCount);
+        //OperationThread.Synchronize(UpdateChangeCount);
         if DirectoryExists(FProjects[J].SourceFolder) and (not FStop) then
         begin
           // list all the files in the source folder
@@ -841,11 +841,8 @@ begin
                 Break;
               end;
               LSourceFile := FFiles[i].Trim;
-              if (i mod 50) = 0 then
-              begin
-                FStateMsg := 'Looking for changes ' + i.ToString + '/' + FFiles.Count.ToString + ' (' + LSourceFile + ')';
-                OperationThread.Synchronize(UpdateState);
-              end;
+
+              FStateMsg := 'Looking for changes ' + i.ToString + '/' + FFiles.Count.ToString + ' (' + LSourceFile + ')';
 
               LCopy := false;
               // replace source folder path with destination folder path
@@ -902,11 +899,7 @@ begin
                   LSourceDir := FFolders[i].Trim;
 
                   // check if directory exists in destination
-                  if (FProgress mod 50) = 0 then
-                  begin
-                    FStateMsg := 'Checking directory ' + LSourceDir;
-                    OperationThread.Synchronize(UpdateState);
-                  end;
+                  FStateMsg := 'Checking directory ' + LSourceDir;
                   LDestDir := LSourceDir.Replace(FProjects[J].SourceFolder, FProjects[J].DestFolder);
                   if not DirectoryExists(LDestDir) then
                   begin
@@ -935,11 +928,7 @@ begin
                     Break;
 
                   FProgress := i + 1;
-                  if (FProgress mod 50) = 0 then
-                  begin
-                    FStateMsg := 'Creating directory ' + LDirsToCreate[i].Directory;
-                  end;
-                  OperationThread.Synchronize(UpdateState);
+                  FStateMsg := 'Creating directory ' + LDirsToCreate[i].Directory;
                   try
                     if not FPreview then
                     begin
@@ -995,11 +984,7 @@ begin
                   end;
 
                   FProgress := i+1;
-                  if (i mod 20) = 0 then
-                  begin
-                    FStateMsg := 'Copying ' + i.ToString + '/' + LFileCopyPairs.Count.ToString + ' (' + LFileCopyPairs[i].DestFile + ')';
-                    OperationThread.Synchronize(UpdateState);
-                  end;
+                  FStateMsg := 'Copying ' + i.ToString + '/' + LFileCopyPairs.Count.ToString + ' (' + LFileCopyPairs[i].DestFile + ')';
                   try
                     if FileExists(LFileCopyPairs[i].DestFile) then
                     begin
@@ -1053,11 +1038,7 @@ begin
                     end;
                     FProgress := I + 1;
                     LDestFile := FFiles[i].Trim;
-                    if (FProgress mod 50) = 0 then
-                    begin
-                      FStateMsg := 'Searching file in source folder ' + i.ToString + '/' + FFiles.Count.ToString + ' (' + LDestFile + ')';
-                      OperationThread.Synchronize(UpdateState);
-                    end;
+                    FStateMsg := 'Searching file in source folder ' + i.ToString + '/' + FFiles.Count.ToString + ' (' + LDestFile + ')';
 
                     LSourceFile := LDestFile.Replace(FProjects[J].DestFolder, FProjects[J].SourceFolder);
                     if not FileExists(LSourceFile) then
@@ -1117,11 +1098,7 @@ begin
 
                     FProgress := I + 1;
                     LDestDir := FFolders[i].Trim;
-                    if (FProgress mod 50) = 0 then
-                    begin
-                      FStateMsg := 'Searching folder in source folder ' + i.ToString + '/' + FFolders.Count.ToString + ' (' + LDestDir + ')';
-                      OperationThread.Synchronize(UpdateState);
-                    end;
+                    FStateMsg := 'Searching folder in source folder ' + i.ToString + '/' + FFolders.Count.ToString + ' (' + LDestDir + ')';
 
                     LSourceDir := LDestDir.Replace(FProjects[J].DestFolder, FProjects[J].SourceFolder);
                     if not DirectoryExists(LSourceDir) then
@@ -1194,11 +1171,7 @@ begin
                   LSourceDir := FFolders[i].Trim;
 
                   // check if directory exists in destination
-                  if (FProgress mod 50) = 0 then
-                  begin
-                    FStateMsg := 'Checking directory ' + LSourceDir;
-                    OperationThread.Synchronize(UpdateState);
-                  end;
+                  FStateMsg := 'Checking directory ' + LSourceDir;
                   LDestDir := LSourceDir.Replace(FProjects[J].SourceFolder, FProjects[J].DestFolder);
                   if DirectoryExists(LDestDir) then
                   begin
@@ -1229,11 +1202,7 @@ begin
                       Break;
 
                     FProgress := i + 1;
-                    if (FProgress mod 50) = 0 then
-                    begin
-                      FStateMsg := 'Writing attribute to ' + LDirsToCreate[i].Directory;
-                      OperationThread.Synchronize(UpdateState);
-                    end;
+                    FStateMsg := 'Writing attribute to ' + LDirsToCreate[i].Directory;
                     try
                       FileSetAttr(LDirsToCreate[i].Directory, LDirsToCreate[i].Attributes);
                     except on E: Exception do
@@ -1265,7 +1234,7 @@ begin
     end;
   finally
     OperationThread.Synchronize(StopSpeedTimer);
-    OperationThread.Synchronize(UpdateState);
+//    OperationThread.Synchronize(UpdateState);
     LLogFilePath := AppDataFolder + '\logs\' + DateTimeToStr(Now).Replace('.', '').Replace(':', '').Replace(' ', '').Replace('\', '').Trim + '.log';
     if FStop then
     begin
@@ -1390,6 +1359,8 @@ end;
 procedure TMainForm.ProgressTimerTimer(Sender: TObject);
 begin
   UpdateProgress;
+  UpdateState;
+  UpdateChangeCount;
 end;
 
 procedure TMainForm.RunJobsBtnClick(Sender: TObject);
@@ -1473,11 +1444,7 @@ begin
   if CheckIfFileCanBeAdded(AName, FIgnoreTypeString) then
   begin
     FFiles.Add(AName);
-    if (FFiles.Count mod 100) = 0 then
-    begin
-      FStateMsg := 'Found ' + FFiles.Count.ToString + ' files';
-      UpdateState;
-    end;
+    FStateMsg := 'Found ' + FFiles.Count.ToString + ' files';
   end;
 end;
 
