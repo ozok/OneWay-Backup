@@ -265,11 +265,21 @@ object MainForm: TMainForm
       end
       object SendEmailBtn: TsCheckBox
         Left = 436
-        Top = 20
+        Top = 8
         Width = 127
         Height = 20
         Caption = 'Send email when done'
         TabOrder = 7
+        ImgChecked = 0
+        ImgUnchecked = 0
+      end
+      object ShutdownBtn: TsCheckBox
+        Left = 436
+        Top = 34
+        Width = 124
+        Height = 20
+        Caption = 'Shutdown when done'
+        TabOrder = 8
         ImgChecked = 0
         ImgUnchecked = 0
       end
@@ -384,10 +394,6 @@ object MainForm: TMainForm
         ImageIndex = 1
         SkinData.CustomColor = False
         SkinData.CustomFont = False
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
         object ErrorLog: TsListView
           Left = 0
           Top = 0
@@ -422,10 +428,6 @@ object MainForm: TMainForm
         ImageIndex = 2
         SkinData.CustomColor = False
         SkinData.CustomFont = False
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
         object FullLogList: TsListView
           Left = 0
           Top = 0
@@ -893,5 +895,9 @@ object MainForm: TMainForm
     OnTimer = ProgressTimerTimer
     Left = 416
     Top = 208
+  end
+  object Info: TJvComputerInfoEx
+    Left = 896
+    Top = 156
   end
 end

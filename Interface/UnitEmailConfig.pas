@@ -62,7 +62,7 @@ procedure TEmailConfForm.FormShow(Sender: TObject);
 var
   LEmailSetFile: TIniFile;
 begin
-  LEmailSetFile := TIniFile.Create(ExtractFileDir(Application.ExeName) + '\email.ini');
+  LEmailSetFile := TIniFile.Create(MainForm.AppDataFolder + '\email.ini');
   try
     with LEmailSetFile do
     begin
@@ -82,7 +82,7 @@ procedure TEmailConfForm.SaveBtnClick(Sender: TObject);
 var
   LEmailSetFile: TIniFile;
 begin
-  LEmailSetFile := TIniFile.Create(ExtractFileDir(Application.ExeName) + '\email.ini');
+  LEmailSetFile := TIniFile.Create(MainForm.AppDataFolder + '\email.ini');
   try
     with LEmailSetFile do
     begin

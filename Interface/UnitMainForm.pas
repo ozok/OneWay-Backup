@@ -14,7 +14,8 @@ uses
   sSkinProvider, sSkinManager, sPageControl, acProgressBar, sComboBox, sButton,
   sLabel, sListView, sPanel, sGauge, IdIOHandler, IdIOHandlerSocket,
   IdIOHandlerStack, IdSSL, IdSSLOpenSSL, IniFiles, System.ImageList,
-  Vcl.ImgList, acAlphaImageList, Vcl.Buttons, sBitBtn, sCheckBox;
+  Vcl.ImgList, acAlphaImageList, Vcl.Buttons, sBitBtn, sCheckBox,
+  JvComputerInfoEx;
 
 type
   TLogItem = record
@@ -72,6 +73,8 @@ type
     ProgressBar: TsProgressBar;
     PercentageLabel: TsLabel;
     SendEmailBtn: TsCheckBox;
+    Info: TJvComputerInfoEx;
+    ShutdownBtn: TsCheckBox;
     procedure FormCreate(Sender: TObject);
     procedure RunJobsBtnClick(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -129,7 +132,6 @@ type
     FCompareMethodId: integer;
     FPreview: Boolean;
     FSendEmail: Boolean;
-    FAppDataFolder: string;
 
     procedure Log(const Str: string);
     procedure LogError(const Str: string);
@@ -156,12 +158,16 @@ type
     procedure DisableUI;
     procedure EnableUI;
 
+    procedure SaveSettings;
+    procedure LoadSettings;
+
     function CheckIfFileCanBeAdded(const FilePath: string; const ProjectIgnoreFileTypes: string):Boolean;
   public
     { Public declarations }
     FProjects: TProjectFiles;
     FFullLogItems: TLogItems;
     LastLogFilePath: string;
+    AppDataFolder: string;
 
     procedure SaveProjects;
     procedure LoadProjects;
@@ -173,11 +179,8 @@ var
   MainForm: TMainForm;
 
 const
-<<<<<<< .mine
-  PROGRAM_TITLE = 'OneWay Backup - Beta';
-=======
-  PROGRAM_TITLE = 'OneWay Backup - Beta 1';
->>>>>>> .theirs
+  PROGRAM_TITLE = 'OneWay Backup';
+  Portable = False;
 
 implementation
 
@@ -187,6 +190,7 @@ uses UnitProjectSettingsForm, UnitEmailConfig, UnitLog;
 
 procedure TMainForm.AddNewProjectBtnClick(Sender: TObject);
 begin
+  // default project settings
   ProjectSettingsForm.FItemIndex := -1;
   ProjectSettingsForm.DestDirEdit.Clear;
   ProjectSettingsForm.SourceDirEdit.Clear;
@@ -232,6 +236,7 @@ begin
 
   LSplitList := TStringList.Create;
   try
+    // file's extension
     LFileExt := ExtractFileExt(FilePath).ToLower;
 
     LSplitList.StrictDelimiter := True;
@@ -241,6 +246,7 @@ begin
     begin
       for I := 0 to LSplitList.Count-1 do
       begin
+        // if file's extension is in ignore list
         if LFileExt = LSplitList[i].ToLower then
         begin
           Result := False;
@@ -353,6 +359,7 @@ end;
 
 procedure TMainForm.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
+  // stop all possible operations
   FStop := True;
   if SearchSourceFiles.Searching then
   begin
@@ -371,13 +378,16 @@ begin
       OperationThread.Terminate;
     end;
   end;
+
   SaveProjects;
+  SaveSettings;
 end;
 
 procedure TMainForm.FormCreate(Sender: TObject);
 begin
   SearchSourceFiles.RecurseDepth := MaxInt;
   SearchDestFiles.RecurseDepth := MaxInt;
+
   FFiles := TStringList.Create;
   FFolders := TStringList.Create;
   FFileCompare := TFileComperator.Create;
@@ -385,9 +395,28 @@ begin
   FFullLogItems := TLogItems.Create;
   FGeneralLogItems := TLogItems.Create;
   FErrorLogItems := TLogItems.Create;
-  if not DirectoryExists(ExtractFileDir(Application.ExeName) + '\logs\') then
+
+  if Portable then
   begin
-    ForceDirectories(ExtractFileDir(Application.ExeName) + '\logs\')
+    AppDataFolder := ExtractFileDir(Application.ExeName);
+  end
+  else
+  begin
+    AppDataFolder := Info.Folders.AppData + '\OneWayBackup';
+  end;
+
+  if not DirectoryExists(AppDataFolder) then
+  begin
+    if not ForceDirectories(AppDataFolder) then
+    begin
+      Application.MessageBox('Unable to create appdata folder.', 'Fatal Error', MB_ICONERROR);
+      Application.Terminate;
+    end;
+  end;
+
+  if not DirectoryExists(AppDataFolder + '\logs\') then
+  begin
+    ForceDirectories(AppDataFolder + '\logs\')
   end;
 end;
 
@@ -422,6 +451,8 @@ var
   I: Integer;
   LParamStr: string;
 begin
+  // place label on the progressbar
+  // looks better this way
   PercentageLabel.Parent := ProgressBar;
   PercentageLabel.AutoSize := False;
   PercentageLabel.Transparent := True;
@@ -434,7 +465,9 @@ begin
 
   Self.Caption := PROGRAM_TITLE;
   LoadProjects;
+  LoadSettings;
 
+  // default values
   FAll := False;
   FRun := False;
   FExit := False;
@@ -442,6 +475,7 @@ begin
   FCompareMethodId := -1;
   FSendEmail := False;
 
+  // parse command lines
   for I := 1 to ParamCount do
   begin
     LParamStr := LowerCase(ParamStr(i));
@@ -501,6 +535,7 @@ var
   LListItem: TListItem;
   LHitTest: THitTests;
 begin
+  // this handles project state saving
   if JobsList.Items.Count > 0 then
   begin
     LListItem := JobsList.GetItemAt(x, y);
@@ -541,22 +576,29 @@ var
   LLine: string;
   LSplitList: TStringList;
 begin
-  if FileExists(ExtractFileDir(Application.ExeName) + '\data.dat') then
+  if FileExists(AppDataFolder + '\data.dat') then
   begin
     LProjectFile := TStringList.Create;
     try
-      LProjectFile.LoadFromFile(ExtractFileDir(Application.ExeName) + '\data.dat', TEncoding.UTF8);
+      LProjectFile.LoadFromFile(AppDataFolder + '\data.dat', TEncoding.UTF8);
 
       LSplitList := TStringList.Create;
       try
         LSplitList.StrictDelimiter := True;
+        // each project property on a line
+        // is seperated by a |
         LSplitList.Delimiter := '|';
 
+        // each line represents a project
         for I := 0 to LProjectFile.Count-1 do
         begin
           LLine := LProjectFile[i].Trim;
           LSplitList.DelimitedText := LLine;
+          // this value (8) may change as more properties
+          // are added to projects
 
+          // todo: check for | when a value is entered while
+          // creating or editing a project
           if LSplitList.Count = 8 then
           begin
             LProject := TProjectFile.Create();
@@ -587,6 +629,22 @@ begin
     finally
       LProjectFile.Free;
     end;
+  end;
+end;
+
+procedure TMainForm.LoadSettings;
+var
+  LSettingsFile: TIniFile;
+begin
+  LSettingsFile := TIniFile.Create(AppDataFolder + '\settings.ini');
+  try
+    with LSettingsFile do
+    begin
+      SendEmailBtn.Checked := ReadBool('general', 'sendemail', false);
+      ShutdownBtn.Checked := ReadBool('general', 'shutdown', false);
+    end;
+  finally
+    LSettingsFile.Free;
   end;
 end;
 
@@ -1208,7 +1266,7 @@ begin
   finally
     OperationThread.Synchronize(StopSpeedTimer);
     OperationThread.Synchronize(UpdateState);
-    LLogFilePath := ExtractFileDir(Application.ExeName) + '\logs\' + DateTimeToStr(Now).Replace('.', '').Replace(':', '').Replace(' ', '').Replace('\', '').Trim + '.log';
+    LLogFilePath := AppDataFolder + '\logs\' + DateTimeToStr(Now).Replace('.', '').Replace(':', '').Replace(' ', '').Replace('\', '').Trim + '.log';
     if FStop then
     begin
       FLogLineToAdd := 'Stopped by user.';
@@ -1229,8 +1287,8 @@ begin
     finally
       if (not FPreview) and (SendEmailBtn.Checked or FSendEmail) then
       begin
-        // send emails
-        LEmailSetFile := TIniFile.Create(ExtractFileDir(Application.ExeName) + '\email.ini');
+        // send email
+        LEmailSetFile := TIniFile.Create(AppDataFolder + '\email.ini');
         try
           with LEmailSetFile do
           begin
@@ -1286,6 +1344,7 @@ begin
       end;
       LLogFile.Free;
     end;
+    // post operation stuff
     OperationThread.Synchronize(StopPassedTimeTimer);
     OperationThread.Synchronize(StopProgressTimer);
     OperationThread.Synchronize(EnableUI);
@@ -1364,9 +1423,9 @@ var
 begin
   LProjectFile := TStringList.Create();
   try
-    if FileExists(ExtractFileDir(Application.ExeName) + '\data.dat') then
+    if FileExists(AppDataFolder + '\data.dat') then
     begin
-      DeleteFile(ExtractFileDir(Application.ExeName) + '\data.dat');
+      DeleteFile(AppDataFolder + '\data.dat');
     end;
     for I := 0 to FProjects.Count-1 do
     begin
@@ -1376,8 +1435,24 @@ begin
       LProjectFile.Add(LLine);
     end;
   finally
-    LProjectFile.SaveToFile(ExtractFileDir(Application.ExeName) + '\data.dat', TEncoding.UTF8);
+    LProjectFile.SaveToFile(AppDataFolder + '\data.dat', TEncoding.UTF8);
     LProjectFile.Free;
+  end;
+end;
+
+procedure TMainForm.SaveSettings;
+var
+  LSettingsFile: TIniFile;
+begin
+  LSettingsFile := TIniFile.Create(AppDataFolder + '\settings.ini');
+  try
+    with LSettingsFile do
+    begin
+      WriteBool('general', 'sendemail', SendEmailBtn.Checked);
+      WriteBool('general', 'shutdown', ShutdownBtn.Checked);
+    end;
+  finally
+    LSettingsFile.Free;
   end;
 end;
 
@@ -1394,6 +1469,7 @@ end;
 
 procedure TMainForm.SearchSourceFilesFindFile(Sender: TObject; const AName: string);
 begin
+  // for ignore file type options
   if CheckIfFileCanBeAdded(AName, FIgnoreTypeString) then
   begin
     FFiles.Add(AName);
@@ -1467,8 +1543,9 @@ end;
 
 procedure TMainForm.ShutDown;
 begin
-  if FShutDown then
+  if FShutDown or ShutdownBtn.Checked then
   begin
+    // ugly af
     WinExec('shutdown.exe -s -f -t 0' , SW_HIDE);
   end;
 end;
@@ -1546,6 +1623,7 @@ begin
   if FMaxProgress > 0 then
   begin
     LProgress := (10000 * FProgress) / FMaxProgress;
+    // 32,15 for example
     LProgressStr :=  Format('%.2f', [LProgress/100]) + '%';
     Self.Caption := LProgressStr + ' [' + PROGRAM_TITLE + ']';
     PercentageLabel.Caption := LProgressStr;
