@@ -1083,8 +1083,12 @@ begin
                         begin
                           FLogLineToAdd := TAB + 'Last resort also failed. Copy error: ' + E.Message + ' ' + LFileCopyAgainPairs[i].SourceFile;
                           OperationThread.Synchronize(AddToErrorLog);
+                        end
+                        else
+                        begin
+                          FLogLineToAdd := TAB + 'SHFileOperations worked. Copied: ' + LFileCopyAgainPairs[i].SourceFile + ' is copied to ' + LFileCopyAgainPairs[i].DestFile;
+                          OperationThread.Synchronize(AddToErrorLog);
                         end;
-
 
                         Continue;
                       end;
