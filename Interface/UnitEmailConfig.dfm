@@ -40,6 +40,12 @@ object EmailConfForm: TEmailConfForm
     Width = 291
     Height = 21
     Anchors = [akLeft, akTop, akRight]
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
     TabOrder = 0
     BoundLabel.Active = True
     BoundLabel.Caption = 'From:'
@@ -50,6 +56,12 @@ object EmailConfForm: TEmailConfForm
     Width = 291
     Height = 21
     Anchors = [akLeft, akTop, akRight]
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
     TabOrder = 1
     BoundLabel.Active = True
     BoundLabel.Caption = 'To:'
@@ -60,6 +72,12 @@ object EmailConfForm: TEmailConfForm
     Width = 291
     Height = 21
     Anchors = [akLeft, akTop, akRight]
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
     TabOrder = 2
     BoundLabel.Active = True
     BoundLabel.Caption = 'Host:'
@@ -70,6 +88,12 @@ object EmailConfForm: TEmailConfForm
     Width = 291
     Height = 21
     Anchors = [akLeft, akTop, akRight]
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
     TabOrder = 3
     BoundLabel.Active = True
     BoundLabel.Caption = 'User Name:'
@@ -80,6 +104,12 @@ object EmailConfForm: TEmailConfForm
     Width = 291
     Height = 21
     Anchors = [akLeft, akTop, akRight]
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
     PasswordChar = '*'
     TabOrder = 4
     BoundLabel.Active = True
@@ -90,7 +120,13 @@ object EmailConfForm: TEmailConfForm
     Top = 97
     Width = 121
     Height = 21
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
     NumbersOnly = True
+    ParentFont = False
     TabOrder = 5
     Text = '25'
     BoundLabel.Active = True
@@ -159,5 +195,17 @@ object EmailConfForm: TEmailConfForm
     SSLOptions.VerifyDepth = 0
     Left = 181
     Top = 136
+  end
+  object sSkinProvider1: TsSkinProvider
+    AddedTitle.Font.Charset = DEFAULT_CHARSET
+    AddedTitle.Font.Color = clNone
+    AddedTitle.Font.Height = -11
+    AddedTitle.Font.Name = 'Tahoma'
+    AddedTitle.Font.Style = []
+    FormHeader.AdditionalHeight = 0
+    SkinData.SkinSection = 'FORM'
+    TitleButtons = <>
+    Left = 288
+    Top = 48
   end
 end

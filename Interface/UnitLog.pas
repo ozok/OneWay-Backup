@@ -5,12 +5,13 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ComCtrls, sListView, Vcl.StdCtrls,
-  sLabel, ShellApi;
+  sLabel, ShellApi, sSkinProvider;
 
 type
   TLogForm = class(TForm)
     LogList: TsListView;
     LogFilePathLabel: TsLabel;
+    sSkinProvider1: TsSkinProvider;
     procedure FormResize(Sender: TObject);
     procedure LogListData(Sender: TObject; Item: TListItem);
     procedure FormShow(Sender: TObject);

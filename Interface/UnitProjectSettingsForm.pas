@@ -107,12 +107,12 @@ begin
         LItem.SubItems.Add(LProjectFile.IgnoredFileTypes);
         LItem.SubItems.Add(MainForm.CompareMethodToStr(LProjectFile.CompareMethod));
         LItem.Checked := LProjectFile.Active;
-
+//
         MainForm.JobsList.Items.Clear;
         MainForm.FProjects.Clear;
         MainForm.LoadProjects;
 
-        Self.Close;
+        Close;
       end;
     end;
   end;

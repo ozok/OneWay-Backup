@@ -15,7 +15,7 @@ uses
   sLabel, sListView, sPanel, sGauge, IdIOHandler, IdIOHandlerSocket,
   IdIOHandlerStack, IdSSL, IdSSLOpenSSL, IniFiles, System.ImageList,
   Vcl.ImgList, acAlphaImageList, Vcl.Buttons, sBitBtn, sCheckBox,
-  JvComputerInfoEx;
+  JvComputerInfoEx, IOUtils;
 
 type
   TLogItem = record
@@ -110,6 +110,7 @@ type
     procedure DeleteBtnClick(Sender: TObject);
     procedure PreviewBtnClick(Sender: TObject);
     procedure LogBtnClick(Sender: TObject);
+    procedure AboutBtnClick(Sender: TObject);
   private
     { Private declarations }
     FFiles: TStringList;
@@ -163,6 +164,8 @@ type
     procedure LoadSettings;
 
     function CheckIfFileCanBeAdded(const FilePath: string; const ProjectIgnoreFileTypes: string):Boolean;
+
+    function CopyFileUsingSHFO(const Source: string; const Dest: string):Boolean;
   public
     { Public declarations }
     FProjects: TProjectFiles;
@@ -181,13 +184,18 @@ var
 
 const
   PROGRAM_TITLE = 'OneWay Backup';
-  Portable = False;
 
 implementation
 
 {$R *.dfm}
 
-uses UnitProjectSettingsForm, UnitEmailConfig, UnitLog;
+uses UnitProjectSettingsForm, UnitEmailConfig, UnitLog, UnitAbout;
+
+procedure TMainForm.AboutBtnClick(Sender: TObject);
+begin
+  AboutForm.Show;
+  Self.Enabled := False;
+end;
 
 procedure TMainForm.AddNewProjectBtnClick(Sender: TObject);
 begin
@@ -286,6 +294,18 @@ begin
   EmailConfForm.Show;
 end;
 
+function TMainForm.CopyFileUsingSHFO(const Source, Dest: string): Boolean;
+var
+  shFOS : TShFileOpStruct;
+begin
+  shFOS.Wnd := Application.MainForm.Handle;
+  shFOS.wFunc := FO_COPY;
+  shFOS.pFrom := PWideChar(Source + #0);
+  shFOS.pTo := PWideChar(Dest + #0);
+  shFOS.fFlags := FOF_NOCONFIRMATION or FOF_NOCONFIRMMKDIR or FOF_NOERRORUI;
+  Result := 0 = SHFileOperation(shFOS);
+end;
+
 procedure TMainForm.DeleteBtnClick(Sender: TObject);
 var
   I: Integer;
@@ -315,6 +335,7 @@ begin
   ConfEmailBtn.Enabled := False;
   DeleteBtn.Enabled := False;
   PreviewBtn.Enabled := False;
+  AboutBtn.Enabled := False;
 end;
 
 procedure TMainForm.EditProjectBtnClick(Sender: TObject);
@@ -336,6 +357,7 @@ begin
   StopBtn.Enabled := False;
   ActivatePanel.Enabled := True;
   ConfEmailBtn.Enabled := True;
+  AboutBtn.Enabled := True;
   StateLabel.Caption := '';
   ProjectNameLabel.Caption := '';
   ChangesLabel.Caption := '';
@@ -397,14 +419,15 @@ begin
   FGeneralLogItems := TLogItems.Create;
   FErrorLogItems := TLogItems.Create;
 
-  if Portable then
-  begin
+  {$IFDEF PORTABLE}
     AppDataFolder := ExtractFileDir(Application.ExeName);
-  end
-  else
-  begin
+  {$ENDIF}
+  {$IFDEF INSTALLED}
     AppDataFolder := Info.Folders.AppData + '\OneWayBackup';
-  end;
+  {$ENDIF}
+
+  FLogLineToAdd := 'Appdata location ' + AppDataFolder;
+  AddToLog;
 
   if not DirectoryExists(AppDataFolder) then
   begin
@@ -756,6 +779,7 @@ var
   LCopiedCount: integer;
   LFileCopyPair: TFileCopyPair;
   LFileCopyPairs: TFileCopyPairs;
+  LFileCopyAgainPairs: TFileCopyPairs;
   LDateTime: TDateTime;
   LFilesToDelete: TStringList;
   LDirsToDelete: TStringList;
@@ -827,6 +851,7 @@ begin
           FTotalCMDCount := 0;
           // create a list to hold the names of the files that will be copied
           LFileCopyPairs := TFileCopyPairs.Create;
+          LFileCopyAgainPairs := TFileCopyPairs.Create;
           try
             FMaxProgress := FFiles.Count;
             OperationThread.Synchronize(UpdateMaxProgres);
@@ -992,25 +1017,81 @@ begin
                       DeleteFile(LFileCopyPairs[i].DestFile);
                     end;
 
-                    // report if copy fails
-                    if not CopyFile(PWideChar(LFileCopyPairs[i].SourceFile), PWideChar(LFileCopyPairs[i].DestFile), false) then
-                    begin
-                      RaiseLastOSError;
-                    end
-                    else
-                    begin
-                      FLogLineToAdd := TAB + LFileCopyPairs[i].SourceFile + ' is copied to ' + LFileCopyPairs[i].DestFile;
-                      OperationThread.Synchronize(AddToFullLog);
-                    end;
+                    TFile.Copy(LFileCopyPairs[i].SourceFile, LFileCopyPairs[i].DestFile, True);
+                    FLogLineToAdd := TAB + LFileCopyPairs[i].SourceFile + ' is copied to ' + LFileCopyPairs[i].DestFile;
+                    OperationThread.Synchronize(AddToFullLog);
                   except on E: Exception do
                     begin
+                      LFileCopyAgainPairs.Add(LFileCopyPairs[i]);
                       FLogLineToAdd := TAB + 'Copy error: ' + E.Message + ' ' + LFileCopyPairs[i].SourceFile;
                       OperationThread.Synchronize(AddToErrorLog);
+                      FLogLineToAdd := TAB + 'Will try to copy again: ' + LFileCopyPairs[i].SourceFile;
+                      OperationThread.Synchronize(AddToFullLog);
                       Continue;
                     end;
                   end;
                 end;
                 OperationThread.Synchronize(StopSpeedTimer);
+              end;
+
+              // try to copy file that couldn't be copied earlier
+              if not FStop then
+              begin
+                if LFileCopyAgainPairs.Count > 0 then
+                begin
+                  FLogLineToAdd := TAB + 'Trying to copy file with copy error: ' + LFileCopyAgainPairs.Count.ToString();
+                  OperationThread.Synchronize(AddToLog);
+                end;
+                if not FPreview then
+                begin
+                  FMaxProgress := LFileCopyAgainPairs.Count;
+                  OperationThread.Synchronize(UpdateMaxProgres);
+                  OperationThread.Synchronize(StartSpeedTimer);
+                  for I := 0 to LFileCopyAgainPairs.Count-1 do
+                  begin
+                    if FStop then
+                    begin
+                      Break;
+                    end;
+
+                    FProgress := i+1;
+                    FStateMsg := 'Copying ' + i.ToString + '/' + LFileCopyAgainPairs.Count.ToString + ' (' + LFileCopyAgainPairs[i].DestFile + ')';
+                    try
+                      if FileExists(LFileCopyAgainPairs[i].DestFile) then
+                      begin
+                        DeleteFile(LFileCopyAgainPairs[i].DestFile);
+                      end;
+
+                      // report if copy fails
+                      if not CopyFile(PWideChar(LFileCopyAgainPairs[i].SourceFile), PWideChar(LFileCopyAgainPairs[i].DestFile), false) then
+                      begin
+                        RaiseLastOSError;
+                      end
+                      else
+                      begin
+                        FLogLineToAdd := TAB + LFileCopyAgainPairs[i].SourceFile + ' is copied to ' + LFileCopyAgainPairs[i].DestFile;
+                        OperationThread.Synchronize(AddToFullLog);
+                      end;
+                    except on E: Exception do
+                      begin
+                        FLogLineToAdd := TAB + 'Copy error: ' + E.Message + ' ' + LFileCopyAgainPairs[i].SourceFile;
+                        OperationThread.Synchronize(AddToErrorLog);
+                        FLogLineToAdd := TAB + 'Trying SHFileOperations as the last result. ' + LFileCopyAgainPairs[i].SourceFile;
+                        OperationThread.Synchronize(AddToFullLog);
+
+                        if not CopyFileUsingSHFO(LFileCopyAgainPairs[i].SourceFile, LFileCopyAgainPairs[i].DestFile) then
+                        begin
+                          FLogLineToAdd := TAB + 'Last resort also failed. Copy error: ' + E.Message + ' ' + LFileCopyAgainPairs[i].SourceFile;
+                          OperationThread.Synchronize(AddToErrorLog);
+                        end;
+
+
+                        Continue;
+                      end;
+                    end;
+                  end;
+                  OperationThread.Synchronize(StopSpeedTimer);
+                end;
               end;
             end;
 
@@ -1220,6 +1301,7 @@ begin
             end;
           finally
             LFileCopyPairs.Free;
+            LFileCopyAgainPairs.Free;
           end;
         end;
         FLogLineToAdd := TAB + 'Finished ' + FProjects[J].ProjectName;

@@ -28,7 +28,12 @@ object ProjectSettingsForm: TProjectSettingsForm
     Width = 677
     Height = 21
     AutoSize = False
-    Color = clWhite
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clBlack
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
     TabOrder = 2
     BoundLabel.Active = True
     BoundLabel.Caption = 'Project Name:'
@@ -43,7 +48,6 @@ object ProjectSettingsForm: TProjectSettingsForm
     Caption = 'Save'
     TabOrder = 5
     OnClick = SaveProjectBtnClick
-    ExplicitTop = 241
   end
   object DeleteFromDestBtn: TsCheckBox
     Left = 8
@@ -64,7 +68,12 @@ object ProjectSettingsForm: TProjectSettingsForm
     Width = 677
     Height = 21
     AutoSize = False
-    Color = clWhite
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clBlack
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
     TabOrder = 3
     BoundLabel.Active = True
     BoundLabel.Caption = 'Ignore these file types (separate with ; example: .mp3;.jpeg)'
@@ -77,8 +86,13 @@ object ProjectSettingsForm: TProjectSettingsForm
     Width = 593
     Height = 21
     AutoSize = False
-    Color = clWhite
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clBlack
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
     MaxLength = 255
+    ParentFont = False
     TabOrder = 0
     Text = ''
     CheckOnExit = True
@@ -96,8 +110,13 @@ object ProjectSettingsForm: TProjectSettingsForm
     Width = 593
     Height = 21
     AutoSize = False
-    Color = clWhite
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clBlack
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
     MaxLength = 255
+    ParentFont = False
     TabOrder = 1
     Text = ''
     CheckOnExit = True
@@ -114,8 +133,13 @@ object ProjectSettingsForm: TProjectSettingsForm
     Width = 121
     Height = 21
     Alignment = taCenter
-    Color = clWhite
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clBlack
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
     NumbersOnly = True
+    ParentFont = False
     TabOrder = 6
     Text = '8192'
     BoundLabel.Active = True
@@ -135,7 +159,6 @@ object ProjectSettingsForm: TProjectSettingsForm
     BoundLabel.Caption = 'File Compare Method:'
     VerticalAlignment = taAlignTop
     Style = csDropDownList
-    Color = clWhite
     ItemIndex = 0
     TabOrder = 7
     Text = 'Full File Search'

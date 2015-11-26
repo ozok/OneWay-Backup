@@ -8,7 +8,7 @@ uses
   sSpinEdit, sEdit, IniFiles, IdIOHandler, IdIOHandlerSocket, IdIOHandlerStack,
   IdSSL, IdSSLOpenSSL, IdComponent, IdTCPConnection, IdTCPClient,
   IdExplicitTLSClientServerBase, IdMessageClient, IdSMTPBase, IdSMTP,
-  IdBaseComponent, IdMessage;
+  IdBaseComponent, IdMessage, sSkinProvider;
 
 type
   TEmailConfForm = class(TForm)
@@ -25,6 +25,7 @@ type
     IdMessage1: TIdMessage;
     IdSMTP1: TIdSMTP;
     IdSSLIOHandlerSocketOpenSSL1: TIdSSLIOHandlerSocketOpenSSL;
+    sSkinProvider1: TsSkinProvider;
     procedure CancelBtnClick(Sender: TObject);
     procedure SaveBtnClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);

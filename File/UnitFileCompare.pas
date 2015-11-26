@@ -3,18 +3,19 @@ unit UnitFileCompare;
 interface
 
 uses Classes, SysUtils, Windows, IOUtils, DateUtils, IdHashMessageDigest,
-  idHash, ComCtrls;
+  idHash, ComCtrls, JclFileUtils;
 
 type
   TFileComperator = class
   private
     function StreamsAreIdentical(const FileStream1, FileStream2: TStream; const BlockSize: Integer): Boolean;
-    function DoFilesHaveSameLastModifiedTime(const FilePath1: string; const FilePath2: string): Boolean;
+    function CompareLastModifiedDate(const FilePath1: string; const FilePath2: string): Boolean;
     function CompareMD5(const FileStream1, FileStream2: TStream): Boolean;
     function CalculateMD5(const FS: TStream): string;
     function CompareSizes(const FS1: TStream; const FS2: TStream): Boolean;
     function GetFileLastModifiedDate(const FilePath: string): _FILETIME;
-    function GetFileLastModDate(filename: string): TDateTime;
+    function GetFileLastModDate(FileName: string): TDateTime;
+    function FileTimeToDateTime(FileTime: TFileTime): TDateTime;
   public
     Stop: Boolean;
     function CompareFiles(const FileName1, FileName2: String; const BlockSize: Integer; const CompareMethod: integer; var Reason: string): Boolean;
@@ -49,7 +50,7 @@ begin
     Reason := '[DestDoesntExist] ';
     Exit;
   end;
-  if not DoFilesHaveSameLastModifiedTime(FileName1, FileName2) then
+  if not CompareLastModifiedDate(FileName1, FileName2) then
   begin
     Reason := '[DateDiff] ';
     Result := False;
@@ -108,24 +109,31 @@ begin
   Result := FS1.Size = FS2.Size;
 end;
 
-function TFileComperator.DoFilesHaveSameLastModifiedTime(const FilePath1, FilePath2: string): Boolean;
+function TFileComperator.FileTimeToDateTime(FileTime: TFileTime): TDateTime;
 var
-  LDate1, LDate2: TDateTime;
-  LFileAge1, LFileAge2: integer;
-begin
-  Result := FileAge(FilePath1) = FileAge(FilePath2);
-end;
-
-function TFileComperator.GetFileLastModDate(filename: string): TDateTime;
-var
-  fileDate: integer;
+  ModifiedTime: TFileTime;
+  SystemTime: TSystemTime;
 begin
   Result := 0;
-  fileDate := FileAge(filename);
+  if (FileTime.dwLowDateTime = 0) and (FileTime.dwHighDateTime = 0) then
+    Exit;
+  try
+    FileTimeToLocalFileTime(FileTime, ModifiedTime);
+    FileTimeToSystemTime(ModifiedTime, SystemTime);
+    Result := SystemTimeToDateTime(SystemTime);
+  except
+    Result := Now; // Something to return in case of error
+  end;
+end;
 
-  // Did we get the file age OK?
-  if fileDate > -1 then
-    Result := FileDateToDateTime(fileDate);
+function TFileComperator.CompareLastModifiedDate(const FilePath1, FilePath2: string): Boolean;
+begin
+  Result := GetFileLastModDate(FilePath1) = GetFileLastModDate(FilePath2);
+end;
+
+function TFileComperator.GetFileLastModDate(FileName: string): TDateTime;
+begin
+  Result := FileTimeToDateTime(GetFileLastWrite(FileName));
 end;
 
 function TFileComperator.GetFileLastModifiedDate(const FilePath: string): _FILETIME;

@@ -31,9 +31,9 @@ object MainForm: TMainForm
     TabOrder = 0
     object LeftPanel: TsPanel
       Left = 0
-      Top = 60
+      Top = 65
       Width = 1008
-      Height = 235
+      Height = 230
       Align = alClient
       BevelOuter = bvNone
       TabOrder = 0
@@ -41,10 +41,9 @@ object MainForm: TMainForm
         Left = 0
         Top = 25
         Width = 1008
-        Height = 210
+        Height = 205
         Align = alClient
         Checkboxes = True
-        Color = 15263976
         Columns = <
           item
             Caption = 'Project Name'
@@ -72,7 +71,7 @@ object MainForm: TMainForm
             Width = 100
           end>
         Font.Charset = DEFAULT_CHARSET
-        Font.Color = clBlack
+        Font.Color = clWindowText
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
@@ -155,7 +154,7 @@ object MainForm: TMainForm
       Left = 0
       Top = 0
       Width = 1008
-      Height = 60
+      Height = 65
       Align = alTop
       BevelOuter = bvNone
       TabOrder = 1
@@ -164,7 +163,7 @@ object MainForm: TMainForm
         Left = 818
         Top = 0
         Width = 95
-        Height = 60
+        Height = 65
         Cursor = crHandPoint
         Align = alRight
         Caption = 'Run'
@@ -231,7 +230,7 @@ object MainForm: TMainForm
         Left = 0
         Top = 0
         Width = 95
-        Height = 60
+        Height = 65
         Cursor = crHandPoint
         Hint = 'Add a new backup project'
         Align = alLeft
@@ -311,7 +310,7 @@ object MainForm: TMainForm
         Left = 913
         Top = 0
         Width = 95
-        Height = 60
+        Height = 65
         Cursor = crHandPoint
         Align = alRight
         Caption = 'Stop'
@@ -391,7 +390,7 @@ object MainForm: TMainForm
         Left = 95
         Top = 0
         Width = 95
-        Height = 60
+        Height = 65
         Cursor = crHandPoint
         Align = alLeft
         Caption = 'Edit'
@@ -470,7 +469,7 @@ object MainForm: TMainForm
         Left = 285
         Top = 0
         Width = 95
-        Height = 60
+        Height = 65
         Cursor = crHandPoint
         Align = alLeft
         Caption = 'Email Options'
@@ -549,7 +548,7 @@ object MainForm: TMainForm
         Left = 190
         Top = 0
         Width = 95
-        Height = 60
+        Height = 65
         Cursor = crHandPoint
         Align = alLeft
         Caption = 'Delete'
@@ -628,7 +627,7 @@ object MainForm: TMainForm
         Left = 723
         Top = 0
         Width = 95
-        Height = 60
+        Height = 65
         Cursor = crHandPoint
         Align = alRight
         Caption = 'Preview'
@@ -706,8 +705,8 @@ object MainForm: TMainForm
       object SendEmailBtn: TsCheckBox
         Left = 386
         Top = 8
-        Width = 134
-        Height = 19
+        Width = 127
+        Height = 20
         Caption = 'Send email when done'
         TabOrder = 7
         ImgChecked = 0
@@ -716,8 +715,8 @@ object MainForm: TMainForm
       object ShutdownBtn: TsCheckBox
         Left = 386
         Top = 34
-        Width = 131
-        Height = 19
+        Width = 124
+        Height = 20
         Caption = 'Shutdown when done'
         TabOrder = 8
         ImgChecked = 0
@@ -727,7 +726,7 @@ object MainForm: TMainForm
         Left = 628
         Top = 0
         Width = 95
-        Height = 60
+        Height = 65
         Cursor = crHandPoint
         Align = alRight
         Caption = 'About'
@@ -797,6 +796,7 @@ object MainForm: TMainForm
           FF00FFFFFF00FFFFFF00}
         Layout = blGlyphTop
         TabOrder = 9
+        OnClick = AboutBtnClick
         ImageIndex = 9
         Reflected = True
         SkinData.SkinSection = 'TOOLBUTTON'
@@ -805,7 +805,7 @@ object MainForm: TMainForm
         Left = 533
         Top = 0
         Width = 95
-        Height = 60
+        Height = 65
         Cursor = crHandPoint
         Align = alRight
         Caption = 'Donate'
@@ -961,7 +961,6 @@ object MainForm: TMainForm
           Width = 998
           Height = 144
           Align = alClient
-          Color = 15263976
           Columns = <
             item
               Width = 125
@@ -970,7 +969,7 @@ object MainForm: TMainForm
               Width = 500
             end>
           Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
+          Font.Color = clWindowText
           Font.Height = -11
           Font.Name = 'Tahoma'
           Font.Style = []
@@ -997,7 +996,6 @@ object MainForm: TMainForm
           Width = 998
           Height = 144
           Align = alClient
-          Color = 15263976
           Columns = <
             item
               Width = 125
@@ -1005,7 +1003,7 @@ object MainForm: TMainForm
             item
             end>
           Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
+          Font.Color = clWindowText
           Font.Height = -11
           Font.Name = 'Tahoma'
           Font.Style = []
@@ -1032,7 +1030,6 @@ object MainForm: TMainForm
           Width = 998
           Height = 144
           Align = alClient
-          Color = 15263976
           Columns = <
             item
               Width = 125
@@ -1040,7 +1037,7 @@ object MainForm: TMainForm
             item
             end>
           Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
+          Font.Color = clWindowText
           Font.Height = -11
           Font.Name = 'Tahoma'
           Font.Style = []
@@ -1152,7 +1149,7 @@ object MainForm: TMainForm
     Top = 172
   end
   object sSkinManager1: TsSkinManager
-    Brightness = -10
+    Active = False
     InternalSkins = <
       item
         Name = 'Aluminium (internal)'
@@ -3340,7 +3337,7 @@ object MainForm: TMainForm
     MenuSupport.ExtraLineFont.Style = []
     SkinDirectory = 'H:\delphi\Skins'
     SkinName = 'Aluminium (internal)'
-    SkinInfo = '10'
+    SkinInfo = 'N/A'
     ThirdParty.ThirdEdits = ' '
     ThirdParty.ThirdButtons = 'TButton'
     ThirdParty.ThirdBitBtns = ' '

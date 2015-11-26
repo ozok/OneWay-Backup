@@ -16,7 +16,8 @@ uses
   Vcl.Themes,
   Vcl.Styles,
   UnitEmailConfig in 'Interface\UnitEmailConfig.pas' {EmailConfForm} ,
-  UnitLog in 'Interface\UnitLog.pas' {LogForm};
+  UnitLog in 'Interface\UnitLog.pas' {LogForm} ,
+  UnitAbout in 'Interface\UnitAbout.pas' {AboutForm};
 
 {$R *.res}
 
@@ -28,6 +29,7 @@ begin
   Application.CreateForm(TProjectSettingsForm, ProjectSettingsForm);
   Application.CreateForm(TEmailConfForm, EmailConfForm);
   Application.CreateForm(TLogForm, LogForm);
+  Application.CreateForm(TAboutForm, AboutForm);
   Application.Run;
 
 end.
