@@ -930,7 +930,7 @@ begin
                   if not DirectoryExists(LDestDir) then
                   begin
                     LDirToCreate.Directory := LDestDir;
-                    LDirToCreate.Attributes := TFile.GetAttributes(LSourceDir);
+                    LDirToCreate.Attributes := FileGetAttr(LSourceDir);
                     LDirsToCreate.Add(LDirToCreate);
                   end;
                 end;
@@ -1258,7 +1258,7 @@ begin
                   if DirectoryExists(LDestDir) then
                   begin
                     LDirToCreate.Directory := LDestDir;
-                    LDirToCreate.Attributes := TFile.GetAttributes(LSourceDir);
+                    LDirToCreate.Attributes := FileGetAttr(LSourceDir);
                     LDirsToCreate.Add(LDirToCreate);
                   end;
                 end;
@@ -1286,7 +1286,7 @@ begin
                     FProgress := i + 1;
                     FStateMsg := 'Writing attribute to ' + LDirsToCreate[i].Directory;
                     try
-                      TFile.SetAttributes(LDirsToCreate[i].Directory, LDirsToCreate[i].Attributes);
+                      FileSetAttr(LDirsToCreate[i].Directory, LDirsToCreate[i].Attributes);
                     except on E: Exception do
                     begin
                       FLogLineToAdd := TAB + 'Change attribute error: ' + E.Message;
