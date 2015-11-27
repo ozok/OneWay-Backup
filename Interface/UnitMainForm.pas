@@ -930,7 +930,7 @@ begin
                   if not DirectoryExists(LDestDir) then
                   begin
                     LDirToCreate.Directory := LDestDir;
-                    LDirToCreate.Attributes := FileGetAttr(LSourceDir);
+                    LDirToCreate.Attributes := TFile.GetAttributes(LSourceDir);
                     LDirsToCreate.Add(LDirToCreate);
                   end;
                 end;
@@ -1258,7 +1258,7 @@ begin
                   if DirectoryExists(LDestDir) then
                   begin
                     LDirToCreate.Directory := LDestDir;
-                    LDirToCreate.Attributes := FileGetAttr(LSourceDir);
+                    LDirToCreate.Attributes := TFile.GetAttributes(LSourceDir);
                     LDirsToCreate.Add(LDirToCreate);
                   end;
                 end;
@@ -1286,7 +1286,7 @@ begin
                     FProgress := i + 1;
                     FStateMsg := 'Writing attribute to ' + LDirsToCreate[i].Directory;
                     try
-                      FileSetAttr(LDirsToCreate[i].Directory, LDirsToCreate[i].Attributes);
+                      TFile.SetAttributes(LDirsToCreate[i].Directory, LDirsToCreate[i].Attributes);
                     except on E: Exception do
                     begin
                       FLogLineToAdd := TAB + 'Change attribute error: ' + E.Message;
@@ -1418,6 +1418,10 @@ end;
 
 procedure TMainForm.PreviewBtnClick(Sender: TObject);
 begin
+  if LogForm.Visible then
+  begin
+    LogForm.Close;
+  end;
   FPreview := True;
   PassedTimeTimer.Enabled := True;
   FFullLogItems.Clear;
@@ -1448,6 +1452,10 @@ end;
 
 procedure TMainForm.RunJobsBtnClick(Sender: TObject);
 begin
+  if LogForm.Visible then
+  begin
+    LogForm.Close;
+  end;
   FPreview := False;
   PassedTimeTimer.Enabled := True;
   FFullLogItems.Clear;
@@ -1578,15 +1586,12 @@ end;
 
 procedure TMainForm.ShowPreviewResults;
 begin
-  if FPreview then
+  if not FShutDown then
   begin
-    if not FShutDown then
+    if not FExit then
     begin
-      if not FExit then
-      begin
-        LogForm.LogList.Items.Count := FFullLogItems.Count;
-        LogForm.Show;
-      end;
+      LogForm.LogList.Items.Count := FFullLogItems.Count;
+      LogForm.Show;
     end;
   end;
 end;

@@ -990,10 +990,6 @@ object MainForm: TMainForm
         ImageIndex = 1
         SkinData.CustomColor = False
         SkinData.CustomFont = False
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
         object ErrorLog: TsListView
           Left = 0
           Top = 0
@@ -1028,10 +1024,6 @@ object MainForm: TMainForm
         ImageIndex = 2
         SkinData.CustomColor = False
         SkinData.CustomFont = False
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
         object FullLogList: TsListView
           Left = 0
           Top = 0

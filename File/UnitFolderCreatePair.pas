@@ -2,12 +2,12 @@ unit UnitFolderCreatePair;
 
 interface
 
-uses Generics.Collections;
+uses Generics.Collections, IOUtils;
 
 type
   TFolderCreatePair = record
     Directory: string;
-    Attributes: integer;
+    Attributes: TFileAttributes;
   end;
 
   TFolderCreatePairs = TList<TFolderCreatePair>;
