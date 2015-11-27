@@ -1023,9 +1023,7 @@ begin
                   except on E: Exception do
                     begin
                       LFileCopyAgainPairs.Add(LFileCopyPairs[i]);
-                      FLogLineToAdd := TAB + 'Copy error: ' + E.Message + ' ' + LFileCopyPairs[i].SourceFile;
-                      OperationThread.Synchronize(AddToErrorLog);
-                      FLogLineToAdd := TAB + 'Will try to copy again: ' + LFileCopyPairs[i].SourceFile;
+                      FLogLineToAdd := TAB + '1st copy failed. Will try to copy again: ' + LFileCopyPairs[i].SourceFile;
                       OperationThread.Synchronize(AddToFullLog);
                       Continue;
                     end;
@@ -1034,12 +1032,12 @@ begin
                 OperationThread.Synchronize(StopSpeedTimer);
               end;
 
-              // try to copy file that couldn't be copied earlier
+              // try to copy files that couldn't be copied earlier
               if not FStop then
               begin
                 if LFileCopyAgainPairs.Count > 0 then
                 begin
-                  FLogLineToAdd := TAB + 'Trying to copy file with copy error: ' + LFileCopyAgainPairs.Count.ToString();
+                  FLogLineToAdd := TAB + 'Trying to copy again: ' + LFileCopyAgainPairs.Count.ToString();
                   OperationThread.Synchronize(AddToLog);
                 end;
                 if not FPreview then
@@ -1074,9 +1072,7 @@ begin
                       end;
                     except on E: Exception do
                       begin
-                        FLogLineToAdd := TAB + 'Copy error: ' + E.Message + ' ' + LFileCopyAgainPairs[i].SourceFile;
-                        OperationThread.Synchronize(AddToErrorLog);
-                        FLogLineToAdd := TAB + 'Trying SHFileOperations as the last result. ' + LFileCopyAgainPairs[i].SourceFile;
+                        FLogLineToAdd := TAB + '2nd copy failed. Trying SHFileOperations as the last result. ' + LFileCopyAgainPairs[i].SourceFile;
                         OperationThread.Synchronize(AddToFullLog);
 
                         if not CopyFileUsingSHFO(LFileCopyAgainPairs[i].SourceFile, LFileCopyAgainPairs[i].DestFile) then

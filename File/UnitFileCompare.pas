@@ -12,8 +12,6 @@ type
     function CompareLastModifiedDate(const FilePath1: string; const FilePath2: string): Boolean;
     function CompareMD5(const FileStream1, FileStream2: TStream): Boolean;
     function CalculateMD5(const FS: TStream): string;
-    function CompareSizes(const FS1: TStream; const FS2: TStream): Boolean;
-    function GetFileLastModifiedDate(const FilePath: string): _FILETIME;
     function GetFileLastModDate(FileName: string): TDateTime;
     function FileTimeToDateTime(FileTime: TFileTime): TDateTime;
   public
@@ -104,11 +102,6 @@ begin
   Result := LHashStr1 = LHashStr2;
 end;
 
-function TFileComperator.CompareSizes(const FS1, FS2: TStream): Boolean;
-begin
-  Result := FS1.Size = FS2.Size;
-end;
-
 function TFileComperator.FileTimeToDateTime(FileTime: TFileTime): TDateTime;
 var
   ModifiedTime: TFileTime;
@@ -122,7 +115,7 @@ begin
     FileTimeToSystemTime(ModifiedTime, SystemTime);
     Result := SystemTimeToDateTime(SystemTime);
   except
-    Result := Now; // Something to return in case of error
+    Result := Now;
   end;
 end;
 
@@ -134,14 +127,6 @@ end;
 function TFileComperator.GetFileLastModDate(FileName: string): TDateTime;
 begin
   Result := FileTimeToDateTime(GetFileLastWrite(FileName));
-end;
-
-function TFileComperator.GetFileLastModifiedDate(const FilePath: string): _FILETIME;
-var
-  LDate: TWin32FileAttributeData;
-begin
-  GetFileAttributesEx(PWideChar(FilePath), GetFileExInfoStandard, @LDate);
-  Result := LDate.ftLastWriteTime;
 end;
 
 function TFileComperator.StreamsAreIdentical(const FileStream1, FileStream2: TStream; const BlockSize: Integer): Boolean;
