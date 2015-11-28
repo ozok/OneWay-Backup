@@ -48,10 +48,22 @@ begin
     Reason := '[DestDoesntExist] ';
     Exit;
   end;
-  if not CompareLastModifiedDate(FileName1, FileName2) then
+  if CompareMethod <> 3 then
   begin
+    if not CompareLastModifiedDate(FileName1, FileName2) then
+    begin
+      Reason := '[DateDiff] ';
+      Result := False;
+      Exit;
+    end;
+  end;
+
+  // if just compare last modified date is selected
+  // no need to go any further
+  if CompareMethod = 3 then
+  begin
+    Result := CompareLastModifiedDate(FileName1, FileName2);
     Reason := '[DateDiff] ';
-    Result := False;
     Exit;
   end;
 

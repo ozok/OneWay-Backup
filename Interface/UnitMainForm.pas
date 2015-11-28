@@ -10,12 +10,9 @@ uses
   IdThreadComponent, CommCtrl, System.Win.TaskbarCore, Vcl.Taskbar, JvExComCtrls, 
   JvComCtrls, Generics.Collections, Vcl.Menus, ShellAPI, UnitFolderCreatePair, 
   IdMessage, IdComponent, IdTCPConnection, IdTCPClient, 
-  IdExplicitTLSClientServerBase, IdMessageClient, IdSMTPBase, IdSMTP, JvThreadTimer,
-  sSkinProvider, sSkinManager, sPageControl, acProgressBar, sComboBox, sButton,
-  sLabel, sListView, sPanel, sGauge, IdIOHandler, IdIOHandlerSocket,
-  IdIOHandlerStack, IdSSL, IdSSLOpenSSL, IniFiles, System.ImageList,
-  Vcl.ImgList, acAlphaImageList, Vcl.Buttons, sBitBtn, sCheckBox,
-  JvComputerInfoEx, IOUtils;
+  IdExplicitTLSClientServerBase, IdMessageClient, IdSMTPBase, IdSMTP, JvThreadTimer, acProgressBar, 
+  IdIOHandler, IdIOHandlerSocket, IdIOHandlerStack, IdSSL, IdSSLOpenSSL, IniFiles, 
+  System.ImageList, Vcl.ImgList, Vcl.Buttons, JvComputerInfoEx, IOUtils;
 
 type
   TLogItem = record
@@ -26,56 +23,57 @@ type
 
 type
   TMainForm = class(TForm)
-    JobsList: TsListView;
+    JobsList: TListView;
     SearchSourceFiles: TJvSearchFiles;
-    RightPanel: TsPanel;
-    LeftPanel: TsPanel;
-    TopPanel: TsPanel;
-    BottomPanel: TsPanel;
-    StateLabel: TsLabel;
-    RunJobsBtn: TsBitBtn;
-    ProjectNameLabel: TsLabel;
-    AddNewProjectBtn: TsBitBtn;
-    StopBtn: TsBitBtn;
-    EditProjectBtn: TsBitBtn;
+    RightPanel: TPanel;
+    LeftPanel: TPanel;
+    TopPanel: TPanel;
+    BottomPanel: TPanel;
+    StateLabel: TLabel;
+    RunJobsBtn: TButton;
+    ProjectNameLabel: TLabel;
+    AddNewProjectBtn: TButton;
+    StopBtn: TButton;
+    EditProjectBtn: TButton;
     OperationThread: TIdThreadComponent;
     SearchDestFiles: TJvSearchFiles;
-    LogsPages: TsPageControl;
-    TabSheet1: TsTabSheet;
-    TabSheet2: TsTabSheet;
+    LogsPages: TPageControl;
+    TabSheet1: TTabSheet;
+    TabSheet2: TTabSheet;
     Taskbar1: TTaskbar;
-    TabSheet3: TsTabSheet;
-    LogList: TsListView;
-    ErrorLog: TsListView;
-    FullLogList: TsListView;
+    TabSheet3: TTabSheet;
+    LogList: TListView;
+    ErrorLog: TListView;
+    FullLogList: TListView;
     JobListMenu: TPopupMenu;
     O1: TMenuItem;
     O2: TMenuItem;
-    ActivatePanel: TsPanel;
-    SelectAllLabel: TsLabel;
-    SelectNoneLabel: TsLabel;
-    SelectReverseLabel: TsLabel;
+    ActivatePanel: TPanel;
+    SelectAllLabel: TLabel;
+    SelectNoneLabel: TLabel;
+    SelectReverseLabel: TLabel;
     IdSMTP1: TIdSMTP;
     IdMessage1: TIdMessage;
-    ChangesLabel: TsLabel;
-    SpeedLabel: TsLabel;
+    ChangesLabel: TLabel;
+    SpeedLabel: TLabel;
     SpeedTimer: TJvThreadTimer;
-    TimeLabel: TsLabel;
+    TimeLabel: TLabel;
     PassedTimeTimer: TJvThreadTimer;
-    sSkinManager1: TsSkinManager;
-    sSkinProvider1: TsSkinProvider;
+                                 
+                                   
     IdSSLIOHandlerSocketOpenSSL1: TIdSSLIOHandlerSocketOpenSSL;
-    ConfEmailBtn: TsBitBtn;
+    ConfEmailBtn: TButton;
     ProgressTimer: TTimer;
-    DeleteBtn: TsBitBtn;
-    PreviewBtn: TsBitBtn;
+    DeleteBtn: TButton;
+    PreviewBtn: TButton;
     ProgressBar: TsProgressBar;
-    PercentageLabel: TsLabel;
-    SendEmailBtn: TsCheckBox;
+    PercentageLabel: TLabel;
+    SendEmailBtn: TCheckBox;
     Info: TJvComputerInfoEx;
-    ShutdownBtn: TsCheckBox;
-    AboutBtn: TsBitBtn;
-    DonateBtn: TsBitBtn;
+    ShutdownBtn: TCheckBox;
+    AboutBtn: TButton;
+    DonateBtn: TButton;
+    ImageList1: TImageList;
     procedure FormCreate(Sender: TObject);
     procedure RunJobsBtnClick(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -285,6 +283,8 @@ begin
       Result := 'Compare MD5';
     2:
       Result := 'Compare sizes';
+    3:
+      Result := 'Last modified date';
   end;
 end;
 
@@ -1694,4 +1694,4 @@ procedure TMainForm.UpdateState;begin
   StateLabel.Caption := FStateMsg;
 end;
 
-end.
+end.

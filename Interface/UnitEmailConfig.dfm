@@ -20,21 +20,63 @@ object EmailConfForm: TEmailConfForm
     256)
   PixelsPerInch = 96
   TextHeight = 13
-  object sLabel1: TsLabel
+  object sLabel1: TLabel
     Left = 64
     Top = 191
     Width = 281
     Height = 14
     Anchors = [akLeft, akTop, akRight]
     Caption = '!!!Your password will be saved in plain text!!!'
-    ParentFont = False
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clRed
     Font.Height = -12
     Font.Name = 'Tahoma'
     Font.Style = [fsBold, fsUnderline]
+    ParentFont = False
   end
-  object FromEdit: TsEdit
+  object Label1: TLabel
+    Left = 30
+    Top = 11
+    Width = 28
+    Height = 13
+    Caption = 'From:'
+  end
+  object Label2: TLabel
+    Left = 42
+    Top = 38
+    Width = 16
+    Height = 13
+    Caption = 'To:'
+  end
+  object Label3: TLabel
+    Left = 32
+    Top = 75
+    Width = 26
+    Height = 13
+    Caption = 'Host:'
+  end
+  object Label4: TLabel
+    Left = 34
+    Top = 100
+    Width = 24
+    Height = 13
+    Caption = 'Port:'
+  end
+  object Label5: TLabel
+    Left = 8
+    Top = 142
+    Width = 55
+    Height = 13
+    Caption = 'User name:'
+  end
+  object Label6: TLabel
+    Left = 8
+    Top = 167
+    Width = 50
+    Height = 13
+    Caption = 'Password:'
+  end
+  object FromEdit: TEdit
     Left = 64
     Top = 8
     Width = 291
@@ -47,10 +89,8 @@ object EmailConfForm: TEmailConfForm
     Font.Style = []
     ParentFont = False
     TabOrder = 0
-    BoundLabel.Active = True
-    BoundLabel.Caption = 'From:'
   end
-  object ToEdit: TsEdit
+  object ToEdit: TEdit
     Left = 64
     Top = 35
     Width = 291
@@ -63,10 +103,8 @@ object EmailConfForm: TEmailConfForm
     Font.Style = []
     ParentFont = False
     TabOrder = 1
-    BoundLabel.Active = True
-    BoundLabel.Caption = 'To:'
   end
-  object HostEdit: TsEdit
+  object HostEdit: TEdit
     Left = 64
     Top = 70
     Width = 291
@@ -79,10 +117,8 @@ object EmailConfForm: TEmailConfForm
     Font.Style = []
     ParentFont = False
     TabOrder = 2
-    BoundLabel.Active = True
-    BoundLabel.Caption = 'Host:'
   end
-  object UserNameEdit: TsEdit
+  object UserNameEdit: TEdit
     Left = 64
     Top = 137
     Width = 291
@@ -94,11 +130,9 @@ object EmailConfForm: TEmailConfForm
     Font.Name = 'Tahoma'
     Font.Style = []
     ParentFont = False
-    TabOrder = 3
-    BoundLabel.Active = True
-    BoundLabel.Caption = 'User Name:'
+    TabOrder = 4
   end
-  object PassEdit: TsEdit
+  object PassEdit: TEdit
     Left = 64
     Top = 164
     Width = 291
@@ -111,31 +145,9 @@ object EmailConfForm: TEmailConfForm
     Font.Style = []
     ParentFont = False
     PasswordChar = '*'
-    TabOrder = 4
-    BoundLabel.Active = True
-    BoundLabel.Caption = 'Password:'
-  end
-  object PortEdit: TsSpinEdit
-    Left = 64
-    Top = 97
-    Width = 121
-    Height = 21
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clWindowText
-    Font.Height = -11
-    Font.Name = 'Tahoma'
-    Font.Style = []
-    NumbersOnly = True
-    ParentFont = False
     TabOrder = 5
-    Text = '25'
-    BoundLabel.Active = True
-    BoundLabel.Caption = 'Port:'
-    MaxValue = 0
-    MinValue = 0
-    Value = 25
   end
-  object SaveBtn: TsButton
+  object SaveBtn: TButton
     Left = 286
     Top = 223
     Width = 75
@@ -145,7 +157,7 @@ object EmailConfForm: TEmailConfForm
     TabOrder = 6
     OnClick = SaveBtnClick
   end
-  object CancelBtn: TsButton
+  object CancelBtn: TButton
     Left = 205
     Top = 223
     Width = 75
@@ -155,7 +167,7 @@ object EmailConfForm: TEmailConfForm
     TabOrder = 7
     OnClick = CancelBtnClick
   end
-  object SendTestBtn: TsButton
+  object SendTestBtn: TButton
     Left = 8
     Top = 223
     Width = 97
@@ -164,6 +176,16 @@ object EmailConfForm: TEmailConfForm
     Caption = 'Send Test Mail'
     TabOrder = 8
     OnClick = SendTestBtnClick
+  end
+  object PortEdit: TJvSpinEdit
+    Left = 64
+    Top = 97
+    Width = 121
+    Height = 21
+    CheckMinValue = True
+    ButtonKind = bkClassic
+    Value = 25.000000000000000000
+    TabOrder = 3
   end
   object IdMessage1: TIdMessage
     AttachmentEncoding = 'UUE'
@@ -176,14 +198,14 @@ object EmailConfForm: TEmailConfForm
     Recipients = <>
     ReplyTo = <>
     ConvertPreamble = True
-    Left = 181
-    Top = 68
+    Left = 245
+    Top = 164
   end
   object IdSMTP1: TIdSMTP
     IOHandler = IdSSLIOHandlerSocketOpenSSL1
     SASLMechanisms = <>
-    Left = 117
-    Top = 68
+    Left = 317
+    Top = 164
   end
   object IdSSLIOHandlerSocketOpenSSL1: TIdSSLIOHandlerSocketOpenSSL
     Destination = ':25'
@@ -193,19 +215,7 @@ object EmailConfForm: TEmailConfForm
     SSLOptions.Mode = sslmUnassigned
     SSLOptions.VerifyMode = []
     SSLOptions.VerifyDepth = 0
-    Left = 181
-    Top = 136
-  end
-  object sSkinProvider1: TsSkinProvider
-    AddedTitle.Font.Charset = DEFAULT_CHARSET
-    AddedTitle.Font.Color = clNone
-    AddedTitle.Font.Height = -11
-    AddedTitle.Font.Name = 'Tahoma'
-    AddedTitle.Font.Style = []
-    FormHeader.AdditionalHeight = 0
-    SkinData.SkinSection = 'FORM'
-    TitleButtons = <>
-    Left = 288
-    Top = 48
+    Left = 141
+    Top = 200
   end
 end

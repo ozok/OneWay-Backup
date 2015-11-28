@@ -18,7 +18,7 @@ object LogForm: TLogForm
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
-  object LogFilePathLabel: TsLabel
+  object LogFilePathLabel: TLabel
     AlignWithMargins = True
     Left = 3
     Top = 578
@@ -38,7 +38,7 @@ object LogForm: TLogForm
     Font.Style = [fsUnderline]
     ExplicitWidth = 49
   end
-  object LogList: TsListView
+  object LogList: TListView
     Left = 0
     Top = 0
     Width = 1008
@@ -66,16 +66,4 @@ object LogForm: TLogForm
     ViewStyle = vsReport
     OnData = LogListData
   end
-  object sSkinProvider1: TsSkinProvider
-    AddedTitle.Font.Charset = DEFAULT_CHARSET
-    AddedTitle.Font.Color = clNone
-    AddedTitle.Font.Height = -11
-    AddedTitle.Font.Name = 'Tahoma'
-    AddedTitle.Font.Style = []
-    FormHeader.AdditionalHeight = 0
-    SkinData.SkinSection = 'FORM'
-    TitleButtons = <>
-    Left = 496
-    Top = 304
-  end
-end
+end

@@ -21,7 +21,49 @@ object ProjectSettingsForm: TProjectSettingsForm
     303)
   PixelsPerInch = 96
   TextHeight = 13
-  object ProjectNameEdit: TsEdit
+  object Label1: TLabel
+    Left = 8
+    Top = 8
+    Width = 68
+    Height = 13
+    Caption = 'Source folder:'
+  end
+  object Label2: TLabel
+    Left = 8
+    Top = 55
+    Width = 89
+    Height = 13
+    Caption = 'Destination folder:'
+  end
+  object Label3: TLabel
+    Left = 8
+    Top = 95
+    Width = 67
+    Height = 13
+    Caption = 'Project name:'
+  end
+  object Label4: TLabel
+    Left = 8
+    Top = 141
+    Width = 259
+    Height = 13
+    Caption = 'File types to ignore. Separate with ";" (.mp3;.avi;.zip)'
+  end
+  object Label5: TLabel
+    Left = 8
+    Top = 216
+    Width = 98
+    Height = 13
+    Caption = 'Buffer size (kbytes):'
+  end
+  object Label6: TLabel
+    Left = 25
+    Top = 243
+    Width = 86
+    Height = 13
+    Caption = 'Compare method:'
+  end
+  object ProjectNameEdit: TEdit
     AlignWithMargins = True
     Left = 8
     Top = 114
@@ -35,21 +77,18 @@ object ProjectSettingsForm: TProjectSettingsForm
     Font.Style = []
     ParentFont = False
     TabOrder = 2
-    BoundLabel.Active = True
-    BoundLabel.Caption = 'Project Name:'
-    BoundLabel.Layout = sclTopLeft
   end
-  object SaveProjectBtn: TsButton
+  object SaveProjectBtn: TButton
     Left = 540
     Top = 270
     Width = 145
     Height = 25
     Anchors = [akRight, akBottom]
     Caption = 'Save'
-    TabOrder = 5
+    TabOrder = 7
     OnClick = SaveProjectBtnClick
   end
-  object DeleteFromDestBtn: TsCheckBox
+  object DeleteFromDestBtn: TCheckBox
     Left = 8
     Top = 187
     Width = 342
@@ -58,10 +97,8 @@ object ProjectSettingsForm: TProjectSettingsForm
       'Delete files in destination folder if they do not exist in sourc' +
       'e folder'
     TabOrder = 4
-    ImgChecked = 0
-    ImgUnchecked = 0
   end
-  object IgnoreTypesEdit: TsEdit
+  object IgnoreTypesEdit: TEdit
     AlignWithMargins = True
     Left = 8
     Top = 160
@@ -75,99 +112,24 @@ object ProjectSettingsForm: TProjectSettingsForm
     Font.Style = []
     ParentFont = False
     TabOrder = 3
-    BoundLabel.Active = True
-    BoundLabel.Caption = 'Ignore these file types (separate with ; example: .mp3;.jpeg)'
-    BoundLabel.Layout = sclTopLeft
   end
-  object SourceDirEdit: TsDirectoryEdit
-    AlignWithMargins = True
-    Left = 8
-    Top = 22
-    Width = 593
-    Height = 21
-    AutoSize = False
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clBlack
-    Font.Height = -11
-    Font.Name = 'Tahoma'
-    Font.Style = []
-    MaxLength = 255
-    ParentFont = False
-    TabOrder = 0
-    Text = ''
-    CheckOnExit = True
-    BoundLabel.Active = True
-    BoundLabel.Caption = 'Source folder:'
-    BoundLabel.Layout = sclTopLeft
-    GlyphMode.Blend = 0
-    GlyphMode.Grayed = False
-    Root = 'rfDesktop'
-  end
-  object DestDirEdit: TsDirectoryEdit
-    AlignWithMargins = True
-    Left = 8
-    Top = 68
-    Width = 593
-    Height = 21
-    AutoSize = False
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clBlack
-    Font.Height = -11
-    Font.Name = 'Tahoma'
-    Font.Style = []
-    MaxLength = 255
-    ParentFont = False
-    TabOrder = 1
-    Text = ''
-    CheckOnExit = True
-    BoundLabel.Active = True
-    BoundLabel.Caption = 'Destination folder:'
-    BoundLabel.Layout = sclTopLeft
-    GlyphMode.Blend = 0
-    GlyphMode.Grayed = False
-    Root = 'rfDesktop'
-  end
-  object BufferEdit: TsSpinEdit
-    Left = 117
-    Top = 213
-    Width = 121
-    Height = 21
-    Alignment = taCenter
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clBlack
-    Font.Height = -11
-    Font.Name = 'Tahoma'
-    Font.Style = []
-    NumbersOnly = True
-    ParentFont = False
-    TabOrder = 6
-    Text = '8192'
-    BoundLabel.Active = True
-    BoundLabel.Caption = 'Buffer length (bytes):'
-    MaxValue = 0
-    MinValue = 0
-    Value = 8192
-  end
-  object CompareMethodList: TsComboBox
+  object CompareMethodList: TComboBox
     Left = 117
     Top = 240
-    Width = 121
+    Width = 233
     Height = 21
-    Anchors = [akTop, akRight]
-    Alignment = taLeftJustify
-    BoundLabel.Active = True
-    BoundLabel.Caption = 'File Compare Method:'
-    VerticalAlignment = taAlignTop
     Style = csDropDownList
+    Anchors = [akTop, akRight]
     ItemIndex = 0
-    TabOrder = 7
-    Text = 'Full File Search'
+    TabOrder = 6
+    Text = 'Full File Search + Last Modified Date'
     Items.Strings = (
-      'Full File Search'
-      'MD5'
-      'Compare Sizes')
+      'Full File Search + Last Modified Date'
+      'MD5 + Last Modified Date'
+      'Compare Sizes + Last Modified Date'
+      'Just Last Modified Date')
   end
-  object SwapFoldersBTn: TsButton
+  object SwapFoldersBTn: TButton
     Left = 607
     Top = 22
     Width = 78
@@ -175,18 +137,38 @@ object ProjectSettingsForm: TProjectSettingsForm
     Anchors = [akTop, akRight]
     Caption = 'Switch Source with Destination'
     TabOrder = 8
+    WordWrap = True
     OnClick = SwapFoldersBTnClick
   end
-  object sSkinProvider1: TsSkinProvider
-    AddedTitle.Font.Charset = DEFAULT_CHARSET
-    AddedTitle.Font.Color = clNone
-    AddedTitle.Font.Height = -11
-    AddedTitle.Font.Name = 'Tahoma'
-    AddedTitle.Font.Style = []
-    FormHeader.AdditionalHeight = 0
-    SkinData.SkinSection = 'FORM'
-    TitleButtons = <>
-    Left = 376
-    Top = 128
+  object SourceDirEdit: TJvDirectoryEdit
+    Left = 8
+    Top = 22
+    Width = 593
+    Height = 21
+    DialogKind = dkWin32
+    Anchors = [akLeft, akTop, akRight]
+    TabOrder = 0
+    Text = ''
+  end
+  object DestDirEdit: TJvDirectoryEdit
+    Left = 8
+    Top = 68
+    Width = 593
+    Height = 21
+    DialogKind = dkWin32
+    Anchors = [akLeft, akTop, akRight]
+    TabOrder = 1
+    Text = ''
+  end
+  object BufferEdit: TJvSpinEdit
+    Left = 117
+    Top = 213
+    Width = 125
+    Height = 21
+    CheckMinValue = True
+    Alignment = taCenter
+    ButtonKind = bkClassic
+    Value = 8192.000000000000000000
+    TabOrder = 5
   end
 end

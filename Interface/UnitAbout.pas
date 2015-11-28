@@ -3,19 +3,18 @@ unit UnitAbout;
 interface
 
 uses
-  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, sButton, sLabel, acPNG,
-  Vcl.ExtCtrls, acImage, ShellAPI;
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, 
+  System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ExtCtrls, ShellAPI;
 
 type
   TAboutForm = class(TForm)
-    sImage1: TsImage;
-    sLabel1: TsLabel;
-    sLabel2: TsLabel;
-    sLabel3: TsLabel;
-    sLabel4: TsLabel;
-    sButton1: TsButton;
-    sButton2: TsButton;
+    sImage1: TImage;
+    sLabel1: TLabel;
+    sLabel2: TLabel;
+    sLabel3: TLabel;
+    sLabel4: TLabel;
+    sButton1: TButton;
+    sButton2: TButton;
     procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure sButton1Click(Sender: TObject);
@@ -66,4 +65,4 @@ begin
   ShellExecute(Handle, 'open', 'https://sourceforge.net/projects/oneway-backup/', nil, nil, SW_SHOWNORMAL);
 end;
 
-end.
+end.

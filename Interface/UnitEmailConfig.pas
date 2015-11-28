@@ -3,29 +3,35 @@ unit UnitEmailConfig;
 interface
 
 uses
-  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, sButton, sLabel,
-  sSpinEdit, sEdit, IniFiles, IdIOHandler, IdIOHandlerSocket, IdIOHandlerStack,
-  IdSSL, IdSSLOpenSSL, IdComponent, IdTCPConnection, IdTCPClient,
-  IdExplicitTLSClientServerBase, IdMessageClient, IdSMTPBase, IdSMTP,
-  IdBaseComponent, IdMessage, sSkinProvider;
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, 
+  System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, 
+  IniFiles, IdIOHandler, IdIOHandlerSocket, IdIOHandlerStack, IdSSL, 
+  IdSSLOpenSSL, IdComponent, IdTCPConnection, IdTCPClient, 
+  IdExplicitTLSClientServerBase, IdMessageClient, IdSMTPBase, IdSMTP, IdBaseComponent, IdMessage,
+  Vcl.Mask, JvExMask, JvSpin;
 
 type
   TEmailConfForm = class(TForm)
-    FromEdit: TsEdit;
-    ToEdit: TsEdit;
-    HostEdit: TsEdit;
-    UserNameEdit: TsEdit;
-    PassEdit: TsEdit;
-    PortEdit: TsSpinEdit;
-    sLabel1: TsLabel;
-    SaveBtn: TsButton;
-    CancelBtn: TsButton;
-    SendTestBtn: TsButton;
+    FromEdit: TEdit;
+    ToEdit: TEdit;
+    HostEdit: TEdit;
+    UserNameEdit: TEdit;
+    PassEdit: TEdit;
+    sLabel1: TLabel;
+    SaveBtn: TButton;
+    CancelBtn: TButton;
+    SendTestBtn: TButton;
     IdMessage1: TIdMessage;
     IdSMTP1: TIdSMTP;
     IdSSLIOHandlerSocketOpenSSL1: TIdSSLIOHandlerSocketOpenSSL;
-    sSkinProvider1: TsSkinProvider;
+    PortEdit: TJvSpinEdit;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    Label6: TLabel;
+                                   
     procedure CancelBtnClick(Sender: TObject);
     procedure SaveBtnClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -109,7 +115,7 @@ begin
     IdMessage1.Subject := 'OneWay Backup Test Mail';
     try
       IdSMTP1.Host := HostEdit.Text;
-      IdSMTP1.Port := PortEdit.Value;
+      IdSMTP1.Port := Round(PortEdit.Value);
       IdSMTP1.AuthType := satDefault;
       IdSMTP1.Username := UserNameEdit.Text;
       IdSMTP1.Password := PassEdit.Text;
@@ -124,4 +130,4 @@ begin
   end;
 end;
 
-end.
+end.

@@ -5,22 +5,26 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, 
   System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, 
-  Vcl.Mask, JvExMask, JvToolEdit, UnitProjectFile, Vcl.ComCtrls, JvSpin,
-  sSkinProvider, sCheckBox, sButton, sEdit, sLabel, sSpinEdit, sMaskEdit,
-  sCustomComboEdit, sToolEdit, sComboBox, StrUtils;
+  Vcl.Mask, JvExMask, JvToolEdit, UnitProjectFile, Vcl.ComCtrls, JvSpin, StrUtils;
 
 type
   TProjectSettingsForm = class(TForm)
-    ProjectNameEdit: TsEdit;
-    SaveProjectBtn: TsButton;
-    DeleteFromDestBtn: TsCheckBox;
-    IgnoreTypesEdit: TsEdit;
-    sSkinProvider1: TsSkinProvider;
-    SourceDirEdit: TsDirectoryEdit;
-    DestDirEdit: TsDirectoryEdit;
-    BufferEdit: TsSpinEdit;
-    CompareMethodList: TsComboBox;
-    SwapFoldersBTn: TsButton;
+    ProjectNameEdit: TEdit;
+    SaveProjectBtn: TButton;
+    DeleteFromDestBtn: TCheckBox;
+    IgnoreTypesEdit: TEdit;
+                                   
+    CompareMethodList: TComboBox;
+    SwapFoldersBTn: TButton;
+    SourceDirEdit: TJvDirectoryEdit;
+    DestDirEdit: TJvDirectoryEdit;
+    BufferEdit: TJvSpinEdit;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    Label6: TLabel;
     procedure SaveProjectBtnClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormShow(Sender: TObject);
@@ -132,4 +136,4 @@ begin
   DestDirEdit.TExt := LTmpStr;
 end;
 
-end.
+end.
