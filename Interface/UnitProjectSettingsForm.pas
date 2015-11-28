@@ -7,7 +7,7 @@ uses
   System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, 
   Vcl.Mask, JvExMask, JvToolEdit, UnitProjectFile, Vcl.ComCtrls, JvSpin,
   sSkinProvider, sCheckBox, sButton, sEdit, sLabel, sSpinEdit, sMaskEdit,
-  sCustomComboEdit, sToolEdit, sComboBox;
+  sCustomComboEdit, sToolEdit, sComboBox, StrUtils;
 
 type
   TProjectSettingsForm = class(TForm)
@@ -67,6 +67,12 @@ var
   LProjectFile: TProjectFile;
   LItem: TListItem;
 begin
+  if ContainsText(SourceDirEdit.Text, '|') or ContainsText(DestDirEdit.Text, '|') or ContainsText(ProjectNameEdit.Text, '|') or ContainsText(IgnoreTypesEdit.Text, '|') then
+  begin
+    Application.MessageBox('None of the text fields can contain "|". Please remove this character.', 'Error', MB_ICONERROR);
+    Exit;
+  end;
+
   if Length(SourceDirEdit.Text) > 0 then
   begin
     if Length(DestDirEdit.Text) > 0 then
