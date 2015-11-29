@@ -193,8 +193,6 @@ object MainForm: TMainForm
         ShowHint = True
         TabOrder = 1
         OnClick = AddNewProjectBtnClick
-        ExplicitLeft = -6
-        ExplicitTop = -2
       end
       object StopBtn: TButton
         Left = 913
@@ -404,8 +402,6 @@ object MainForm: TMainForm
       ActivePage = TabSheet1
       Align = alClient
       TabOrder = 0
-      ExplicitLeft = 4
-      ExplicitTop = -2
       object TabSheet1: TTabSheet
         Caption = 'General Log'
         object LogList: TListView
@@ -441,6 +437,10 @@ object MainForm: TMainForm
       object TabSheet2: TTabSheet
         Caption = 'Error Log'
         ImageIndex = 1
+        ExplicitLeft = 0
+        ExplicitTop = 0
+        ExplicitWidth = 0
+        ExplicitHeight = 0
         object ErrorLog: TListView
           Left = 0
           Top = 0
@@ -473,6 +473,10 @@ object MainForm: TMainForm
       object TabSheet3: TTabSheet
         Caption = 'Full Log'
         ImageIndex = 2
+        ExplicitLeft = 0
+        ExplicitTop = 0
+        ExplicitWidth = 0
+        ExplicitHeight = 0
         object FullLogList: TListView
           Left = 0
           Top = 0
@@ -627,7 +631,7 @@ object MainForm: TMainForm
     Left = 600
     Top = 168
     Bitmap = {
-      494C010109002C00380018001800FFFFFFFF2000FFFFFFFFFFFFFFFF424D3600
+      494C010109002C003C0018001800FFFFFFFF2000FFFFFFFFFFFFFFFF424D3600
       000000000000360000002800000060000000480000000100200000000000006C
       0000000000000000000000000000000000000000000000000000000000000000
       000000000000000000000000000000000000020202030B0B0B0C171717182020

@@ -20,7 +20,8 @@ OneWay Backup can be called with command line parameters which makes it ideal fo
    * /method0: Full file search: Reads whole content of files
    * /method1: Uses MD5 checksums for comparesion
    * /method2: Compare file sizes
-   * Please note that, OneWay Backup will compare file modification dates before resorting the any of the methods above
+   * /method3: Compare last modified date
+   * Please note that, OneWay Backup compares last modified date first before using the selected option. If 4th option is selected, only last modified dates will be compared.
 
 ###Licence
 OneWay Backup is licenced with MIT licence.

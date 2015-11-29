@@ -535,6 +535,10 @@ begin
     else if LParamStr = '/method2' then
     begin
       FCompareMethodId := 2;
+    end
+    else if LParamStr = '/method3' then
+    begin
+      FCompareMethodId := 3;
     end;
   end;
 
