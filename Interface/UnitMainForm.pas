@@ -899,7 +899,10 @@ begin
               begin
                 if not DirectoryExists(ExtractFileDir(LDestFile)) then
                 begin
-                  ForceDirectories(ExtractFileDir(LDestFile));
+                  if not FPreview then
+                  begin
+                    ForceDirectories(ExtractFileDir(LDestFile));
+                  end;
                 end;
                 LFileCopyPair.SourceFile := LSourceFile;
                 LFileCopyPair.DestFile := LDestFile;
