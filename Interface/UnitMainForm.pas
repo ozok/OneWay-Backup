@@ -12,7 +12,8 @@ uses
   IdMessage, IdComponent, IdTCPConnection, IdTCPClient, 
   IdExplicitTLSClientServerBase, IdMessageClient, IdSMTPBase, IdSMTP, JvThreadTimer, acProgressBar, 
   IdIOHandler, IdIOHandlerSocket, IdIOHandlerStack, IdSSL, IdSSLOpenSSL, IniFiles, 
-  System.ImageList, Vcl.ImgList, Vcl.Buttons, JvComputerInfoEx, IOUtils;
+  System.ImageList, Vcl.ImgList, Vcl.Buttons, JvComputerInfoEx, IOUtils,
+  JvCaptionButton, JvTrayIcon;
 
 type
   TLogItem = record
@@ -74,6 +75,8 @@ type
     AboutBtn: TButton;
     DonateBtn: TButton;
     ImageList1: TImageList;
+    MinimizeToTrayBtn: TJvCaptionButton;
+    TrayIcon: TJvTrayIcon;
     procedure FormCreate(Sender: TObject);
     procedure RunJobsBtnClick(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -109,6 +112,8 @@ type
     procedure PreviewBtnClick(Sender: TObject);
     procedure LogBtnClick(Sender: TObject);
     procedure AboutBtnClick(Sender: TObject);
+    procedure MinimizeToTrayBtnClick(Sender: TObject);
+    procedure TrayIconBalloonClick(Sender: TObject);
   private
     { Private declarations }
     FFiles: TStringList;
@@ -150,6 +155,7 @@ type
     procedure StartProgressTimer();
     procedure StopProgressTimer();
     procedure ShowPreviewResults();
+    procedure ShowBalloon();
 
     procedure UpdateMaxProgres();
     procedure JumpToItem();
@@ -425,9 +431,6 @@ begin
   {$IFDEF INSTALLED}
     AppDataFolder := Info.Folders.AppData + '\OneWayBackup';
   {$ENDIF}
-
-  FLogLineToAdd := 'Appdata location ' + AppDataFolder;
-  AddToLog;
 
   if not DirectoryExists(AppDataFolder) then
   begin
@@ -744,6 +747,11 @@ begin
     Item.Caption := DateTimeToStr(FGeneralLogItems[Item.Index].LogDate);
     Item.SubItems.Add(FGeneralLogItems[Item.Index].LogStr);
   end;
+end;
+
+procedure TMainForm.MinimizeToTrayBtnClick(Sender: TObject);
+begin
+  TrayIcon.HideApplication;
 end;
 
 procedure TMainForm.O1Click(Sender: TObject);
@@ -1591,6 +1599,11 @@ begin
   end;
 end;
 
+procedure TMainForm.ShowBalloon;
+begin
+  TrayIcon.BalloonHint('OneWay Backup', 'Finished backup.');
+end;
+
 procedure TMainForm.ShowPreviewResults;
 begin
   if not FShutDown then
@@ -1653,6 +1666,11 @@ procedure TMainForm.StopSpeedTimer;
 begin
   SpeedTimer.Enabled := False;
    FTimeCounter := 0;
+end;
+
+procedure TMainForm.TrayIconBalloonClick(Sender: TObject);
+begin
+  TrayIcon.ShowApplication;
 end;
 
 procedure TMainForm.SpeedTimerTimer(Sender: TObject);

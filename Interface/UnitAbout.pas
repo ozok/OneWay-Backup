@@ -62,7 +62,7 @@ end;
 
 procedure TAboutForm.sButton2Click(Sender: TObject);
 begin
-  ShellExecute(Handle, 'open', 'https://sourceforge.net/projects/oneway-backup/', nil, nil, SW_SHOWNORMAL);
+  ShellExecute(Handle, 'open', 'http://www.ozok26.com/oneway-backup-9', nil, nil, SW_SHOWNORMAL);
 end;
 
 end.
