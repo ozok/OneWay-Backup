@@ -26,10 +26,7 @@ type
   TMainForm = class(TForm)
     JobsList: TListView;
     SearchSourceFiles: TJvSearchFiles;
-    RightPanel: TPanel;
-    LeftPanel: TPanel;
-    TopPanel: TPanel;
-    BottomPanel: TPanel;
+    ToolBar: TPanel;
     StateLabel: TLabel;
     RunJobsBtn: TButton;
     ProjectNameLabel: TLabel;
@@ -60,7 +57,6 @@ type
     SpeedTimer: TJvThreadTimer;
     TimeLabel: TLabel;
     PassedTimeTimer: TJvThreadTimer;
-                                 
                                    
     IdSSLIOHandlerSocketOpenSSL1: TIdSSLIOHandlerSocketOpenSSL;
     ConfEmailBtn: TButton;
@@ -77,6 +73,9 @@ type
     ImageList1: TImageList;
     MinimizeToTrayBtn: TJvCaptionButton;
     TrayIcon: TJvTrayIcon;
+    GeneralPage: TPageControl;
+    TabSheet4: TTabSheet;
+    TabSheet5: TTabSheet;
     procedure FormCreate(Sender: TObject);
     procedure RunJobsBtnClick(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -130,13 +129,13 @@ type
     FGeneralLogItems: TLogItems;
     FErrorLogItems: TLogItems;
     FAll, FRun, FExit, FShutDown: Boolean;
-    FIgnoreTypeString: string;
     FChangeCount: integer;
     FTimeCounter: int64;
     FTotalTimeCounter: integer;
     FCompareMethodId: integer;
     FPreview: Boolean;
     FSendEmail: Boolean;
+    FFileTypeSplitList: TStringList;
 
     procedure Log(const Str: string);
     procedure LogError(const Str: string);
@@ -167,7 +166,7 @@ type
     procedure SaveSettings;
     procedure LoadSettings;
 
-    function CheckIfFileCanBeAdded(const FilePath: string; const ProjectIgnoreFileTypes: string):Boolean;
+    function CheckIfFileCanBeAdded(const FilePath: string):Boolean;
 
     function CopyFileUsingSHFO(const Source: string; const Dest: string):Boolean;
   public
@@ -238,37 +237,26 @@ begin
   end;
 end;
 
-function TMainForm.CheckIfFileCanBeAdded(const FilePath,
-  ProjectIgnoreFileTypes: string): Boolean;
+function TMainForm.CheckIfFileCanBeAdded(const FilePath: string): Boolean;
 var
-  LSplitList: TStringList;
   I: Integer;
   LFileExt: string;
 begin
   Result := True;
+  // file's extension
+  LFileExt := ExtractFileExt(FilePath).ToLower;
 
-  LSplitList := TStringList.Create;
-  try
-    // file's extension
-    LFileExt := ExtractFileExt(FilePath).ToLower;
-
-    LSplitList.StrictDelimiter := True;
-    LSplitList.Delimiter := ';';
-    LSplitList.DelimitedText := ProjectIgnoreFileTypes;
-    if LSplitList.Count > 0 then
+  if FFileTypeSplitList.Count > 0 then
+  begin
+    for I := 0 to FFileTypeSplitList.Count-1 do
     begin
-      for I := 0 to LSplitList.Count-1 do
+      // if file's extension is in ignore list
+      if LFileExt = FFileTypeSplitList[i].ToLower then
       begin
-        // if file's extension is in ignore list
-        if LFileExt = LSplitList[i].ToLower then
-        begin
-          Result := False;
-          Break;
-        end;
+        Result := False;
+        Break;
       end;
     end;
-  finally
-    LSplitList.Free;
   end;
 end;
 
@@ -375,6 +363,7 @@ begin
   Self.Caption := PROGRAM_TITLE;
   DeleteBtn.Enabled := True;
   PreviewBtn.Enabled := True;
+  GeneralPage.ActivePageIndex := 0;
 end;
 
 procedure TMainForm.ErrorLogData(Sender: TObject; Item: TListItem);
@@ -445,6 +434,13 @@ begin
   begin
     ForceDirectories(AppDataFolder + '\logs\')
   end;
+
+  GeneralPage.Pages[0].TabVisible := False;
+  GeneralPage.Pages[1].TabVisible := False;
+  GeneralPage.ActivePageIndex := 0;
+  FFileTypeSplitList := TStringList.Create;
+  FFileTypeSplitList.StrictDelimiter := True;
+  FFileTypeSplitList.Delimiter := ';';
 end;
 
 procedure TMainForm.FormDestroy(Sender: TObject);
@@ -461,6 +457,7 @@ begin
   FFullLogItems.Free;
   FGeneralLogItems.Free;
   FErrorLogItems.Free;
+  FFileTypeSplitList.Free;
 end;
 
 procedure TMainForm.FormResize(Sender: TObject);
@@ -837,13 +834,14 @@ begin
         FItemIndex := J;
         OperationThread.Synchronize(JumpToItem);
 
-        FCurrentProjectName := FProjects[J].ProjectName;
+        FCurrentProjectName := Format('%d/%d %s', [(j+1), FProjects.Count, FProjects[J].ProjectName]);
         OperationThread.Synchronize(UpdateProjectName);
         FLogLineToAdd := '+ Starting ' + FProjects[J].ProjectName;
         OperationThread.Synchronize(AddToLog);
         FLogLineToAdd := TAB + 'Using ' + CompareMethodToStr(LCompareMethodId);
         OperationThread.Synchronize(AddToLog);
-        FIgnoreTypeString := FProjects[J].IgnoredFileTypes;
+        // file types that will be ignored
+        FFileTypeSplitList.DelimitedText := FProjects[J].IgnoredFileTypes;
 
         // reset lists
         FProgress := 0;
@@ -1416,6 +1414,7 @@ begin
     OperationThread.Synchronize(StopProgressTimer);
     OperationThread.Synchronize(EnableUI);
     OperationThread.Synchronize(ShowPreviewResults);
+    OperationThread.Synchronize(ShowBalloon);
     OperationThread.Synchronize(ShutDown);
     OperationThread.Synchronize(CloseQueue);
     OperationThread.Terminate;
@@ -1455,6 +1454,7 @@ begin
   FStop := False;
   DisableUI;
   LogList.Items.Clear;
+  GeneralPage.ActivePageIndex := 1;
   OperationThread.Start;
 end;
 
@@ -1489,6 +1489,7 @@ begin
   FStop := False;
   DisableUI;
   LogList.Items.Clear;
+  GeneralPage.ActivePageIndex := 1;
   OperationThread.Start;
 end;
 
@@ -1547,7 +1548,7 @@ end;
 procedure TMainForm.SearchSourceFilesFindFile(Sender: TObject; const AName: string);
 begin
   // for ignore file type options
-  if CheckIfFileCanBeAdded(AName, FIgnoreTypeString) then
+  if CheckIfFileCanBeAdded(AName) then
   begin
     FFiles.Add(AName);
     FStateMsg := 'Found ' + FFiles.Count.ToString + ' files';
@@ -1601,7 +1602,13 @@ end;
 
 procedure TMainForm.ShowBalloon;
 begin
-  TrayIcon.BalloonHint('OneWay Backup', 'Finished backup.');
+  if not FShutDown then
+  begin
+    if not FExit then
+    begin
+      TrayIcon.BalloonHint('OneWay Backup', 'Finished backup.');
+    end;
+  end;
 end;
 
 procedure TMainForm.ShowPreviewResults;
