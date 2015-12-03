@@ -1339,7 +1339,7 @@ begin
   finally
     OperationThread.Synchronize(StopSpeedTimer);
 //    OperationThread.Synchronize(UpdateState);
-    LLogFilePath := AppDataFolder + '\logs\' + DateTimeToStr(Now).Replace('.', '').Replace(':', '').Replace(' ', '').Replace('\', '').Trim + '.log';
+    LLogFilePath := AppDataFolder + '\logs\' + FormatDateTime('ddmmyyyyhhnnss', Now) + '.log';
     if FStop then
     begin
       FLogLineToAdd := 'Stopped by user.';
@@ -1614,7 +1614,7 @@ begin
   begin
     if not FExit then
     begin
-      TrayIcon.BalloonHint('OneWay Backup', 'Finished backup.');
+      TrayIcon.BalloonHint('OneWay Backup', 'OneWay Backup is done. Please see logs for more detail.');
     end;
   end;
 end;

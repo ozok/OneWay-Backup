@@ -62,6 +62,8 @@ procedure TLogsForm.PopulateLogsList;
 var
   LSearchRec: TSearchRec;
 begin
+  LogsList.Items.Clear;
+  ContentList.Items.Clear;
   if FindFirst(IncludeTrailingPathDelimiter(FAppDataFolder + '\logs\') + '*.log', faAnyFile, LSearchRec) = 0 then
   begin
     try
