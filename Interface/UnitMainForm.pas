@@ -19,6 +19,7 @@ type
   TLogItem = record
     LogDate: TDateTime;
     LogStr: string;
+    ImageIndex: integer;
   end;
   TLogItems = TList<TLogItem>;
 
@@ -76,6 +77,7 @@ type
     GeneralPage: TPageControl;
     TabSheet4: TTabSheet;
     TabSheet5: TTabSheet;
+    LogsBtn: TButton;
     procedure FormCreate(Sender: TObject);
     procedure RunJobsBtnClick(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -113,6 +115,7 @@ type
     procedure AboutBtnClick(Sender: TObject);
     procedure MinimizeToTrayBtnClick(Sender: TObject);
     procedure TrayIconBalloonClick(Sender: TObject);
+    procedure LogsBtnClick(Sender: TObject);
   private
     { Private declarations }
     FFiles: TStringList;
@@ -192,7 +195,7 @@ implementation
 
 {$R *.dfm}
 
-uses UnitProjectSettingsForm, UnitEmailConfig, UnitLog, UnitAbout;
+uses UnitProjectSettingsForm, UnitEmailConfig, UnitLog, UnitAbout, UnitLogs;
 
 procedure TMainForm.AboutBtnClick(Sender: TObject);
 begin
@@ -744,6 +747,11 @@ begin
     Item.Caption := DateTimeToStr(FGeneralLogItems[Item.Index].LogDate);
     Item.SubItems.Add(FGeneralLogItems[Item.Index].LogStr);
   end;
+end;
+
+procedure TMainForm.LogsBtnClick(Sender: TObject);
+begin
+  LogsForm.Show;
 end;
 
 procedure TMainForm.MinimizeToTrayBtnClick(Sender: TObject);

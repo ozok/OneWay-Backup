@@ -59,8 +59,6 @@ object MainForm: TMainForm
           ParentFont = False
           Layout = tlCenter
           OnClick = SelectAllLabelClick
-          ExplicitLeft = 4
-          ExplicitTop = 4
           ExplicitHeight = 13
         end
         object SelectNoneLabel: TLabel
@@ -80,8 +78,6 @@ object MainForm: TMainForm
           ParentFont = False
           Layout = tlCenter
           OnClick = SelectNoneLabelClick
-          ExplicitLeft = 64
-          ExplicitTop = 4
           ExplicitHeight = 13
         end
         object SelectReverseLabel: TLabel
@@ -101,8 +97,6 @@ object MainForm: TMainForm
           ParentFont = False
           Layout = tlCenter
           OnClick = SelectReverseLabelClick
-          ExplicitLeft = 136
-          ExplicitTop = 4
           ExplicitHeight = 13
         end
       end
@@ -153,8 +147,6 @@ object MainForm: TMainForm
         TabOrder = 1
         ViewStyle = vsReport
         OnMouseDown = JobsListMouseDown
-        ExplicitWidth = 1008
-        ExplicitHeight = 205
       end
     end
     object TabSheet4: TTabSheet
@@ -166,7 +158,7 @@ object MainForm: TMainForm
         Width = 994
         Height = 13
         Align = alBottom
-        ExplicitTop = 414
+        ExplicitWidth = 3
       end
       object PercentageLabel: TLabel
         Left = 0
@@ -206,8 +198,6 @@ object MainForm: TMainForm
         Width = 994
         Height = 13
         Align = alBottom
-        ExplicitLeft = 4
-        ExplicitTop = 233
         ExplicitWidth = 3
       end
       object StateLabel: TLabel
@@ -217,8 +207,6 @@ object MainForm: TMainForm
         Width = 994
         Height = 13
         Align = alBottom
-        ExplicitLeft = 4
-        ExplicitTop = 195
         ExplicitWidth = 3
       end
       object TimeLabel: TLabel
@@ -228,8 +216,6 @@ object MainForm: TMainForm
         Width = 994
         Height = 13
         Align = alBottom
-        ExplicitLeft = 4
-        ExplicitTop = 252
         ExplicitWidth = 3
       end
       object LogsPages: TPageControl
@@ -244,14 +230,8 @@ object MainForm: TMainForm
         ActivePage = TabSheet1
         Align = alClient
         TabOrder = 0
-        ExplicitLeft = 1
-        ExplicitTop = 1
-        ExplicitWidth = 998
-        ExplicitHeight = 371
         object TabSheet1: TTabSheet
           Caption = 'General Log'
-          ExplicitWidth = 990
-          ExplicitHeight = 343
           object LogList: TListView
             Left = 0
             Top = 0
@@ -263,6 +243,7 @@ object MainForm: TMainForm
                 Width = 125
               end
               item
+                ImageIndex = 0
                 Width = 500
               end>
             Font.Charset = DEFAULT_CHARSET
@@ -280,8 +261,6 @@ object MainForm: TMainForm
             TabOrder = 0
             ViewStyle = vsReport
             OnData = LogListData
-            ExplicitWidth = 998
-            ExplicitHeight = 144
           end
         end
         object TabSheet2: TTabSheet
@@ -358,9 +337,6 @@ object MainForm: TMainForm
         Smooth = True
         SmoothReverse = True
         TabOrder = 1
-        ExplicitLeft = 1
-        ExplicitTop = 448
-        ExplicitWidth = 998
       end
     end
   end
@@ -373,9 +349,9 @@ object MainForm: TMainForm
     BevelOuter = bvNone
     TabOrder = 1
     object RunJobsBtn: TButton
-      Left = 818
+      Left = 838
       Top = 0
-      Width = 95
+      Width = 85
       Height = 65
       Cursor = crHandPoint
       Align = alRight
@@ -388,11 +364,12 @@ object MainForm: TMainForm
       ShowHint = True
       TabOrder = 0
       OnClick = RunJobsBtnClick
+      ExplicitLeft = 818
     end
     object AddNewProjectBtn: TButton
       Left = 0
       Top = 0
-      Width = 95
+      Width = 85
       Height = 65
       Cursor = crHandPoint
       Hint = 'Add a new backup project'
@@ -408,9 +385,9 @@ object MainForm: TMainForm
       OnClick = AddNewProjectBtnClick
     end
     object StopBtn: TButton
-      Left = 913
+      Left = 923
       Top = 0
-      Width = 95
+      Width = 85
       Height = 65
       Cursor = crHandPoint
       Align = alRight
@@ -424,11 +401,12 @@ object MainForm: TMainForm
       ShowHint = True
       TabOrder = 2
       OnClick = StopBtnClick
+      ExplicitLeft = 913
     end
     object EditProjectBtn: TButton
-      Left = 95
+      Left = 85
       Top = 0
-      Width = 95
+      Width = 85
       Height = 65
       Cursor = crHandPoint
       Align = alLeft
@@ -443,9 +421,9 @@ object MainForm: TMainForm
       OnClick = EditProjectBtnClick
     end
     object ConfEmailBtn: TButton
-      Left = 285
+      Left = 255
       Top = 0
-      Width = 95
+      Width = 85
       Height = 65
       Cursor = crHandPoint
       Align = alLeft
@@ -459,11 +437,12 @@ object MainForm: TMainForm
       ShowHint = True
       TabOrder = 4
       OnClick = ConfEmailBtnClick
+      ExplicitLeft = 275
     end
     object DeleteBtn: TButton
-      Left = 190
+      Left = 170
       Top = 0
-      Width = 95
+      Width = 85
       Height = 65
       Cursor = crHandPoint
       Align = alLeft
@@ -476,11 +455,12 @@ object MainForm: TMainForm
       ShowHint = True
       TabOrder = 5
       OnClick = DeleteBtnClick
+      ExplicitLeft = 180
     end
     object PreviewBtn: TButton
-      Left = 723
+      Left = 753
       Top = 0
-      Width = 95
+      Width = 85
       Height = 65
       Cursor = crHandPoint
       Align = alRight
@@ -493,9 +473,10 @@ object MainForm: TMainForm
       ShowHint = True
       TabOrder = 6
       OnClick = PreviewBtnClick
+      ExplicitLeft = 723
     end
     object SendEmailBtn: TCheckBox
-      Left = 386
+      Left = 431
       Top = 8
       Width = 127
       Height = 20
@@ -503,7 +484,7 @@ object MainForm: TMainForm
       TabOrder = 7
     end
     object ShutdownBtn: TCheckBox
-      Left = 386
+      Left = 431
       Top = 34
       Width = 124
       Height = 20
@@ -511,9 +492,9 @@ object MainForm: TMainForm
       TabOrder = 8
     end
     object AboutBtn: TButton
-      Left = 628
+      Left = 668
       Top = 0
-      Width = 95
+      Width = 85
       Height = 65
       Cursor = crHandPoint
       Align = alRight
@@ -526,11 +507,12 @@ object MainForm: TMainForm
       ShowHint = True
       TabOrder = 9
       OnClick = AboutBtnClick
+      ExplicitLeft = 628
     end
     object DonateBtn: TButton
-      Left = 533
+      Left = 583
       Top = 0
-      Width = 95
+      Width = 85
       Height = 65
       Cursor = crHandPoint
       Align = alRight
@@ -542,6 +524,17 @@ object MainForm: TMainForm
       ParentShowHint = False
       ShowHint = True
       TabOrder = 10
+      ExplicitLeft = 543
+    end
+    object LogsBtn: TButton
+      Left = 340
+      Top = 0
+      Width = 85
+      Height = 65
+      Align = alLeft
+      Caption = 'Logs'
+      TabOrder = 11
+      OnClick = LogsBtnClick
     end
   end
   object SearchSourceFiles: TJvSearchFiles
@@ -575,8 +568,8 @@ object MainForm: TMainForm
     FileParams.MaxSize = 0
     OnFindFile = SearchSourceFilesFindFile
     OnFindDirectory = SearchDestFilesFindDirectory
-    Left = 168
-    Top = 104
+    Left = 104
+    Top = 152
   end
   object Taskbar1: TTaskbar
     TaskBarButtons = <>
@@ -657,7 +650,7 @@ object MainForm: TMainForm
     Left = 584
     Top = 120
     Bitmap = {
-      494C010109002C00500018001800FFFFFFFF2000FFFFFFFFFFFFFFFF424D3600
+      494C010109002C00580018001800FFFFFFFF2000FFFFFFFFFFFFFFFF424D3600
       000000000000360000002800000060000000480000000100200000000000006C
       0000000000000000000000000000000000000000000000000000000000000000
       000000000000000000000000000000000000020202030B0B0B0C171717182020
