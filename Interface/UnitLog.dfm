@@ -28,14 +28,14 @@ object LogForm: TLogForm
     Align = alBottom
     Caption = 'log file link'
     Color = clBtnFace
-    ParentColor = False
-    ParentFont = False
-    OnClick = LogFilePathLabelClick
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clHotLight
     Font.Height = -11
     Font.Name = 'Tahoma'
     Font.Style = [fsUnderline]
+    ParentColor = False
+    ParentFont = False
+    OnClick = LogFilePathLabelClick
     ExplicitWidth = 49
   end
   object LogList: TListView
@@ -65,5 +65,7 @@ object LogForm: TLogForm
     TabOrder = 0
     ViewStyle = vsReport
     OnData = LogListData
+    ExplicitLeft = 3
+    ExplicitTop = -3
   end
-end
+end

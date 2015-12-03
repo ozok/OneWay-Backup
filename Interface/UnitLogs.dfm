@@ -14,6 +14,8 @@ object LogsForm: TLogsForm
   OldCreateOrder = False
   Position = poScreenCenter
   OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  OnResize = FormResize
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
@@ -34,18 +36,23 @@ object LogsForm: TLogsForm
     TabOrder = 0
     OnClick = LogsListClick
   end
-  object ContentList: TListBox
+  object ContentList: TListView
     Left = 204
     Top = 0
     Width = 590
     Height = 403
     Align = alClient
-    ItemHeight = 13
+    Columns = <
+      item
+      end>
+    OwnerData = True
+    ReadOnly = True
+    RowSelect = True
+    ShowColumnHeaders = False
     TabOrder = 1
-    ExplicitLeft = 471
-    ExplicitTop = 168
-    ExplicitWidth = 121
-    ExplicitHeight = 97
+    ViewStyle = vsReport
+    OnData = ContentListData
+    ExplicitLeft = 207
   end
   object Info: TJvComputerInfoEx
     Left = 464

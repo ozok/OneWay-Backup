@@ -5,20 +5,24 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.StdCtrls,
-  JvComponentBase, JvComputerInfoEx;
+  JvComponentBase, JvComputerInfoEx, Vcl.ComCtrls;
 
 type
   TLogsForm = class(TForm)
     LogsList: TListBox;
-    ContentList: TListBox;
     Splitter1: TSplitter;
     Info: TJvComputerInfoEx;
+    ContentList: TListView;
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure LogsListClick(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure ContentListData(Sender: TObject; Item: TListItem);
+    procedure FormResize(Sender: TObject);
   private
     { Private declarations }
     FAppDataFolder: string;
+    FFileContent: TStringList;
 
     procedure PopulateLogsList;
   public
@@ -32,6 +36,14 @@ implementation
 
 {$R *.dfm}
 
+procedure TLogsForm.ContentListData(Sender: TObject; Item: TListItem);
+begin
+  if Item.Index < FFileContent.Count then
+  begin
+    item.Caption := FFileContent[Item.Index];
+  end;
+end;
+
 procedure TLogsForm.FormCreate(Sender: TObject);
 begin
 {$IFDEF PORTABLE}
@@ -40,6 +52,20 @@ begin
 {$IFDEF INSTALLED}
   FAppDataFolder := Info.Folders.AppData + '\OneWayBackup';
 {$ENDIF}
+  FFileContent := TStringList.Create;
+end;
+
+procedure TLogsForm.FormDestroy(Sender: TObject);
+begin
+  FFileContent.Free;
+end;
+
+procedure TLogsForm.FormResize(Sender: TObject);
+begin
+  try
+    ContentList.Columns[0].Width := ContentList.ClientWidth - 20;
+  except on E: Exception do
+  end;
 end;
 
 procedure TLogsForm.FormShow(Sender: TObject);
@@ -53,7 +79,8 @@ begin
   begin
     if FileExists(IncludeTrailingPathDelimiter(FAppDataFolder + '\logs\') + LogsList.Items[LogsList.ItemIndex]) then
     begin
-      ContentList.Items.LoadFromFile(IncludeTrailingPathDelimiter(FAppDataFolder + '\logs\') + LogsList.Items[LogsList.ItemIndex]);
+      FFileContent.LoadFromFile(IncludeTrailingPathDelimiter(FAppDataFolder + '\logs\') + LogsList.Items[LogsList.ItemIndex]);
+      ContentList.Items.Count := FFileContent.Count;
     end;
   end;
 end;
@@ -63,7 +90,8 @@ var
   LSearchRec: TSearchRec;
 begin
   LogsList.Items.Clear;
-  ContentList.Items.Clear;
+  ContentList.Items.Count := 0;
+  FFileContent.Clear;
   if FindFirst(IncludeTrailingPathDelimiter(FAppDataFolder + '\logs\') + '*.log', faAnyFile, LSearchRec) = 0 then
   begin
     try
