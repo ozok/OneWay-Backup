@@ -20,26 +20,16 @@ object LogsForm: TLogsForm
   PixelsPerInch = 96
   TextHeight = 13
   object Splitter1: TSplitter
-    Left = 201
+    Left = 185
     Top = 0
     Height = 403
     ExplicitLeft = 144
     ExplicitTop = -8
   end
-  object LogsList: TListBox
-    Left = 0
-    Top = 0
-    Width = 201
-    Height = 403
-    Align = alLeft
-    ItemHeight = 13
-    TabOrder = 0
-    OnClick = LogsListClick
-  end
   object ContentList: TListView
-    Left = 204
+    Left = 188
     Top = 0
-    Width = 590
+    Width = 606
     Height = 403
     Align = alClient
     Columns = <
@@ -49,10 +39,48 @@ object LogsForm: TLogsForm
     ReadOnly = True
     RowSelect = True
     ShowColumnHeaders = False
-    TabOrder = 1
+    TabOrder = 0
     ViewStyle = vsReport
     OnData = ContentListData
-    ExplicitLeft = 207
+    ExplicitLeft = 204
+    ExplicitWidth = 590
+  end
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 185
+    Height = 403
+    Align = alLeft
+    TabOrder = 1
+    ExplicitLeft = 19
+    ExplicitTop = 8
+    object LogsList: TListBox
+      Left = 1
+      Top = 26
+      Width = 183
+      Height = 376
+      Align = alClient
+      ItemHeight = 13
+      TabOrder = 0
+      OnClick = LogsListClick
+      ExplicitLeft = -16
+      ExplicitTop = 1
+      ExplicitWidth = 201
+      ExplicitHeight = 401
+    end
+    object RefreshBtn: TButton
+      Left = 1
+      Top = 1
+      Width = 183
+      Height = 25
+      Align = alTop
+      Caption = 'Refresh'
+      TabOrder = 1
+      OnClick = RefreshBtnClick
+      ExplicitLeft = 56
+      ExplicitTop = 192
+      ExplicitWidth = 75
+    end
   end
   object Info: TJvComputerInfoEx
     Left = 464

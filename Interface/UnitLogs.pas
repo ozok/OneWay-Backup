@@ -13,12 +13,15 @@ type
     Splitter1: TSplitter;
     Info: TJvComputerInfoEx;
     ContentList: TListView;
+    Panel1: TPanel;
+    RefreshBtn: TButton;
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure LogsListClick(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure ContentListData(Sender: TObject; Item: TListItem);
     procedure FormResize(Sender: TObject);
+    procedure RefreshBtnClick(Sender: TObject);
   private
     { Private declarations }
     FAppDataFolder: string;
@@ -103,6 +106,11 @@ begin
     end;
   end;
 
+end;
+
+procedure TLogsForm.RefreshBtnClick(Sender: TObject);
+begin
+  PopulateLogsList;
 end;
 
 end.
