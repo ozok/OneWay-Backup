@@ -1614,7 +1614,7 @@ begin
   begin
     if not FExit then
     begin
-      TrayIcon.BalloonHint('OneWay Backup', 'OneWay Backup is done. Please see logs for more detail.');
+      TrayIcon.BalloonHint('OneWay Backup', 'OneWay Backup is done. Please see logs for more details.');
     end;
   end;
 end;
