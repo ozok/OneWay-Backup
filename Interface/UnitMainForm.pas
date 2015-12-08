@@ -3,7 +3,7 @@ unit UnitMainForm;
 interface
 
 uses
-  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, 
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
   System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ComCtrls, 
   Vcl.ExtCtrls, Vcl.StdCtrls, JvComponentBase, JvSearchFiles, UnitFileCompare, 
   UnitFileCopyPair, UnitProjectFile, Vcl.Mask, JvExMask, JvToolEdit, IdBaseComponent, 
@@ -1104,7 +1104,7 @@ begin
                         else
                         begin
                           FLogLineToAdd := TAB + 'SHFileOperations worked. Copied: ' + LFileCopyAgainPairs[i].SourceFile + ' is copied to ' + LFileCopyAgainPairs[i].DestFile;
-                          OperationThread.Synchronize(AddToErrorLog);
+                          OperationThread.Synchronize(AddToLog);
                         end;
 
                         Continue;
