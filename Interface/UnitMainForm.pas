@@ -1147,6 +1147,7 @@ begin
                     if not FileExists(LSourceFile) then
                     begin
                       LFilesToDelete.Add(LDestFile);
+                      FChangeCount := LFilesToDelete.Count;
                     end;
                   end;
                 finally
@@ -1207,6 +1208,7 @@ begin
                     if not DirectoryExists(LSourceDir) then
                     begin
                       LDirsToDelete.Add(LDestDir);
+                      FChangeCount := LDirsToDelete.Count;
                     end;
                   end;
                 finally
