@@ -5,16 +5,16 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.StdCtrls,
-  JvComponentBase, JvComputerInfoEx, Vcl.ComCtrls;
+  JvComponentBase, JvComputerInfoEx, Vcl.ComCtrls, UnitLogItems;
 
 type
   TLogsForm = class(TForm)
     LogsList: TListBox;
     Splitter1: TSplitter;
     Info: TJvComputerInfoEx;
-    ContentList: TListView;
     Panel1: TPanel;
     RefreshBtn: TButton;
+    ContentList: TListView;
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure LogsListClick(Sender: TObject);
@@ -25,7 +25,7 @@ type
   private
     { Private declarations }
     FAppDataFolder: string;
-    FFileContent: TStringList;
+    FLogFile: TLogFile;
 
     procedure PopulateLogsList;
   public
@@ -41,9 +41,14 @@ implementation
 
 procedure TLogsForm.ContentListData(Sender: TObject; Item: TListItem);
 begin
-  if Item.Index < FFileContent.Count then
+  if Item.Index < FLogFile.Count then
   begin
-    item.Caption := FFileContent[Item.Index];
+    Item.Caption := FLogFile.LogItems[Item.Index].AddDate;
+    Item.SubItems.Add(FLogFile.LogItems[Item.Index].LogType);
+    Item.SubItems.Add(FLogFile.LogItems[Item.Index].Source);
+    Item.SubItems.Add(FLogFile.LogItems[Item.Index].Operation);
+    Item.SubItems.Add(FLogFile.LogItems[Item.Index].Destination);
+    Item.SubItems.Add(FLogFile.LogItems[Item.Index].Reason);
   end;
 end;
 
@@ -55,12 +60,12 @@ begin
 {$IFDEF INSTALLED}
   FAppDataFolder := Info.Folders.AppData + '\OneWayBackup';
 {$ENDIF}
-  FFileContent := TStringList.Create;
+  FLogFile := TLogFile.Create;
 end;
 
 procedure TLogsForm.FormDestroy(Sender: TObject);
 begin
-  FFileContent.Free;
+  FLogFile.Free;
 end;
 
 procedure TLogsForm.FormResize(Sender: TObject);
@@ -82,8 +87,9 @@ begin
   begin
     if FileExists(IncludeTrailingPathDelimiter(FAppDataFolder + '\logs\') + LogsList.Items[LogsList.ItemIndex]) then
     begin
-      FFileContent.LoadFromFile(IncludeTrailingPathDelimiter(FAppDataFolder + '\logs\') + LogsList.Items[LogsList.ItemIndex]);
-      ContentList.Items.Count := FFileContent.Count;
+      FLogFile.LoadFromFile(IncludeTrailingPathDelimiter(FAppDataFolder + '\logs\') + LogsList.Items[LogsList.ItemIndex]);
+      Self.Caption := FLogFile.Count.ToString();
+      ContentList.Items.Count := FLogFile.Count;
     end;
   end;
 end;
@@ -94,8 +100,8 @@ var
 begin
   LogsList.Items.Clear;
   ContentList.Items.Count := 0;
-  FFileContent.Clear;
-  if FindFirst(IncludeTrailingPathDelimiter(FAppDataFolder + '\logs\') + '*.log', faAnyFile, LSearchRec) = 0 then
+  FLogFile.LogItems.Clear;
+  if FindFirst(IncludeTrailingPathDelimiter(FAppDataFolder + '\logs\') + '*.csv', faAnyFile, LSearchRec) = 0 then
   begin
     try
       repeat

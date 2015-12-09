@@ -9,8 +9,8 @@ uses
 
 type
   TLogForm = class(TForm)
-    LogList: TListView;
     LogFilePathLabel: TLabel;
+    LogList: TListView;
                                    
     procedure FormResize(Sender: TObject);
     procedure LogListData(Sender: TObject; Item: TListItem);
@@ -33,7 +33,7 @@ uses UnitMainForm;
 
 procedure TLogForm.FormResize(Sender: TObject);
 begin
-  LogList.Columns[1].Width := LogList.ClientWidth - 20 - LogList.Columns[0].Width;
+//  LogList.Columns[1].Width := LogList.ClientWidth - 20 - LogList.Columns[0].Width;
 end;
 
 procedure TLogForm.FormShow(Sender: TObject);
@@ -57,8 +57,12 @@ procedure TLogForm.LogListData(Sender: TObject; Item: TListItem);
 begin
   if Item.Index < MainForm.FFullLogItems.Count then
   begin
-    Item.Caption := DateTimeToStr(MainForm.FFullLogItems[Item.Index].LogDate);
-    Item.SubItems.Add(MainForm.FFullLogItems[Item.Index].LogStr);
+    Item.Caption := MainForm.FFullLogItems.LogItems[Item.Index].AddDate;
+    Item.SubItems.Add(MainForm.FFullLogItems.LogItems[Item.Index].LogType);
+    Item.SubItems.Add(MainForm.FFullLogItems.LogItems[Item.Index].Source);
+    Item.SubItems.Add(MainForm.FFullLogItems.LogItems[Item.Index].Operation);
+    Item.SubItems.Add(MainForm.FFullLogItems.LogItems[Item.Index].Destination);
+    Item.SubItems.Add(MainForm.FFullLogItems.LogItems[Item.Index].Reason);
   end;
 end;
 

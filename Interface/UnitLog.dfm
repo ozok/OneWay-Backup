@@ -46,9 +46,24 @@ object LogForm: TLogForm
     Align = alClient
     Columns = <
       item
-        Width = 125
+        Width = 110
       end
       item
+        Alignment = taCenter
+      end
+      item
+        Width = 300
+      end
+      item
+        Alignment = taCenter
+        Width = 100
+      end
+      item
+        Width = 300
+      end
+      item
+        Alignment = taCenter
+        Width = 140
       end>
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
@@ -61,11 +76,10 @@ object LogForm: TLogForm
     ReadOnly = True
     RowSelect = True
     ParentFont = False
-    ShowColumnHeaders = False
     TabOrder = 0
     ViewStyle = vsReport
     OnData = LogListData
-    ExplicitLeft = 3
-    ExplicitTop = -3
+    ExplicitWidth = 992
+    ExplicitHeight = 345
   end
 end

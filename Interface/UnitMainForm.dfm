@@ -306,9 +306,24 @@ object MainForm: TMainForm
             Align = alClient
             Columns = <
               item
-                Width = 125
+                Width = 110
               end
               item
+                Alignment = taCenter
+              end
+              item
+                Width = 300
+              end
+              item
+                Alignment = taCenter
+                Width = 100
+              end
+              item
+                Width = 300
+              end
+              item
+                Alignment = taCenter
+                Width = 140
               end>
             Font.Charset = DEFAULT_CHARSET
             Font.Color = clWindowText
@@ -321,7 +336,6 @@ object MainForm: TMainForm
             ReadOnly = True
             RowSelect = True
             ParentFont = False
-            ShowColumnHeaders = False
             TabOrder = 0
             ViewStyle = vsReport
             OnData = FullLogListData
@@ -647,7 +661,7 @@ object MainForm: TMainForm
     Left = 584
     Top = 120
     Bitmap = {
-      494C01010A002C00880018001800FFFFFFFF2000FFFFFFFFFFFFFFFF424D3600
+      494C01010A002C00900018001800FFFFFFFF2000FFFFFFFFFFFFFFFF424D3600
       000000000000360000002800000060000000480000000100200000000000006C
       0000000000000000000000000000000000000000000000000000000000000000
       000000000000000000000000000000000000020202030B0B0B0C171717182020

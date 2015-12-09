@@ -45,14 +45,14 @@ begin
   Stop := False;
   if not(FileExists(FileName1) and FileExists(FileName2)) then
   begin
-    Reason := '[DestDoesntExist] ';
+    Reason := 'Destination file doesn''t exist';
     Exit;
   end;
   if CompareMethod <> 3 then
   begin
     if not CompareLastModifiedDate(FileName1, FileName2) then
     begin
-      Reason := '[DateDiff] ';
+      Reason := 'Last modified dates are different';
       Result := False;
       Exit;
     end;
@@ -63,7 +63,7 @@ begin
   if CompareMethod = 3 then
   begin
     Result := CompareLastModifiedDate(FileName1, FileName2);
-    Reason := '[DateDiff] ';
+    Reason := 'Last modified dates are different';
     Exit;
   end;
 
@@ -75,17 +75,17 @@ begin
     case CompareMethod of
       0:
         begin
-          Reason := '[DiffStream] ';
+          Reason := 'Files are different';
           Result := StreamsAreIdentical(LFS1, LFS2, BlockSize);
         end;
       1:
         begin
-          Reason := '[DiffMd5] ';
+          Reason := 'MD5 hashes are different';
           Result := CompareMD5(LFS1, LFS2);
         end;
       2:
         begin
-          Reason := '[DiffSize ' + FloatToStr(LFS1.Size) + '/' + FloatToStr(LFS2.Size) + '] ';
+          Reason := 'Different file sizes';
           Result := LFS1.Size = LFS2.Size;
         end;
     end;
