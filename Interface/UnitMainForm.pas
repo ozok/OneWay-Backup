@@ -108,6 +108,9 @@ type
     procedure MinimizeToTrayBtnClick(Sender: TObject);
     procedure TrayIconBalloonClick(Sender: TObject);
     procedure LogsBtnClick(Sender: TObject);
+    procedure FullLogListCustomDrawSubItem(Sender: TCustomListView;
+      Item: TListItem; SubItem: Integer; State: TCustomDrawState;
+      var DefaultDraw: Boolean);
   private
     { Private declarations }
     FFiles: TStringList;
@@ -182,7 +185,7 @@ var
   MainForm: TMainForm;
 
 const
-  PROGRAM_TITLE = 'OneWay Backup';
+  PROGRAM_TITLE = 'OneWay Backup RC';
 
 implementation
 
@@ -544,6 +547,35 @@ begin
   end;
 end;
 
+procedure TMainForm.FullLogListCustomDrawSubItem(Sender: TCustomListView;
+  Item: TListItem; SubItem: Integer; State: TCustomDrawState;
+  var DefaultDraw: Boolean);
+begin
+  if SubItem = 1 then
+  begin
+    if item.SubItems[0] = 'Error' then
+    begin
+      Sender.Canvas.Font.Color := clRed;
+    end
+    else if Item.SubItems[0] = 'Info' then
+    begin
+      Sender.Canvas.Font.Color := clBlue;
+    end
+    else if Item.SubItems[0] = 'Success' then
+    begin
+      Sender.Canvas.Font.Color := clGreen;
+    end
+    else
+    begin
+      Sender.Canvas.Font.Color := clBlack;
+    end;
+  end
+  else
+  begin
+    Sender.Canvas.Font.Color := clBlack;
+  end;
+end;
+
 procedure TMainForm.FullLogListData(Sender: TObject; Item: TListItem);
 begin
   if Item.Index < FFullLogItems.Count then
@@ -799,7 +831,7 @@ begin
   OperationThread.Synchronize(StartProgressTimer);
   if FPreview then
   begin
-      ResetLogItem(FLogLineToAdd);
+    ResetLogItem(FLogLineToAdd);
     FLogLineToAdd.LogType := 'Info';
     FLogLineToAdd.Source := 'This is a preview';
     OperationThread.Synchronize(AddToLog);
@@ -1058,7 +1090,7 @@ begin
 
                     TFile.Copy(LFileCopyPairs[i].SourceFile, LFileCopyPairs[i].DestFile, True);
       ResetLogItem(FLogLineToAdd);
-                    FLogLineToAdd.LogType := 'Copy Success';
+                    FLogLineToAdd.LogType := 'Success';
                     FLogLineToAdd.Source := LFileCopyPairs[i].SourceFile;
                     FLogLineToAdd.Destination := LFileCopyPairs[i].DestFile;
                     FLogLineToAdd.Operation := 'Copy file';

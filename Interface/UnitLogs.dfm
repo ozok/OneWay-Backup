@@ -13,6 +13,7 @@ object LogsForm: TLogsForm
   Font.Style = []
   OldCreateOrder = False
   Position = poScreenCenter
+  OnClose = FormClose
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   OnResize = FormResize
@@ -34,17 +35,17 @@ object LogsForm: TLogsForm
     Height = 430
     Align = alLeft
     TabOrder = 0
-    ExplicitHeight = 403
     object LogsList: TListBox
       Left = 1
-      Top = 26
+      Top = 76
       Width = 183
-      Height = 403
+      Height = 353
       Align = alClient
       ItemHeight = 13
       TabOrder = 0
       OnClick = LogsListClick
-      ExplicitHeight = 376
+      ExplicitTop = 26
+      ExplicitHeight = 403
     end
     object RefreshBtn: TButton
       Left = 1
@@ -56,6 +57,32 @@ object LogsForm: TLogsForm
       TabOrder = 1
       OnClick = RefreshBtnClick
     end
+    object OpenLogBtn: TButton
+      Left = 1
+      Top = 26
+      Width = 183
+      Height = 25
+      Align = alTop
+      Caption = 'Open Selected Log'
+      TabOrder = 2
+      OnClick = OpenLogBtnClick
+      ExplicitLeft = 56
+      ExplicitTop = 200
+      ExplicitWidth = 75
+    end
+    object OpenLogFolderBtn: TButton
+      Left = 1
+      Top = 51
+      Width = 183
+      Height = 25
+      Align = alTop
+      Caption = 'Open Log Folder'
+      TabOrder = 3
+      OnClick = OpenLogFolderBtnClick
+      ExplicitLeft = 64
+      ExplicitTop = 208
+      ExplicitWidth = 75
+    end
   end
   object ContentList: TListView
     Left = 188
@@ -65,23 +92,29 @@ object LogsForm: TLogsForm
     Align = alClient
     Columns = <
       item
+        Caption = 'Date'
         Width = 110
       end
       item
         Alignment = taCenter
+        Caption = 'Type'
       end
       item
+        Caption = 'Source File/Message'
         Width = 300
       end
       item
         Alignment = taCenter
+        Caption = 'Operation'
         Width = 100
       end
       item
+        Caption = 'Destination'
         Width = 300
       end
       item
         Alignment = taCenter
+        Caption = 'Reason'
         Width = 140
       end>
     Font.Charset = DEFAULT_CHARSET
@@ -97,11 +130,12 @@ object LogsForm: TLogsForm
     ParentFont = False
     TabOrder = 1
     ViewStyle = vsReport
+    OnCustomDrawSubItem = ContentListCustomDrawSubItem
     OnData = ContentListData
-    ExplicitLeft = -214
-    ExplicitTop = -172
-    ExplicitWidth = 1008
-    ExplicitHeight = 575
+    ExplicitLeft = 8
+    ExplicitTop = 8
+    ExplicitWidth = 992
+    ExplicitHeight = 345
   end
   object Info: TJvComputerInfoEx
     Left = 464

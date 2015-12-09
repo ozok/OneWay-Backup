@@ -16,6 +16,8 @@ type
     procedure LogListData(Sender: TObject; Item: TListItem);
     procedure FormShow(Sender: TObject);
     procedure LogFilePathLabelClick(Sender: TObject);
+    procedure LogListCustomDrawSubItem(Sender: TCustomListView; Item: TListItem;
+      SubItem: Integer; State: TCustomDrawState; var DefaultDraw: Boolean);
   private
     { Private declarations }
   public
@@ -50,6 +52,35 @@ begin
   else
   begin
     Application.MessageBox('Unable to find log file.', 'Error', MB_ICONERROR);
+  end;
+end;
+
+procedure TLogForm.LogListCustomDrawSubItem(Sender: TCustomListView;
+  Item: TListItem; SubItem: Integer; State: TCustomDrawState;
+  var DefaultDraw: Boolean);
+begin
+  if SubItem = 1 then
+  begin
+    if item.SubItems[0] = 'Error' then
+    begin
+      Sender.Canvas.Font.Color := clRed;
+    end
+    else if Item.SubItems[0] = 'Info' then
+    begin
+      Sender.Canvas.Font.Color := clBlue;
+    end
+    else if Item.SubItems[0] = 'Success' then
+    begin
+      Sender.Canvas.Font.Color := clGreen;
+    end
+    else
+    begin
+      Sender.Canvas.Font.Color := clBlack;
+    end;
+  end
+  else
+  begin
+    Sender.Canvas.Font.Color := clBlack;
   end;
 end;
 

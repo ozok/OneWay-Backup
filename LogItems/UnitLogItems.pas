@@ -2,7 +2,7 @@ unit UnitLogItems;
 
 interface
 
-uses Classes, IniFiles, Generics.Collections, System.SysUtils, Nvv.IO.CSV.Delphi.NvvCSVClasses;
+uses Classes, IniFiles, Generics.Collections, System.SysUtils;
 
 type
   TLogItem = record
@@ -18,6 +18,7 @@ type
   TLogFile = class(TObject)
   private
     FLogItems: TList<TLogItem>;
+    FSplitList: TStringList;
     function GetCount: integer;
     procedure SetLogItems(const Value: TList<TLogItem>);
     function GetAsString: string;
@@ -31,6 +32,7 @@ type
     procedure LoadFromFile(const FilePath: string);
     procedure WriteToFile(const FilePath: string);
     procedure Add(const Item: TLogItem);
+    procedure Clear();
   end;
 
 implementation
@@ -38,18 +40,36 @@ implementation
 { TLogFile }
 
 procedure TLogFile.Add(const Item: TLogItem);
+var
+  LTmpItem: TLogItem;
 begin
-  LogItems.Add(Item);
+  LTmpItem := Item;
+  LTmpItem.LogType := LTmpItem.LogType.Replace(';', '');
+  LTmpItem.AddDate := LTmpItem.AddDate.Replace(';', '');
+  LTmpItem.Source := LTmpItem.Source.Replace(';', '');
+  LTmpItem.Destination := LTmpItem.Destination.Replace(';', '');
+  LTmpItem.Operation := LTmpItem.Operation.Replace(';', '');
+  LTmpItem.Reason := LTmpItem.Reason.Replace(';', '');
+  LogItems.Add(LTmpItem);
+end;
+
+procedure TLogFile.Clear;
+begin
+  LogItems.Clear;
 end;
 
 constructor TLogFile.Create;
 begin
   LogItems := TList<TLogItem>.Create;
+  FSplitList := TStringList.Create;
+  FSplitList.StrictDelimiter := True;
+  FSplitList.Delimiter := ';';
 end;
 
 destructor TLogFile.Destroy;
 begin
   LogItems.Free;
+  FSplitList.Free;
 end;
 
 function TLogFile.GetAsString: string;
@@ -81,34 +101,33 @@ procedure TLogFile.LoadFromFile(const FilePath: string);
 var
   LLine: string;
   LItem: TLogItem;
-  LCSVReader: TnvvCSVFileReader;
+  LSR: TStreamReader;
 begin
+  Clear;
   try
-    LCSVReader := TnvvCSVFileReader.Create();
+    LSR := TStreamReader.Create(FilePath, TEncoding.UTF8);
     try
-      LCSVReader.SetFile(FilePath, TEncoding.UTF8);
-      LCSVReader.HeaderPresent := False;
-      LCSVReader.Open;
-      while not LCSVReader.Eof do
+      while not LSR.EndOfStream do
       begin
-//        if LCSVReader.FieldCount = 6 then
+        LLine := LSR.ReadLine.Trim;
+        FSplitList.DelimitedText := LLine;
+        if FSplitList.Count = 6 then
         begin
           with LItem do
           begin
-            LogType := LCSVReader.Fields[0].Value;
-            AddDate := LCSVReader.Fields[1].Value;
-            Source := LCSVReader.Fields[2].Value;
-            Destination := LCSVReader.Fields[3].Value;
-            Operation := LCSVReader.Fields[4].Value;
-            Reason := LCSVReader.Fields[5].Value;
+            LogType := FSplitList[0];
+            AddDate := FSplitList[1];
+            Source := FSplitList[2];
+            Destination := FSplitList[3];
+            Operation := FSplitList[4];
+            Reason := FSplitList[5];
           end;
           LogItems.Add(LItem);
         end;
-        LCSVReader.Next;
       end;
-      LCSVReader.Close;
     finally
-      LCSVReader.Free;
+      LSR.Close;
+      LSR.Free;
     end;
   except
     on E: Exception do
@@ -130,8 +149,8 @@ var
   LLine: string;
   LItem: TLogItem;
 begin
+  LSW := TStreamWriter.Create(FilePath, True, TEncoding.UTF8);
   try
-    LSW := TStreamWriter.Create(FilePath, True, TEncoding.UTF8);
     for I := 0 to LogItems.Count-1 do
     begin
       LItem := LogItems[i];
@@ -141,7 +160,9 @@ begin
       end;
       LSW.WriteLine(LLine);
     end;
-  except on E: Exception do
+  finally
+    LSW.Close;
+    LSW.Free;
   end;
 end;
 

@@ -19,8 +19,7 @@ uses
   UnitLog in 'Interface\UnitLog.pas' {LogForm} ,
   UnitAbout in 'Interface\UnitAbout.pas' {AboutForm} ,
   UnitLogs in 'Interface\UnitLogs.pas' {LogsForm} ,
-  UnitLogItems in 'LogItems\UnitLogItems.pas',
-  Nvv.IO.CSV.Delphi.NvvCSVClasses in 'LogItems\Nvv.IO.CSV.Delphi.NvvCSVClasses.pas';
+  UnitLogItems in 'LogItems\UnitLogItems.pas';
 
 {$R *.res}
 

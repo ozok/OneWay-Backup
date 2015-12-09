@@ -306,23 +306,29 @@ object MainForm: TMainForm
             Align = alClient
             Columns = <
               item
+                Caption = 'Date'
                 Width = 110
               end
               item
                 Alignment = taCenter
+                Caption = 'Type'
               end
               item
+                Caption = 'Source File/Message'
                 Width = 300
               end
               item
                 Alignment = taCenter
+                Caption = 'Operation'
                 Width = 100
               end
               item
+                Caption = 'Destination'
                 Width = 300
               end
               item
                 Alignment = taCenter
+                Caption = 'Reason'
                 Width = 140
               end>
             Font.Charset = DEFAULT_CHARSET
@@ -338,6 +344,7 @@ object MainForm: TMainForm
             ParentFont = False
             TabOrder = 0
             ViewStyle = vsReport
+            OnCustomDrawSubItem = FullLogListCustomDrawSubItem
             OnData = FullLogListData
           end
         end
@@ -661,7 +668,7 @@ object MainForm: TMainForm
     Left = 584
     Top = 120
     Bitmap = {
-      494C01010A002C00900018001800FFFFFFFF2000FFFFFFFFFFFFFFFF424D3600
+      494C01010A002C00940018001800FFFFFFFF2000FFFFFFFFFFFFFFFF424D3600
       000000000000360000002800000060000000480000000100200000000000006C
       0000000000000000000000000000000000000000000000000000000000000000
       000000000000000000000000000000000000020202030B0B0B0C171717182020

@@ -78,8 +78,9 @@ object LogForm: TLogForm
     ParentFont = False
     TabOrder = 0
     ViewStyle = vsReport
+    OnCustomDrawSubItem = LogListCustomDrawSubItem
     OnData = LogListData
-    ExplicitWidth = 992
-    ExplicitHeight = 345
+    ExplicitLeft = 3
+    ExplicitTop = -3
   end
 end
