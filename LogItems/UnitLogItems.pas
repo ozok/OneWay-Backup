@@ -2,7 +2,7 @@ unit UnitLogItems;
 
 interface
 
-uses Classes, IniFiles, Generics.Collections, System.SysUtils;
+uses Classes, IniFiles, Generics.Collections, System.SysUtils, System.Zip;
 
 type
   TLogItem = record
@@ -31,6 +31,7 @@ type
     destructor Destroy;
     procedure LoadFromFile(const FilePath: string);
     procedure WriteToFile(const FilePath: string);
+    function CompressLog(const LogFilePath: string):string;
     procedure Add(const Item: TLogItem);
     procedure Clear();
   end;
@@ -56,6 +57,27 @@ end;
 procedure TLogFile.Clear;
 begin
   LogItems.Clear;
+end;
+
+function TLogFile.CompressLog(const LogFilePath: string): string;
+var
+  LZipFile: TZipFile;
+  LOutputFileName: string;
+begin
+  Result := LogFilePath;
+  if FileExists(LogFilePath) then
+  begin
+    LOutputFileName := ChangeFileExt(LogFilePath, '.zip');
+    LZipFile := TZipFile.Create;
+    try
+      LZipFile.Open(LOutputFileName, zmWrite);
+      LZipFile.Add(LogFilePath);
+      LZipFile.Close;
+      Result := LOutputFileName;
+    finally
+      LZipFile.Free;
+    end;
+  end;
 end;
 
 constructor TLogFile.Create;
