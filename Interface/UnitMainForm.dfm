@@ -668,7 +668,7 @@ object MainForm: TMainForm
     Left = 584
     Top = 120
     Bitmap = {
-      494C01010A002C00980018001800FFFFFFFF2000FFFFFFFFFFFFFFFF424D3600
+      494C01010A002C009C0018001800FFFFFFFF2000FFFFFFFFFFFFFFFF424D3600
       000000000000360000002800000060000000480000000100200000000000006C
       0000000000000000000000000000000000000000000000000000000000000000
       000000000000000000000000000000000000020202030B0B0B0C171717182020
@@ -8136,5 +8136,19 @@ object MainForm: TMainForm
     OnBalloonClick = TrayIconBalloonClick
     Left = 664
     Top = 224
+  end
+  object FormStorage: TJvFormStorage
+    AppStorage = AppIniFileStorage
+    AppStoragePath = '%FORM_NAME%'
+    StoredValues = <>
+    Left = 880
+    Top = 244
+  end
+  object AppIniFileStorage: TJvAppIniFileStorage
+    StorageOptions.BooleanStringTrueValues = 'TRUE, YES, Y'
+    StorageOptions.BooleanStringFalseValues = 'FALSE, NO, N'
+    SubStorages = <>
+    Left = 864
+    Top = 308
   end
 end

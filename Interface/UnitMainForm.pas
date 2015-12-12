@@ -13,7 +13,8 @@ uses
   IdExplicitTLSClientServerBase, IdMessageClient, IdSMTPBase, IdSMTP, JvThreadTimer, acProgressBar, 
   IdIOHandler, IdIOHandlerSocket, IdIOHandlerStack, IdSSL, IdSSLOpenSSL, IniFiles, 
   System.ImageList, Vcl.ImgList, Vcl.Buttons, JvComputerInfoEx, IOUtils,
-  JvCaptionButton, JvTrayIcon, UnitLogItems, IdAttachmentFile, IdAttachment;
+  JvCaptionButton, JvTrayIcon, UnitLogItems, IdAttachmentFile, IdAttachment,
+  JvFormPlacement, JvAppStorage, JvAppIniStorage;
 
 type
   TMainForm = class(TForm)
@@ -70,6 +71,8 @@ type
     TabSheet4: TTabSheet;
     TabSheet5: TTabSheet;
     LogsBtn: TButton;
+    FormStorage: TJvFormStorage;
+    AppIniFileStorage: TJvAppIniFileStorage;
     procedure FormCreate(Sender: TObject);
     procedure RunJobsBtnClick(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -419,6 +422,9 @@ begin
   {$IFDEF INSTALLED}
     AppDataFolder := Info.Folders.AppData + '\OneWayBackup';
   {$ENDIF}
+
+  // program last location, size and state
+  AppIniFileStorage.FileName := AppDataFolder + '\location.ini';
 
   if not DirectoryExists(AppDataFolder) then
   begin
