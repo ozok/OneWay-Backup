@@ -395,9 +395,6 @@ begin
     AppDataFolder := Info.Folders.AppData + '\OneWayBackup';
   {$ENDIF}
 
-  // program last location, size and state
-  AppIniFileStorage.FileName := AppDataFolder + '\location.ini';
-
   if not DirectoryExists(AppDataFolder) then
   begin
     if not ForceDirectories(AppDataFolder) then
@@ -406,6 +403,9 @@ begin
       Application.Terminate;
     end;
   end;
+
+  // program last location, size and state
+  AppIniFileStorage.FileName := AppDataFolder + '\location.ini';
 
   if not DirectoryExists(AppDataFolder + '\logs\') then
   begin
