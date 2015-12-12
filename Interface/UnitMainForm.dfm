@@ -218,137 +218,6 @@ object MainForm: TMainForm
         Align = alBottom
         ExplicitWidth = 3
       end
-      object LogsPages: TPageControl
-        Left = 0
-        Top = 0
-        Width = 1000
-        Height = 373
-        Margins.Left = 0
-        Margins.Top = 0
-        Margins.Right = 0
-        Margins.Bottom = 0
-        ActivePage = TabSheet1
-        Align = alClient
-        TabOrder = 0
-        object TabSheet1: TTabSheet
-          Caption = 'General Log'
-          object LogList: TListView
-            Left = 0
-            Top = 0
-            Width = 992
-            Height = 345
-            Align = alClient
-            Columns = <
-              item
-                Width = 125
-              end
-              item
-                ImageIndex = 0
-                Width = 500
-              end>
-            Font.Charset = DEFAULT_CHARSET
-            Font.Color = clWindowText
-            Font.Height = -11
-            Font.Name = 'Tahoma'
-            Font.Style = []
-            GridLines = True
-            HideSelection = False
-            OwnerData = True
-            ReadOnly = True
-            RowSelect = True
-            ParentFont = False
-            ShowColumnHeaders = False
-            TabOrder = 0
-            ViewStyle = vsReport
-            OnData = LogListData
-          end
-        end
-        object TabSheet2: TTabSheet
-          Caption = 'Error Log'
-          ImageIndex = 1
-          object ErrorLog: TListView
-            Left = 0
-            Top = 0
-            Width = 992
-            Height = 345
-            Align = alClient
-            Columns = <
-              item
-                Width = 125
-              end
-              item
-              end>
-            Font.Charset = DEFAULT_CHARSET
-            Font.Color = clWindowText
-            Font.Height = -11
-            Font.Name = 'Tahoma'
-            Font.Style = []
-            GridLines = True
-            HideSelection = False
-            OwnerData = True
-            ReadOnly = True
-            RowSelect = True
-            ParentFont = False
-            ShowColumnHeaders = False
-            TabOrder = 0
-            ViewStyle = vsReport
-            OnData = ErrorLogData
-          end
-        end
-        object TabSheet3: TTabSheet
-          Caption = 'Full Log'
-          ImageIndex = 2
-          object FullLogList: TListView
-            Left = 0
-            Top = 0
-            Width = 992
-            Height = 345
-            Align = alClient
-            Columns = <
-              item
-                Caption = 'Date'
-                Width = 110
-              end
-              item
-                Alignment = taCenter
-                Caption = 'Type'
-              end
-              item
-                Caption = 'Source File/Message'
-                Width = 300
-              end
-              item
-                Alignment = taCenter
-                Caption = 'Operation'
-                Width = 100
-              end
-              item
-                Caption = 'Destination'
-                Width = 300
-              end
-              item
-                Alignment = taCenter
-                Caption = 'Reason'
-                Width = 140
-              end>
-            Font.Charset = DEFAULT_CHARSET
-            Font.Color = clWindowText
-            Font.Height = -11
-            Font.Name = 'Tahoma'
-            Font.Style = []
-            GridLines = True
-            HideSelection = False
-            OwnerData = True
-            ReadOnly = True
-            RowSelect = True
-            ParentFont = False
-            TabOrder = 0
-            ViewStyle = vsReport
-            OnCustomDrawSubItem = FullLogListCustomDrawSubItem
-            OnData = FullLogListData
-          end
-        end
-      end
       object ProgressBar: TsProgressBar
         Left = 0
         Top = 468
@@ -357,7 +226,60 @@ object MainForm: TMainForm
         Align = alBottom
         Smooth = True
         SmoothReverse = True
+        TabOrder = 0
+      end
+      object FullLogList: TListView
+        Left = 0
+        Top = 0
+        Width = 1000
+        Height = 373
+        Align = alClient
+        BorderStyle = bsNone
+        Columns = <
+          item
+            Caption = '#'
+          end
+          item
+            Caption = 'Date'
+            Width = 110
+          end
+          item
+            Alignment = taCenter
+            Caption = 'Type'
+          end
+          item
+            Caption = 'Source File/Message'
+            Width = 300
+          end
+          item
+            Alignment = taCenter
+            Caption = 'Operation'
+            Width = 100
+          end
+          item
+            Caption = 'Destination'
+            Width = 300
+          end
+          item
+            Alignment = taCenter
+            Caption = 'Reason'
+            Width = 140
+          end>
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        GridLines = True
+        HideSelection = False
+        OwnerData = True
+        ReadOnly = True
+        RowSelect = True
+        ParentFont = False
         TabOrder = 1
+        ViewStyle = vsReport
+        OnCustomDrawSubItem = FullLogListCustomDrawSubItem
+        OnData = FullLogListData
       end
     end
   end
@@ -668,7 +590,7 @@ object MainForm: TMainForm
     Left = 584
     Top = 120
     Bitmap = {
-      494C01010A002C009C0018001800FFFFFFFF2000FFFFFFFFFFFFFFFF424D3600
+      494C01010A002C00A00018001800FFFFFFFF2000FFFFFFFFFFFFFFFF424D3600
       000000000000360000002800000060000000480000000100200000000000006C
       0000000000000000000000000000000000000000000000000000000000000000
       000000000000000000000000000000000000020202030B0B0B0C171717182020
@@ -8139,7 +8061,7 @@ object MainForm: TMainForm
   end
   object FormStorage: TJvFormStorage
     AppStorage = AppIniFileStorage
-    AppStoragePath = '%FORM_NAME%'
+    AppStoragePath = '%FORM_NAME%\'
     StoredValues = <>
     Left = 880
     Top = 244

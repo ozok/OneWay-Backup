@@ -51,19 +51,23 @@ procedure TLogsForm.ContentListCustomDrawSubItem(Sender: TCustomListView;
   Item: TListItem; SubItem: Integer; State: TCustomDrawState;
   var DefaultDraw: Boolean);
 begin
-  if SubItem = 1 then
+  if SubItem = 2 then
   begin
-    if item.SubItems[0] = 'Error' then
+    if item.SubItems[1] = 'Error' then
     begin
       Sender.Canvas.Font.Color := clRed;
     end
-    else if Item.SubItems[0] = 'Info' then
+    else if Item.SubItems[1] = 'Info' then
     begin
       Sender.Canvas.Font.Color := clBlue;
     end
-    else if Item.SubItems[0] = 'Success' then
+    else if Item.SubItems[1] = 'Success' then
     begin
       Sender.Canvas.Font.Color := clGreen;
+    end
+    else if Item.SubItems[1] = 'Skip' then
+    begin
+      Sender.Canvas.Font.Color := clMaroon;
     end
     else
     begin
@@ -80,7 +84,8 @@ procedure TLogsForm.ContentListData(Sender: TObject; Item: TListItem);
 begin
   if Item.Index < FLogFile.Count then
   begin
-    Item.Caption := FLogFile.LogItems[Item.Index].AddDate;
+    Item.Caption := Item.Index.ToString + '.';
+    Item.SubItems.Add(FLogFile.LogItems[Item.Index].AddDate);
     Item.SubItems.Add(FLogFile.LogItems[Item.Index].LogType);
     Item.SubItems.Add(FLogFile.LogItems[Item.Index].Source);
     Item.SubItems.Add(FLogFile.LogItems[Item.Index].Operation);

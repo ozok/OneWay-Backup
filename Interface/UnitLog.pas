@@ -5,12 +5,17 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, 
   System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ComCtrls, 
-  Vcl.StdCtrls, ShellApi;
+  Vcl.StdCtrls, ShellApi, Vcl.ExtCtrls;
 
 type
   TLogForm = class(TForm)
     LogFilePathLabel: TLabel;
     LogList: TListView;
+    Panel1: TPanel;
+    CopiedFileLabel: TLabel;
+    DeletedFileLabel: TLabel;
+    SkippedFileLabel: TLabel;
+    ErrorLabel: TLabel;
                                    
     procedure FormResize(Sender: TObject);
     procedure LogListData(Sender: TObject; Item: TListItem);
@@ -18,6 +23,7 @@ type
     procedure LogFilePathLabelClick(Sender: TObject);
     procedure LogListCustomDrawSubItem(Sender: TCustomListView; Item: TListItem;
       SubItem: Integer; State: TCustomDrawState; var DefaultDraw: Boolean);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
   private
     { Private declarations }
   public
@@ -32,6 +38,14 @@ implementation
 {$R *.dfm}
 
 uses UnitMainForm;
+
+procedure TLogForm.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  CopiedFileLabel.Caption := 'Copied: N/A';
+  DeletedFileLabel.Caption := 'Deleted: N/A';
+  SkippedFileLabel.Caption := 'Skipped: N/A';
+  ErrorLabel.Caption := 'Errors: N/A';
+end;
 
 procedure TLogForm.FormResize(Sender: TObject);
 begin
@@ -59,19 +73,23 @@ procedure TLogForm.LogListCustomDrawSubItem(Sender: TCustomListView;
   Item: TListItem; SubItem: Integer; State: TCustomDrawState;
   var DefaultDraw: Boolean);
 begin
-  if SubItem = 1 then
+  if SubItem = 2 then
   begin
-    if item.SubItems[0] = 'Error' then
+    if item.SubItems[1] = 'Error' then
     begin
       Sender.Canvas.Font.Color := clRed;
     end
-    else if Item.SubItems[0] = 'Info' then
+    else if Item.SubItems[1] = 'Info' then
     begin
       Sender.Canvas.Font.Color := clBlue;
     end
-    else if Item.SubItems[0] = 'Success' then
+    else if Item.SubItems[1] = 'Success' then
     begin
       Sender.Canvas.Font.Color := clGreen;
+    end
+    else if Item.SubItems[1] = 'Skip' then
+    begin
+      Sender.Canvas.Font.Color := clMaroon;
     end
     else
     begin
@@ -88,7 +106,8 @@ procedure TLogForm.LogListData(Sender: TObject; Item: TListItem);
 begin
   if Item.Index < MainForm.FFullLogItems.Count then
   begin
-    Item.Caption := MainForm.FFullLogItems.LogItems[Item.Index].AddDate;
+    Item.Caption := Item.Index.ToString + '.';
+    Item.SubItems.Add(MainForm.FFullLogItems.LogItems[Item.Index].AddDate);
     Item.SubItems.Add(MainForm.FFullLogItems.LogItems[Item.Index].LogType);
     Item.SubItems.Add(MainForm.FFullLogItems.LogItems[Item.Index].Source);
     Item.SubItems.Add(MainForm.FFullLogItems.LogItems[Item.Index].Operation);

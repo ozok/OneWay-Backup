@@ -44,8 +44,6 @@ object LogsForm: TLogsForm
       ItemHeight = 13
       TabOrder = 0
       OnClick = LogsListClick
-      ExplicitTop = 26
-      ExplicitHeight = 403
     end
     object RefreshBtn: TButton
       Left = 1
@@ -66,9 +64,6 @@ object LogsForm: TLogsForm
       Caption = 'Open Selected Log'
       TabOrder = 2
       OnClick = OpenLogBtnClick
-      ExplicitLeft = 56
-      ExplicitTop = 200
-      ExplicitWidth = 75
     end
     object OpenLogFolderBtn: TButton
       Left = 1
@@ -79,9 +74,6 @@ object LogsForm: TLogsForm
       Caption = 'Open Log Folder'
       TabOrder = 3
       OnClick = OpenLogFolderBtnClick
-      ExplicitLeft = 64
-      ExplicitTop = 208
-      ExplicitWidth = 75
     end
   end
   object ContentList: TListView
@@ -91,6 +83,9 @@ object LogsForm: TLogsForm
     Height = 430
     Align = alClient
     Columns = <
+      item
+        Caption = '#'
+      end
       item
         Caption = 'Date'
         Width = 110
@@ -132,10 +127,6 @@ object LogsForm: TLogsForm
     ViewStyle = vsReport
     OnCustomDrawSubItem = ContentListCustomDrawSubItem
     OnData = ContentListData
-    ExplicitLeft = 8
-    ExplicitTop = 8
-    ExplicitWidth = 992
-    ExplicitHeight = 345
   end
   object Info: TJvComputerInfoEx
     Left = 464
