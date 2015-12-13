@@ -634,7 +634,6 @@ begin
           // this value (8) may change as more properties
           // are added to projects
 
-          // todo: check for | when a value is entered while
           // creating or editing a project
           if LSplitList.Count = 8 then
           begin
@@ -1087,7 +1086,10 @@ begin
                       // todo: try except
                       if FileExists(LFileCopyAgainPairs[i].DestFile) then
                       begin
-                        DeleteFile(LFileCopyAgainPairs[i].DestFile);
+                        if not DeleteFile(LFileCopyAgainPairs[i].DestFile) then
+                        begin
+                          RaiseLastOSError;
+                        end;
                       end;
 
                       // report if copy fails
