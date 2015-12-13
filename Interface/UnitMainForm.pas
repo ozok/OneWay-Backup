@@ -1,20 +1,40 @@
+{Copyright (c) <2015> <ozok26@gmail.com>
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.}
+
 unit UnitMainForm;
 
 interface
 
 uses
-  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
-  System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ComCtrls, 
-  Vcl.ExtCtrls, Vcl.StdCtrls, JvComponentBase, JvSearchFiles, UnitFileCompare, 
-  UnitFileCopyPair, UnitProjectFile, Vcl.Mask, JvExMask, JvToolEdit, IdBaseComponent, 
-  IdThreadComponent, CommCtrl, System.Win.TaskbarCore, Vcl.Taskbar, JvExComCtrls, 
-  JvComCtrls, Generics.Collections, Vcl.Menus, ShellAPI, UnitFolderCreatePair, 
-  IdMessage, IdComponent, IdTCPConnection, IdTCPClient, 
-  IdExplicitTLSClientServerBase, IdMessageClient, IdSMTPBase, IdSMTP, JvThreadTimer, acProgressBar, 
-  IdIOHandler, IdIOHandlerSocket, IdIOHandlerStack, IdSSL, IdSSLOpenSSL, IniFiles, 
-  System.ImageList, Vcl.ImgList, Vcl.Buttons, JvComputerInfoEx, IOUtils,
-  JvCaptionButton, JvTrayIcon, UnitLogItems, IdAttachmentFile, IdAttachment,
-  JvFormPlacement, JvAppStorage, JvAppIniStorage;
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes,
+  Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ComCtrls, Vcl.ExtCtrls,
+  Vcl.StdCtrls, JvComponentBase, JvSearchFiles, UnitFileCompare,
+  UnitFileCopyPair, UnitProjectFile, Vcl.Mask, JvExMask, JvToolEdit,
+  IdBaseComponent, IdThreadComponent, CommCtrl, System.Win.TaskbarCore, Vcl.Taskbar,
+  JvExComCtrls, JvComCtrls, Generics.Collections, Vcl.Menus, ShellAPI,
+  UnitFolderCreatePair, IdMessage, IdComponent, IdTCPConnection, IdTCPClient,
+  IdExplicitTLSClientServerBase, IdMessageClient, IdSMTPBase, IdSMTP,
+  JvThreadTimer, acProgressBar, IdIOHandler, IdIOHandlerSocket, IdIOHandlerStack,
+  IdSSL, IdSSLOpenSSL, IniFiles, System.ImageList, Vcl.ImgList, Vcl.Buttons,
+  JvComputerInfoEx, IOUtils, JvCaptionButton, JvTrayIcon, UnitLogItems,
+  IdAttachmentFile, IdAttachment, JvFormPlacement, JvAppStorage, JvAppIniStorage;
 
 type
   TMainForm = class(TForm)
@@ -44,7 +64,6 @@ type
     SpeedTimer: TJvThreadTimer;
     TimeLabel: TLabel;
     PassedTimeTimer: TJvThreadTimer;
-                                   
     IdSSLIOHandlerSocketOpenSSL1: TIdSSLIOHandlerSocketOpenSSL;
     ConfEmailBtn: TButton;
     ProgressTimer: TTimer;
@@ -78,14 +97,10 @@ type
     procedure AddNewProjectBtnClick(Sender: TObject);
     procedure EditProjectBtnClick(Sender: TObject);
     procedure StopBtnClick(Sender: TObject);
-    procedure JobsListMouseDown(Sender: TObject; Button: TMouseButton;
-      Shift: TShiftState; X, Y: Integer);
-    procedure SearchSourceFilesFindDirectory(Sender: TObject;
-      const AName: string);
-    procedure OperationThreadException(Sender: TIdThreadComponent;
-      AException: Exception);
-    procedure SearchDestFilesFindDirectory(Sender: TObject;
-      const AName: string);
+    procedure JobsListMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+    procedure SearchSourceFilesFindDirectory(Sender: TObject; const AName: string);
+    procedure OperationThreadException(Sender: TIdThreadComponent; AException: Exception);
+    procedure SearchDestFilesFindDirectory(Sender: TObject; const AName: string);
     procedure FullLogListData(Sender: TObject; Item: TListItem);
     procedure O1Click(Sender: TObject);
     procedure O2Click(Sender: TObject);
@@ -103,9 +118,7 @@ type
     procedure MinimizeToTrayBtnClick(Sender: TObject);
     procedure TrayIconBalloonClick(Sender: TObject);
     procedure LogsBtnClick(Sender: TObject);
-    procedure FullLogListCustomDrawSubItem(Sender: TCustomListView;
-      Item: TListItem; SubItem: Integer; State: TCustomDrawState;
-      var DefaultDraw: Boolean);
+    procedure FullLogListCustomDrawSubItem(Sender: TCustomListView; Item: TListItem; SubItem: Integer; State: TCustomDrawState; var DefaultDraw: Boolean);
   private
     { Private declarations }
     FFiles: TStringList;
@@ -128,7 +141,6 @@ type
     FSendEmail: Boolean;
     FFileTypeSplitList: TStringList;
     FDeletedCount, FCopiedCount, FSkippedCount, FErrorCount: integer;
-
     procedure Log(LogItem: TLogItem);
     procedure ResetLogItem(var LogItem: TLogItem);
     procedure AddToFullLog();
@@ -144,32 +156,25 @@ type
     procedure StopProgressTimer();
     procedure ShowPreviewResults();
     procedure ShowBalloon();
-
     procedure UpdateMaxProgres();
     procedure JumpToItem();
     procedure UpdateProjectName;
-
     procedure DisableUI;
     procedure EnableUI;
-
     procedure SaveSettings;
     procedure LoadSettings;
-
-    function CheckIfFileCanBeAdded(const FilePath: string):Boolean;
-
-    function CopyFileUsingSHFO(const Source: string; const Dest: string):Boolean;
-    function DeleteFileUsingSHFO(const Source: string):Boolean;
+    function CheckIfFileCanBeAdded(const FilePath: string): Boolean;
+    function CopyFileUsingSHFO(const Source: string; const Dest: string): Boolean;
+    function DeleteFileUsingSHFO(const Source: string): Boolean;
   public
     { Public declarations }
     FProjects: TProjectFiles;
     FFullLogItems: TLogFile;
     LastLogFilePath: string;
     AppDataFolder: string;
-
     procedure SaveProjects;
     procedure LoadProjects;
-
-    function CompareMethodToStr(const MethodId: integer):string;
+    function CompareMethodToStr(const MethodId: integer): string;
   end;
 
 var
@@ -182,7 +187,8 @@ implementation
 
 {$R *.dfm}
 
-uses UnitProjectSettingsForm, UnitEmailConfig, UnitLog, UnitAbout, UnitLogs;
+uses
+  UnitProjectSettingsForm, UnitEmailConfig, UnitLog, UnitAbout, UnitLogs;
 
 procedure TMainForm.AboutBtnClick(Sender: TObject);
 begin
@@ -204,10 +210,13 @@ begin
 end;
 
 procedure TMainForm.AddToFullLog;
-begin   
+begin
   try
     Log(FLogLineToAdd);
-  except on E: Exception do
+  except
+    on E: Exception do
+
+
   end;
 end;
 
@@ -222,7 +231,7 @@ begin
 
   if FFileTypeSplitList.Count > 0 then
   begin
-    for I := 0 to FFileTypeSplitList.Count-1 do
+    for I := 0 to FFileTypeSplitList.Count - 1 do
     begin
       // if file's extension is in ignore list
       if LFileExt = FFileTypeSplitList[i].ToLower then
@@ -264,7 +273,7 @@ end;
 
 function TMainForm.CopyFileUsingSHFO(const Source, Dest: string): Boolean;
 var
-  shFOS : TShFileOpStruct;
+  shFOS: TShFileOpStruct;
 begin
   shFOS.Wnd := Application.MainForm.Handle;
   shFOS.wFunc := FO_COPY;
@@ -278,7 +287,7 @@ procedure TMainForm.DeleteBtnClick(Sender: TObject);
 var
   I: Integer;
 begin
-  for I := JobsList.Items.Count-1 downto 0 do
+  for I := JobsList.Items.Count - 1 downto 0 do
   begin
     if JobsList.Items[i].Selected then
     begin
@@ -294,7 +303,7 @@ end;
 
 function TMainForm.DeleteFileUsingSHFO(const Source: string): Boolean;
 var
-  shFOS : TShFileOpStruct;
+  shFOS: TShFileOpStruct;
 begin
   shFOS.Wnd := Application.MainForm.Handle;
   shFOS.wFunc := FO_DELETE;
@@ -307,7 +316,7 @@ procedure TMainForm.DisableUI;
 begin
   JobsList.Enabled := False;
   RunJobsBtn.Enabled := False;
-  AddNewProjectBtn.Enabled  := False;
+  AddNewProjectBtn.Enabled := False;
   EditProjectBtn.Enabled := False;
   StopBtn.Enabled := True;
   ActivatePanel.Enabled := False;
@@ -331,7 +340,7 @@ procedure TMainForm.EnableUI;
 begin
   JobsList.Enabled := True;
   RunJobsBtn.Enabled := True;
-  AddNewProjectBtn.Enabled  := True;
+  AddNewProjectBtn.Enabled := True;
   EditProjectBtn.Enabled := True;
   StopBtn.Enabled := False;
   ActivatePanel.Enabled := True;
@@ -389,10 +398,10 @@ begin
   FFullLogItems := TLogFile.Create;
 
   {$IFDEF PORTABLE}
-    AppDataFolder := ExtractFileDir(Application.ExeName);
+  AppDataFolder := ExtractFileDir(Application.ExeName);
   {$ENDIF}
   {$IFDEF INSTALLED}
-    AppDataFolder := Info.Folders.AppData + '\OneWayBackup';
+  AppDataFolder := Info.Folders.AppData + '\OneWayBackup';
   {$ENDIF}
 
   if not DirectoryExists(AppDataFolder) then
@@ -427,7 +436,7 @@ begin
   FFiles.Free;
   FFolders.Free;
   FFileCompare.free;
-  for I := 0 to FProjects.Count-1 do
+  for I := 0 to FProjects.Count - 1 do
   begin
     FProjects[i].Free;
   end;
@@ -451,8 +460,8 @@ begin
   PercentageLabel.Parent := ProgressBar;
   PercentageLabel.AutoSize := False;
   PercentageLabel.Transparent := True;
-  PercentageLabel.Top :=  0;
-  PercentageLabel.Left :=  0;
+  PercentageLabel.Top := 0;
+  PercentageLabel.Left := 0;
   PercentageLabel.Width := ProgressBar.ClientWidth;
   PercentageLabel.Height := ProgressBar.ClientHeight;
   PercentageLabel.Alignment := taCenter;
@@ -519,9 +528,7 @@ begin
   end;
 end;
 
-procedure TMainForm.FullLogListCustomDrawSubItem(Sender: TCustomListView;
-  Item: TListItem; SubItem: Integer; State: TCustomDrawState;
-  var DefaultDraw: Boolean);
+procedure TMainForm.FullLogListCustomDrawSubItem(Sender: TCustomListView; Item: TListItem; SubItem: Integer; State: TCustomDrawState; var DefaultDraw: Boolean);
 begin
   if SubItem = 2 then
   begin
@@ -566,8 +573,7 @@ begin
   end;
 end;
 
-procedure TMainForm.JobsListMouseDown(Sender: TObject; Button: TMouseButton;
-  Shift: TShiftState; X, Y: Integer);
+procedure TMainForm.JobsListMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
 var
   LListItem: TListItem;
   LHitTest: THitTests;
@@ -597,7 +603,7 @@ begin
   JobsList.ItemIndex := FItemIndex;
   if FItemIndex > 0 then
   begin
-    JobsList.Items[FItemIndex-1].Selected := False;
+    JobsList.Items[FItemIndex - 1].Selected := False;
   end;
 
   JobsList.Items[FItemIndex].Selected := True;
@@ -627,7 +633,7 @@ begin
         LSplitList.Delimiter := '|';
 
         // each line represents a project
-        for I := 0 to LProjectFile.Count-1 do
+        for I := 0 to LProjectFile.Count - 1 do
         begin
           LLine := LProjectFile[i].Trim;
           LSplitList.DelimitedText := LLine;
@@ -642,8 +648,14 @@ begin
             LProject.SourceFolder := LSplitList[0];
             LProject.DestFolder := LSplitList[1];
             LProject.ProjectName := LSplitList[2];
-            if LSplitList[3] = 'True' then LProject.Active := True Else LProject.Active := False;
-            if LSplitList[4] = 'True' then LProject.DeleteFromDest := True Else LProject.DeleteFromDest := False;
+            if LSplitList[3] = 'True' then
+              LProject.Active := True
+            else
+              LProject.Active := False;
+            if LSplitList[4] = 'True' then
+              LProject.DeleteFromDest := True
+            else
+              LProject.DeleteFromDest := False;
             LProject.BufferSize := LSplitList[5].ToInteger();
             LProject.IgnoredFileTypes := LSplitList[6];
             LProject.CompareMethod := LSplitList[7].ToInteger();
@@ -690,9 +702,9 @@ begin
   FFullLogItems.LogItems.Add(LogItem);
 
   FullLogList.Items.Count := FFullLogItems.Count;
-  FullLogList.ItemIndex := FullLogList.Items.Count-1;
+  FullLogList.ItemIndex := FullLogList.Items.Count - 1;
 
-  FullLogList.Items[FullLogList.Items.Count-1].MakeVisible(False);
+  FullLogList.Items[FullLogList.Items.Count - 1].MakeVisible(False);
 end;
 
 procedure TMainForm.LogBtnClick(Sender: TObject);
@@ -727,8 +739,7 @@ begin
   end;
 end;
 
-procedure TMainForm.OperationThreadException(Sender: TIdThreadComponent;
-  AException: Exception);
+procedure TMainForm.OperationThreadException(Sender: TIdThreadComponent; AException: Exception);
 begin
   try
     ResetLogItem(FLogLineToAdd);
@@ -736,7 +747,10 @@ begin
     FLogLineToAdd.Operation := 'Thread';
     FLogLineToAdd.Reason := AException.Message;
     OperationThread.Synchronize(AddToFullLog);
-  except on E: Exception do
+  except
+    on E: Exception do
+
+
   end;
 end;
 
@@ -781,7 +795,7 @@ begin
 //  ProgressTimer.Enabled := True;
   try
     JobsList.ItemIndex := -1;
-    for J := 0 to FProjects.Count-1 do
+    for J := 0 to FProjects.Count - 1 do
     begin
       if FStop then
       begin
@@ -802,7 +816,7 @@ begin
         FItemIndex := J;
         OperationThread.Synchronize(JumpToItem);
 
-        FCurrentProjectName := Format('%d/%d %s', [(j+1), FProjects.Count, FProjects[J].ProjectName]);
+        FCurrentProjectName := Format('%d/%d %s', [(j + 1), FProjects.Count, FProjects[J].ProjectName]);
         OperationThread.Synchronize(UpdateProjectName);
         ResetLogItem(FLogLineToAdd);
         FLogLineToAdd.LogType := 'Info';
@@ -843,9 +857,9 @@ begin
 {$REGION 'singlethreaded compare'}
             // compare all source files with their destination counterparts
             OperationThread.Synchronize(StartSpeedTimer);
-            for I := 0 to FFiles.Count-1 do
+            for I := 0 to FFiles.Count - 1 do
             begin
-              FProgress := i+1;
+              FProgress := i + 1;
               if FStop then
               begin
                 Break;
@@ -866,7 +880,8 @@ begin
               begin
                 try
                   LCopy := not FFileCompare.CompareFiles(LSourceFile, LDestFile, FProjects[J].BufferSize, LCompareMethodId, LDiffReason);
-                except on E: Exception do
+                except
+                  on E: Exception do
                   begin
                     ResetLogItem(FLogLineToAdd);
                     FLogLineToAdd.LogType := 'Error';
@@ -913,7 +928,7 @@ begin
               try
                 FMaxProgress := FFolders.Count;
                 OperationThread.Synchronize(UpdateMaxProgres);
-                for I := 0 to FFolders.Count-1 do
+                for I := 0 to FFolders.Count - 1 do
                 begin
                   if FStop then
                     Break;
@@ -949,7 +964,7 @@ begin
                 // create all directories that do not exist in the destination
                 FMaxProgress := LDirsToCreate.Count;
                 OperationThread.Synchronize(UpdateMaxProgres);
-                for I := 0 to LDirsToCreate.Count-1 do
+                for I := 0 to LDirsToCreate.Count - 1 do
                 begin
                   if FStop then
                     Break;
@@ -976,17 +991,18 @@ begin
                         end;
                       end;
                     end;
-                  except on E: Exception do
-                  begin
-                    ResetLogItem(FLogLineToAdd);
-                    FLogLineToAdd.LogType := 'Error';
-                    FLogLineToAdd.Destination := LDirsToCreate[i].Directory;
-                    FLogLineToAdd.Operation := 'Create directory';
-                    FLogLineToAdd.Reason := E.Message;
-                    OperationThread.Synchronize(AddToFullLog);
-                    Inc(FErrorCount);
-                    Continue;
-                  end;
+                  except
+                    on E: Exception do
+                    begin
+                      ResetLogItem(FLogLineToAdd);
+                      FLogLineToAdd.LogType := 'Error';
+                      FLogLineToAdd.Destination := LDirsToCreate[i].Directory;
+                      FLogLineToAdd.Operation := 'Create directory';
+                      FLogLineToAdd.Reason := E.Message;
+                      OperationThread.Synchronize(AddToFullLog);
+                      Inc(FErrorCount);
+                      Continue;
+                    end;
                   end;
                 end;
                 LDirsToCreate.Free;
@@ -1017,14 +1033,14 @@ begin
                 FMaxProgress := LFileCopyPairs.Count;
                 OperationThread.Synchronize(UpdateMaxProgres);
                 OperationThread.Synchronize(StartSpeedTimer);
-                for I := 0 to LFileCopyPairs.Count-1 do
+                for I := 0 to LFileCopyPairs.Count - 1 do
                 begin
                   if FStop then
                   begin
                     Break;
                   end;
 
-                  FProgress := i+1;
+                  FProgress := i + 1;
                   FStateMsg := 'Copying ' + i.ToString + '/' + LFileCopyPairs.Count.ToString + ' (' + LFileCopyPairs[i].DestFile + ')';
                   try
                     if FileExists(LFileCopyPairs[i].DestFile) then
@@ -1040,7 +1056,8 @@ begin
                     FLogLineToAdd.Operation := 'Copy file';
                     OperationThread.Synchronize(AddToFullLog);
                     Inc(FCopiedCount);
-                  except on E: Exception do
+                  except
+                    on E: Exception do
                     begin
                       LFileCopyAgainPairs.Add(LFileCopyPairs[i]);
                       ResetLogItem(FLogLineToAdd);
@@ -1073,14 +1090,14 @@ begin
                   FMaxProgress := LFileCopyAgainPairs.Count;
                   OperationThread.Synchronize(UpdateMaxProgres);
                   OperationThread.Synchronize(StartSpeedTimer);
-                  for I := 0 to LFileCopyAgainPairs.Count-1 do
+                  for I := 0 to LFileCopyAgainPairs.Count - 1 do
                   begin
                     if FStop then
                     begin
                       Break;
                     end;
 
-                    FProgress := i+1;
+                    FProgress := i + 1;
                     FStateMsg := 'Copying ' + i.ToString + '/' + LFileCopyAgainPairs.Count.ToString + ' (' + LFileCopyAgainPairs[i].DestFile + ')';
                     try
                       // todo: try except
@@ -1108,7 +1125,8 @@ begin
                         OperationThread.Synchronize(AddToFullLog);
                         Inc(FCopiedCount);
                       end;
-                    except on E: Exception do
+                    except
+                      on E: Exception do
                       begin
                         ResetLogItem(FLogLineToAdd);
                         FLogLineToAdd.LogType := 'Error';
@@ -1161,7 +1179,7 @@ begin
                 FLogLineToAdd.LogType := 'Info';
                 FLogLineToAdd.Source := 'Searching destination for files/folders to be deleted.';
                 OperationThread.Synchronize(AddToFullLog);
-                SearchDestFiles.RootDirectory :=  FProjects[J].DestFolder;
+                SearchDestFiles.RootDirectory := FProjects[J].DestFolder;
                 SearchDestFiles.Search;
 
                 // delete file if it does not exist in source but exists in destination
@@ -1169,7 +1187,7 @@ begin
                 try
                   FMaxProgress := FFiles.Count;
                   OperationThread.Synchronize(UpdateMaxProgres);
-                  for I := 0 to FFiles.Count-1 do
+                  for I := 0 to FFiles.Count - 1 do
                   begin
                     if FStop then
                     begin
@@ -1203,14 +1221,14 @@ begin
                     begin
                       ResetLogItem(FLogLineToAdd);
                       FLogLineToAdd.LogType := 'Info';
-                      FLogLineToAdd.Source := 'Number of files to be deleted at destination: ' +  LFilesToDelete.Count.ToString();
+                      FLogLineToAdd.Source := 'Number of files to be deleted at destination: ' + LFilesToDelete.Count.ToString();
                       OperationThread.Synchronize(AddToFullLog);
 
                       if not FPreview then
                       begin
                         FMaxProgress := LFilesToDelete.Count;
                         OperationThread.Synchronize(UpdateMaxProgres);
-                        for I := 0 to LFilesToDelete.Count-1 do
+                        for I := 0 to LFilesToDelete.Count - 1 do
                         begin
                           if FStop then
                             Break;
@@ -1221,7 +1239,7 @@ begin
                               TFile.Delete(LFilesToDelete[i]);
                               ResetLogItem(FLogLineToAdd);
                               FLogLineToAdd.LogType := 'Success';
-                              FLogLineToAdd.Source :=  LFilesToDelete[i];
+                              FLogLineToAdd.Source := LFilesToDelete[i];
                               FLogLineToAdd.Operation := 'Delete file at destination';
                               OperationThread.Synchronize(AddToFullLog);
                               Inc(FDeletedCount);
@@ -1230,51 +1248,52 @@ begin
                             begin
                               ResetLogItem(FLogLineToAdd);
                               FLogLineToAdd.LogType := 'Skip';
-                              FLogLineToAdd.Source :=  LFilesToDelete[i];
+                              FLogLineToAdd.Source := LFilesToDelete[i];
                               FLogLineToAdd.Operation := 'Delete file at destination';
                               FLogLineToAdd.Reason := 'File doesn''t exist at destination';
                               OperationThread.Synchronize(AddToFullLog);
                               Inc(FSkippedCount);
                             end;
-                          Except on E: Exception do
-                          begin
-                            ResetLogItem(FLogLineToAdd);
-                            FLogLineToAdd.LogType := 'Error';
-                            FLogLineToAdd.Source := LFilesToDelete[i];
-                            FLogLineToAdd.Operation := 'Delete file at destination';
-                            FLogLineToAdd.Reason := E.Message;
-                            OperationThread.Synchronize(AddToFullLog);
-                            Inc(FErrorCount);
-
-                            // try deleting the file second time using SHFO
-                            ResetLogItem(FLogLineToAdd);
-                            FLogLineToAdd.LogType := 'Info';
-                            FLogLineToAdd.Source := LSourceFile;
-                            FLogLineToAdd.Destination := LDestFile;
-                            FLogLineToAdd.Operation := 'Delete file at destination using SHFO';
-                            FLogLineToAdd.Reason := 'Source file doesn''t exist';
-                            OperationThread.Synchronize(AddToFullLog);
-                            if DeleteFileUsingSHFO(LFilesToDelete[i]) then
-                            begin
-                              ResetLogItem(FLogLineToAdd);
-                              FLogLineToAdd.LogType := 'Success';
-                              FLogLineToAdd.Source :=  LFilesToDelete[i];
-                              FLogLineToAdd.Operation := 'Delete file at destination';
-                              OperationThread.Synchronize(AddToFullLog);
-                              Inc(FDeletedCount);
-                            end
-                            else
+                          except
+                            on E: Exception do
                             begin
                               ResetLogItem(FLogLineToAdd);
                               FLogLineToAdd.LogType := 'Error';
                               FLogLineToAdd.Source := LFilesToDelete[i];
                               FLogLineToAdd.Operation := 'Delete file at destination';
-                              FLogLineToAdd.Reason := 'SHFO also failed to delete the file';
+                              FLogLineToAdd.Reason := E.Message;
                               OperationThread.Synchronize(AddToFullLog);
                               Inc(FErrorCount);
+
+                            // try deleting the file second time using SHFO
+                              ResetLogItem(FLogLineToAdd);
+                              FLogLineToAdd.LogType := 'Info';
+                              FLogLineToAdd.Source := LSourceFile;
+                              FLogLineToAdd.Destination := LDestFile;
+                              FLogLineToAdd.Operation := 'Delete file at destination using SHFO';
+                              FLogLineToAdd.Reason := 'Source file doesn''t exist';
+                              OperationThread.Synchronize(AddToFullLog);
+                              if DeleteFileUsingSHFO(LFilesToDelete[i]) then
+                              begin
+                                ResetLogItem(FLogLineToAdd);
+                                FLogLineToAdd.LogType := 'Success';
+                                FLogLineToAdd.Source := LFilesToDelete[i];
+                                FLogLineToAdd.Operation := 'Delete file at destination';
+                                OperationThread.Synchronize(AddToFullLog);
+                                Inc(FDeletedCount);
+                              end
+                              else
+                              begin
+                                ResetLogItem(FLogLineToAdd);
+                                FLogLineToAdd.LogType := 'Error';
+                                FLogLineToAdd.Source := LFilesToDelete[i];
+                                FLogLineToAdd.Operation := 'Delete file at destination';
+                                FLogLineToAdd.Reason := 'SHFO also failed to delete the file';
+                                OperationThread.Synchronize(AddToFullLog);
+                                Inc(FErrorCount);
+                              end;
+                              Continue;
                             end;
-                            Continue;
-                          end;
                           end;
                         end;
                       end;
@@ -1295,7 +1314,7 @@ begin
                 try
                   FMaxProgress := FFolders.Count;
                   OperationThread.Synchronize(UpdateMaxProgres);
-                  for I := 0 to FFolders.Count-1 do
+                  for I := 0 to FFolders.Count - 1 do
                   begin
                     if FStop then
                       Break;
@@ -1334,7 +1353,7 @@ begin
                       begin
                         FMaxProgress := LDirsToDelete.Count;
                         OperationThread.Synchronize(UpdateMaxProgres);
-                        for I := 0 to LDirsToDelete.Count-1 do
+                        for I := 0 to LDirsToDelete.Count - 1 do
                         begin
                           if FStop then
                             Break;
@@ -1360,7 +1379,8 @@ begin
                               OperationThread.Synchronize(AddToFullLog);
                               Inc(FSkippedCount);
                             end;
-                          Except on E: Exception do
+                          except
+                            on E: Exception do
                             begin
                               ResetLogItem(FLogLineToAdd);
                               FLogLineToAdd.LogType := 'Error';
@@ -1397,14 +1417,14 @@ begin
               FLogLineToAdd.LogType := 'Info';
               FLogLineToAdd.Source := 'Reading source folder properties.';
               OperationThread.Synchronize(AddToFullLog);
-              SearchDestFiles.RootDirectory :=  FProjects[J].SourceFolder;
+              SearchDestFiles.RootDirectory := FProjects[J].SourceFolder;
               SearchDestFiles.Search;
 
               LDirsToCreate := TFolderCreatePairs.Create;
               try
                 FMaxProgress := FFolders.Count;
                 OperationThread.Synchronize(UpdateMaxProgres);
-                for I := 0 to FFolders.Count-1 do
+                for I := 0 to FFolders.Count - 1 do
                 begin
                   if FStop then
                     Break;
@@ -1442,7 +1462,7 @@ begin
                   // create all directories that do not exist in the destination
                   FMaxProgress := LDirsToCreate.Count;
                   OperationThread.Synchronize(UpdateMaxProgres);
-                  for I := 0 to LDirsToCreate.Count-1 do
+                  for I := 0 to LDirsToCreate.Count - 1 do
                   begin
                     if FStop then
                       Break;
@@ -1451,17 +1471,18 @@ begin
                     FStateMsg := 'Writing attribute to ' + LDirsToCreate[i].Directory;
                     try
                       FileSetAttr(LDirsToCreate[i].Directory, LDirsToCreate[i].Attributes);
-                    except on E: Exception do
-                    begin
-                      ResetLogItem(FLogLineToAdd);
-                      FLogLineToAdd.LogType := 'Error';
-                      FLogLineToAdd.Destination := LDirsToCreate[i].Directory;
-                      FLogLineToAdd.Operation := 'Write attribute to directory';
-                      FLogLineToAdd.Reason := E.Message;
-                      OperationThread.Synchronize(AddToFullLog);
-                      Inc(FErrorCount);
-                      Continue;
-                    end;
+                    except
+                      on E: Exception do
+                      begin
+                        ResetLogItem(FLogLineToAdd);
+                        FLogLineToAdd.LogType := 'Error';
+                        FLogLineToAdd.Destination := LDirsToCreate[i].Directory;
+                        FLogLineToAdd.Operation := 'Write attribute to directory';
+                        FLogLineToAdd.Reason := E.Message;
+                        OperationThread.Synchronize(AddToFullLog);
+                        Inc(FErrorCount);
+                        Continue;
+                      end;
                     end;
                   end;
                 end;
@@ -1484,7 +1505,7 @@ begin
       end
       else
       begin
-      ResetLogItem(FLogLineToAdd);
+        ResetLogItem(FLogLineToAdd);
         FLogLineToAdd.LogType := 'Skip';
         FLogLineToAdd.Source := 'Skipping ' + FProjects[J].ProjectName;
         OperationThread.Synchronize(AddToFullLog);
@@ -1522,7 +1543,8 @@ begin
           // compress log to zip
           LZipLogFile := FFullLogItems.CompressLog(LLogFilePath);
           LastLogFilePath := LLogFilePath;
-        except on E: Exception do
+        except
+          on E: Exception do
           begin
             ResetLogItem(FLogLineToAdd);
             FLogLineToAdd.LogType := 'Error';
@@ -1568,7 +1590,8 @@ begin
                 FLogLineToAdd.LogType := 'Info';
                 FLogLineToAdd.Source := 'Sent email';
                 OperationThread.Synchronize(AddToFullLog);
-              except on E: Exception do
+              except
+                on E: Exception do
                 begin
                   ResetLogItem(FLogLineToAdd);
                   FLogLineToAdd.LogType := 'Error';
@@ -1595,8 +1618,13 @@ begin
                 DeleteFile(LZipLogFile);
               end;
             end;
-          except on E: Exception do
+          except
+            on E: Exception do
             // ignored
+
+
+
+
           end;
         end;
       end;
@@ -1604,7 +1632,8 @@ begin
       try
         FFullLogItems.WriteToFile(LLogFilePath);
         LastLogFilePath := LLogFilePath;
-      except on E: Exception do
+      except
+        on E: Exception do
         begin
           ResetLogItem(FLogLineToAdd);
           FLogLineToAdd.LogType := 'Error';
@@ -1712,11 +1741,9 @@ begin
     begin
       DeleteFile(AppDataFolder + '\data.dat');
     end;
-    for I := 0 to FProjects.Count-1 do
+    for I := 0 to FProjects.Count - 1 do
     begin
-      LLine := FProjects[i].SourceFolder + '|' + FProjects[i].DestFolder + '|'
-        + FProjects[i].ProjectName + '|' + BoolToStr(FProjects[i].Active, True)
-        + '|' + BoolToStr(FProjects[i].DeleteFromDest, True) + '|' + FProjects[i].BufferSize.ToString() + '|' + FProjects[i].IgnoredFileTypes + '|' + FProjects[i].CompareMethod.ToString;
+      LLine := FProjects[i].SourceFolder + '|' + FProjects[i].DestFolder + '|' + FProjects[i].ProjectName + '|' + BoolToStr(FProjects[i].Active, True) + '|' + BoolToStr(FProjects[i].DeleteFromDest, True) + '|' + FProjects[i].BufferSize.ToString() + '|' + FProjects[i].IgnoredFileTypes + '|' + FProjects[i].CompareMethod.ToString;
       LProjectFile.Add(LLine);
     end;
   finally
@@ -1741,8 +1768,7 @@ begin
   end;
 end;
 
-procedure TMainForm.SearchDestFilesFindDirectory(Sender: TObject;
-  const AName: string);
+procedure TMainForm.SearchDestFilesFindDirectory(Sender: TObject; const AName: string);
 begin
   FFolders.Add(AName);
 end;
@@ -1766,12 +1792,12 @@ procedure TMainForm.SelectAllLabelClick(Sender: TObject);
 var
   I: Integer;
 begin
-  for I := 0 to FProjects.Count-1 do
+  for I := 0 to FProjects.Count - 1 do
   begin
     FProjects[i].Active := True;
   end;
   SaveProjects;
-  for I := 0 to JobsList.Items.Count-1 do
+  for I := 0 to JobsList.Items.Count - 1 do
   begin
     JobsList.Items[i].Checked := True;
   end;
@@ -1781,12 +1807,12 @@ procedure TMainForm.SelectNoneLabelClick(Sender: TObject);
 var
   I: Integer;
 begin
-  for I := 0 to FProjects.Count-1 do
+  for I := 0 to FProjects.Count - 1 do
   begin
     FProjects[i].Active := False;
   end;
   SaveProjects;
-  for I := 0 to JobsList.Items.Count-1 do
+  for I := 0 to JobsList.Items.Count - 1 do
   begin
     JobsList.Items[i].Checked := False;
   end;
@@ -1796,12 +1822,12 @@ procedure TMainForm.SelectReverseLabelClick(Sender: TObject);
 var
   I: Integer;
 begin
-  for I := 0 to FProjects.Count-1 do
+  for I := 0 to FProjects.Count - 1 do
   begin
     FProjects[i].Active := not FProjects[i].Active;
   end;
   SaveProjects;
-  for I := 0 to JobsList.Items.Count-1 do
+  for I := 0 to JobsList.Items.Count - 1 do
   begin
     JobsList.Items[i].Checked := not JobsList.Items[i].Checked;
   end;
@@ -1839,7 +1865,7 @@ begin
   if FShutDown or ShutdownBtn.Checked then
   begin
     // ugly af
-    WinExec('shutdown.exe -s -f -t 0' , SW_HIDE);
+    WinExec('shutdown.exe -s -f -t 0', SW_HIDE);
   end;
 end;
 
@@ -1883,7 +1909,7 @@ end;
 procedure TMainForm.StopSpeedTimer;
 begin
   SpeedTimer.Enabled := False;
-   FTimeCounter := 0;
+  FTimeCounter := 0;
 end;
 
 procedure TMainForm.TrayIconBalloonClick(Sender: TObject);
@@ -1922,7 +1948,7 @@ begin
   begin
     LProgress := (10000 * FProgress) / FMaxProgress;
     // 32,15 for example
-    LProgressStr :=  Format('%.2f', [LProgress/100]) + '%';
+    LProgressStr := Format('%.2f', [LProgress / 100]) + '%';
     Self.Caption := LProgressStr + ' [' + PROGRAM_TITLE + ']';
     PercentageLabel.Caption := LProgressStr;
   end;
@@ -1933,8 +1959,10 @@ begin
   ProjectNameLabel.Caption := FCurrentProjectName;
 end;
 
-procedure TMainForm.UpdateState;begin
+procedure TMainForm.UpdateState;
+begin
   StateLabel.Caption := FStateMsg;
 end;
 
 end.
+

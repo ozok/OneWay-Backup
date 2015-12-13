@@ -1,9 +1,30 @@
+{Copyright (c) <2015> <ozok26@gmail.com>
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.}
+
 unit UnitFileCompare;
 
 interface
 
-uses Classes, SysUtils, Windows, IOUtils, DateUtils, IdHashMessageDigest,
-  idHash, ComCtrls, JclFileUtils;
+uses
+  Classes, SysUtils, Windows, IOUtils, DateUtils, IdHashMessageDigest, idHash,
+  ComCtrls, JclFileUtils;
 
 type
   TFileComperator = class
@@ -16,12 +37,13 @@ type
     function FileTimeToDateTime(FileTime: TFileTime): TDateTime;
   public
     Stop: Boolean;
-    function CompareFiles(const FileName1, FileName2: String; const BlockSize: Integer; const CompareMethod: integer; var Reason: string): Boolean;
+    function CompareFiles(const FileName1, FileName2: string; const BlockSize: Integer; const CompareMethod: integer; var Reason: string): Boolean;
   end;
 
 implementation
 
-uses UnitMainForm;
+uses
+  UnitMainForm;
 
 { TFileComperator }
 
@@ -37,13 +59,13 @@ begin
   end;
 end;
 
-function TFileComperator.CompareFiles(const FileName1, FileName2: String; const BlockSize: Integer; const CompareMethod: integer; var Reason: string): Boolean;
+function TFileComperator.CompareFiles(const FileName1, FileName2: string; const BlockSize: Integer; const CompareMethod: integer; var Reason: string): Boolean;
 var
   LFS1, LFS2: TFileStream;
 begin
   Result := False;
   Stop := False;
-  if not(FileExists(FileName1) and FileExists(FileName2)) then
+  if not (FileExists(FileName1) and FileExists(FileName2)) then
   begin
     Reason := 'Destination file doesn''t exist';
     Exit;
@@ -184,3 +206,4 @@ begin
 end;
 
 end.
+

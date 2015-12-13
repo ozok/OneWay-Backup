@@ -37,7 +37,6 @@ object LogForm: TLogForm
     ParentColor = False
     ParentFont = False
     OnClick = LogFilePathLabelClick
-    ExplicitTop = 578
     ExplicitWidth = 49
   end
   object LogList: TListView
@@ -91,8 +90,6 @@ object LogForm: TLogForm
     ViewStyle = vsReport
     OnCustomDrawSubItem = LogListCustomDrawSubItem
     OnData = LogListData
-    ExplicitTop = 0
-    ExplicitHeight = 575
   end
   object Panel1: TPanel
     Left = 0
@@ -115,8 +112,7 @@ object LogForm: TLogForm
       Font.Name = 'Tahoma'
       Font.Style = []
       ParentFont = False
-      ExplicitLeft = 0
-      ExplicitTop = -5
+      ExplicitWidth = 89
     end
     object DeletedFileLabel: TLabel
       Left = 1

@@ -1,8 +1,29 @@
+{Copyright (c) <2015> <ozok26@gmail.com>
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.}
+
 unit UnitLogItems;
 
 interface
 
-uses Classes, IniFiles, Generics.Collections, System.SysUtils, System.Zip;
+uses
+  Classes, IniFiles, Generics.Collections, System.SysUtils, System.Zip;
 
 type
   TLogItem = record
@@ -26,12 +47,11 @@ type
     property Count: integer read GetCount;
     property LogItems: TList<TLogItem> read FLogItems write SetLogItems;
     property AsString: string read GetAsString;
-
     constructor Create;
     destructor Destroy;
     procedure LoadFromFile(const FilePath: string);
     procedure WriteToFile(const FilePath: string);
-    function CompressLog(const LogFilePath: string):string;
+    function CompressLog(const LogFilePath: string): string;
     procedure Add(const Item: TLogItem);
     procedure Clear();
   end;
@@ -101,7 +121,7 @@ var
 begin
   LResult := TStringList.Create;
   try
-    for I := 0 to LogItems.Count-1 do
+    for I := 0 to LogItems.Count - 1 do
     begin
       with LogItems[i] do
       begin
@@ -167,13 +187,13 @@ end;
 procedure TLogFile.WriteToFile(const FilePath: string);
 var
   LSW: TStreamWriter;
-  I: Integer; 
+  I: Integer;
   LLine: string;
   LItem: TLogItem;
 begin
   LSW := TStreamWriter.Create(FilePath, True, TEncoding.UTF8);
   try
-    for I := 0 to LogItems.Count-1 do
+    for I := 0 to LogItems.Count - 1 do
     begin
       LItem := LogItems[i];
       with LItem do
@@ -189,3 +209,4 @@ begin
 end;
 
 end.
+
