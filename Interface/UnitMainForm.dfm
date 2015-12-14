@@ -34,10 +34,6 @@ object MainForm: TMainForm
     object TabSheet5: TTabSheet
       Caption = 'TabSheet5'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object ActivatePanel: TPanel
         Left = 0
         Top = 0
@@ -51,7 +47,7 @@ object MainForm: TMainForm
           Left = 3
           Top = 3
           Width = 54
-          Height = 13
+          Height = 19
           Cursor = crHandPoint
           Align = alLeft
           Caption = 'Activate All'
@@ -63,13 +59,14 @@ object MainForm: TMainForm
           ParentFont = False
           Layout = tlCenter
           OnClick = SelectAllLabelClick
+          ExplicitHeight = 13
         end
         object SelectNoneLabel: TLabel
           AlignWithMargins = True
           Left = 63
           Top = 3
           Width = 66
-          Height = 13
+          Height = 19
           Cursor = crHandPoint
           Align = alLeft
           Caption = 'Deactivate All'
@@ -81,13 +78,14 @@ object MainForm: TMainForm
           ParentFont = False
           Layout = tlCenter
           OnClick = SelectNoneLabelClick
+          ExplicitHeight = 13
         end
         object SelectReverseLabel: TLabel
           AlignWithMargins = True
           Left = 135
           Top = 3
           Width = 91
-          Height = 13
+          Height = 19
           Cursor = crHandPoint
           Align = alLeft
           Caption = 'Reverse Activation'
@@ -99,6 +97,7 @@ object MainForm: TMainForm
           ParentFont = False
           Layout = tlCenter
           OnClick = SelectReverseLabelClick
+          ExplicitHeight = 13
         end
       end
       object JobsList: TListView
@@ -591,7 +590,7 @@ object MainForm: TMainForm
     Left = 584
     Top = 120
     Bitmap = {
-      494C01010A002C00A40018001800FFFFFFFF2000FFFFFFFFFFFFFFFF424D3600
+      494C01010A002C00A80018001800FFFFFFFF2000FFFFFFFFFFFFFFFF424D3600
       000000000000360000002800000060000000480000000100200000000000006C
       0000000000000000000000000000000000000000000000000000000000000000
       000000000000000000000000000000000000020202030B0B0B0C171717182020

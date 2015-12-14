@@ -141,6 +141,7 @@ type
     FSendEmail: Boolean;
     FFileTypeSplitList: TStringList;
     FDeletedCount, FCopiedCount, FSkippedCount, FErrorCount: integer;
+    FSourceDirectory, FDestDirectory: string;
     procedure Log(LogItem: TLogItem);
     procedure ResetLogItem(var LogItem: TLogItem);
     procedure AddToFullLog();
@@ -699,6 +700,8 @@ end;
 procedure TMainForm.Log(LogItem: TLogItem);
 begin
   LogItem.AddDate := DateTimeToStr(Now);
+  LogItem.Source := LogItem.Source.Replace(FSourceDirectory, '');
+  LogItem.Destination := LogItem.Destination.Replace(FDestDirectory, '');
   FFullLogItems.LogItems.Add(LogItem);
 
   FullLogList.Items.Count := FFullLogItems.Count;
@@ -784,6 +787,10 @@ begin
   FSkippedCount := 0;
   FErrorCount := 0;
   OperationThread.Synchronize(StartProgressTimer);
+  ResetLogItem(FLogLineToAdd);
+  FLogLineToAdd.LogType := 'Info';
+  FLogLineToAdd.Source := 'Computer name: ' + Info.Identification.LocalComputerName;
+  OperationThread.Synchronize(AddToFullLog);
   if FPreview then
   begin
     ResetLogItem(FLogLineToAdd);
@@ -823,9 +830,22 @@ begin
         FLogLineToAdd.Source := 'Starting ' + FProjects[J].ProjectName;
         OperationThread.Synchronize(AddToFullLog);
         ResetLogItem(FLogLineToAdd);
+
+        FLogLineToAdd.LogType := 'Info';
+        FLogLineToAdd.Source := 'Source folder ' + FProjects[J].SourceFolder;
+        OperationThread.Synchronize(AddToFullLog);
+        ResetLogItem(FLogLineToAdd);
+
+        FLogLineToAdd.LogType := 'Info';
+        FLogLineToAdd.Source := 'Destination folder ' + FProjects[J].DestFolder;
+        OperationThread.Synchronize(AddToFullLog);
+        ResetLogItem(FLogLineToAdd);
+
         FLogLineToAdd.LogType := 'Info';
         FLogLineToAdd.Source := 'Using ' + CompareMethodToStr(LCompareMethodId);
         OperationThread.Synchronize(AddToFullLog);
+        FSourceDirectory := FProjects[j].SourceFolder;
+        FDestDirectory := FProjects[J].DestFolder;
         // file types that will be ignored
         FFileTypeSplitList.DelimitedText := FProjects[J].IgnoredFileTypes;
 
