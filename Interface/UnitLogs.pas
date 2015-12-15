@@ -37,6 +37,10 @@ type
     OpenLogBtn: TButton;
     OpenLogFolderBtn: TButton;
     ContentList: TListView;
+    Panel2: TPanel;
+    FilterList: TComboBox;
+    Panel3: TPanel;
+    Label1: TLabel;
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure LogsListClick(Sender: TObject);
@@ -48,6 +52,7 @@ type
     procedure OpenLogFolderBtnClick(Sender: TObject);
     procedure ContentListCustomDrawSubItem(Sender: TCustomListView; Item: TListItem; SubItem: Integer; State: TCustomDrawState; var DefaultDraw: Boolean);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FilterListChange(Sender: TObject);
   private
     { Private declarations }
     FAppDataFolder: string;
@@ -68,6 +73,10 @@ procedure TLogsForm.ContentListCustomDrawSubItem(Sender: TCustomListView; Item: 
 begin
   if SubItem = 2 then
   begin
+    if Item.SubItems.Count < 2 then
+    begin
+      Exit;
+    end;
     if item.SubItems[1] = 'Error' then
     begin
       Sender.Canvas.Font.Color := clRed;
@@ -97,16 +106,21 @@ end;
 
 procedure TLogsForm.ContentListData(Sender: TObject; Item: TListItem);
 begin
-  if Item.Index < FLogFile.Count then
-  begin
-    Item.Caption := Item.Index.ToString + '.';
-    Item.SubItems.Add(FLogFile.LogItems[Item.Index].AddDate);
-    Item.SubItems.Add(FLogFile.LogItems[Item.Index].LogType);
-    Item.SubItems.Add(FLogFile.LogItems[Item.Index].Source);
-    Item.SubItems.Add(FLogFile.LogItems[Item.Index].Operation);
-    Item.SubItems.Add(FLogFile.LogItems[Item.Index].Destination);
-    Item.SubItems.Add(FLogFile.LogItems[Item.Index].Reason);
-  end;
+  Item.Caption := Item.Index.ToString + '.';
+  Item.SubItems.Add(FLogFile.FilteredItems[Item.Index].AddDate);
+  Item.SubItems.Add(FLogFile.FilteredItems[Item.Index].LogType);
+  Item.SubItems.Add(FLogFile.FilteredItems[Item.Index].Source);
+  Item.SubItems.Add(FLogFile.FilteredItems[Item.Index].Operation);
+  Item.SubItems.Add(FLogFile.FilteredItems[Item.Index].Destination);
+  Item.SubItems.Add(FLogFile.FilteredItems[Item.Index].Reason);
+end;
+
+procedure TLogsForm.FilterListChange(Sender: TObject);
+begin
+  ContentList.Items.Count := 0;
+  FLogFile.FilterItems(FilterList.ItemIndex);
+  ContentList.Items.Count := FLogFile.FilteredCount;
+  ContentList.Refresh;
 end;
 
 procedure TLogsForm.FormClose(Sender: TObject; var Action: TCloseAction);
@@ -154,8 +168,10 @@ begin
       Self.Caption := 'Logs (Please wait...)';
       try
         FLogFile.LoadFromFile(IncludeTrailingPathDelimiter(FAppDataFolder + '\logs\') + LogsList.Items[LogsList.ItemIndex]);
-        Self.Caption := FLogFile.Count.ToString();
-        ContentList.Items.Count := FLogFile.Count;
+        // show all
+        FilterList.ItemIndex := 0;
+        FLogFile.FilterItems(0);
+        ContentList.Items.Count := FLogFile.FilteredCount;
       finally
         Self.Caption := 'Logs';
         ContentList.Refresh;
@@ -187,6 +203,7 @@ begin
   LogsList.Items.Clear;
   ContentList.Items.Count := 0;
   FLogFile.LogItems.Clear;
+  FLogFile.FilteredItems.Clear;
   if FindFirst(IncludeTrailingPathDelimiter(FAppDataFolder + '\logs\') + '*.csv', faAnyFile, LSearchRec) = 0 then
   begin
     try

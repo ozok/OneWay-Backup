@@ -76,57 +76,106 @@ object LogsForm: TLogsForm
       OnClick = OpenLogFolderBtnClick
     end
   end
-  object ContentList: TListView
+  object Panel2: TPanel
     Left = 188
     Top = 0
     Width = 859
     Height = 430
     Align = alClient
-    Columns = <
-      item
-        Caption = '#'
-      end
-      item
-        Caption = 'Date'
-        Width = 110
-      end
-      item
-        Alignment = taCenter
-        Caption = 'Type'
-      end
-      item
-        Caption = 'Source File/Message'
-        Width = 300
-      end
-      item
-        Alignment = taCenter
-        Caption = 'Operation'
-        Width = 100
-      end
-      item
-        Caption = 'Destination'
-        Width = 300
-      end
-      item
-        Alignment = taCenter
-        Caption = 'Reason'
-        Width = 140
-      end>
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clWindowText
-    Font.Height = -11
-    Font.Name = 'Tahoma'
-    Font.Style = []
-    GridLines = True
-    HideSelection = False
-    OwnerData = True
-    ReadOnly = True
-    RowSelect = True
-    ParentFont = False
+    BevelOuter = bvNone
     TabOrder = 1
-    ViewStyle = vsReport
-    OnCustomDrawSubItem = ContentListCustomDrawSubItem
-    OnData = ContentListData
+    ExplicitLeft = 440
+    ExplicitTop = 216
+    ExplicitWidth = 185
+    ExplicitHeight = 41
+    object ContentList: TListView
+      Left = 0
+      Top = 30
+      Width = 859
+      Height = 400
+      Align = alClient
+      Columns = <
+        item
+          Caption = '#'
+        end
+        item
+          Caption = 'Date'
+          Width = 110
+        end
+        item
+          Alignment = taCenter
+          Caption = 'Type'
+        end
+        item
+          Caption = 'Source File/Message'
+          Width = 300
+        end
+        item
+          Alignment = taCenter
+          Caption = 'Operation'
+          Width = 100
+        end
+        item
+          Caption = 'Destination'
+          Width = 300
+        end
+        item
+          Alignment = taCenter
+          Caption = 'Reason'
+          Width = 140
+        end>
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      GridLines = True
+      HideSelection = False
+      OwnerData = True
+      ReadOnly = True
+      RowSelect = True
+      ParentFont = False
+      TabOrder = 0
+      ViewStyle = vsReport
+      OnCustomDrawSubItem = ContentListCustomDrawSubItem
+      OnData = ContentListData
+      ExplicitLeft = 1
+      ExplicitTop = 1
+      ExplicitWidth = 857
+      ExplicitHeight = 428
+    end
+    object Panel3: TPanel
+      Left = 0
+      Top = 0
+      Width = 859
+      Height = 30
+      Align = alTop
+      TabOrder = 1
+      object Label1: TLabel
+        Left = 6
+        Top = 6
+        Width = 71
+        Height = 13
+        Caption = 'What to show:'
+      end
+      object FilterList: TComboBox
+        Left = 83
+        Top = 3
+        Width = 145
+        Height = 21
+        Style = csDropDownList
+        ItemIndex = 0
+        TabOrder = 0
+        Text = 'All'
+        OnChange = FilterListChange
+        Items.Strings = (
+          'All'
+          'Info'
+          'Error'
+          'Success'
+          'Skip')
+      end
+    end
   end
   object Info: TJvComputerInfoEx
     Left = 464

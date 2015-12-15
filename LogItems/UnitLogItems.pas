@@ -23,7 +23,7 @@ unit UnitLogItems;
 interface
 
 uses
-  Classes, IniFiles, Generics.Collections, System.SysUtils, System.Zip;
+  Classes, IniFiles, Generics.Collections, System.SysUtils, System.Zip, Dialogs;
 
 type
   TLogItem = record
@@ -39,20 +39,34 @@ type
   TLogFile = class(TObject)
   private
     FLogItems: TList<TLogItem>;
+    FFilteredItems: TList<TLogItem>;
     FSplitList: TStringList;
     function GetCount: integer;
     procedure SetLogItems(const Value: TList<TLogItem>);
     function GetAsString: string;
+    function GetInfoCount: integer;
+    function GetErrorCount: integer;
+    function GetReadCount: integer;
+    function GetSuccessCount: integer;
+    function GetFilteredCount: integer;
   public
     property Count: integer read GetCount;
+    property FilteredCount: integer read GetFilteredCount;
     property LogItems: TList<TLogItem> read FLogItems write SetLogItems;
+    property FilteredItems: TList<TLogItem> read FFilteredItems write FFilteredItems;
     property AsString: string read GetAsString;
+    property InfoCount: integer read GetInfoCount;
+    property ErrorCount: integer read GetErrorCount;
+    property SkipCount: integer read GetReadCount;
+    property SuccessCount: integer read GetSuccessCount;
+
     constructor Create;
     destructor Destroy;
     procedure LoadFromFile(const FilePath: string);
     procedure WriteToFile(const FilePath: string);
     function CompressLog(const LogFilePath: string): string;
     procedure Add(const Item: TLogItem);
+    procedure FilterItems(const FilterType: integer);
     procedure Clear();
   end;
 
@@ -71,12 +85,13 @@ begin
   LTmpItem.Destination := LTmpItem.Destination.Replace(';', '');
   LTmpItem.Operation := LTmpItem.Operation.Replace(';', '');
   LTmpItem.Reason := LTmpItem.Reason.Replace(';', '');
-  LogItems.Add(LTmpItem);
+  FLogItems.Add(LTmpItem);
 end;
 
 procedure TLogFile.Clear;
 begin
-  LogItems.Clear;
+  FLogItems.Clear;
+  FFilteredItems.Clear;
 end;
 
 function TLogFile.CompressLog(const LogFilePath: string): string;
@@ -102,7 +117,8 @@ end;
 
 constructor TLogFile.Create;
 begin
-  LogItems := TList<TLogItem>.Create;
+  FLogItems := TList<TLogItem>.Create;
+  FFilteredItems := TList<TLogItem>.Create;
   FSplitList := TStringList.Create;
   FSplitList.StrictDelimiter := True;
   FSplitList.Delimiter := ';';
@@ -110,8 +126,76 @@ end;
 
 destructor TLogFile.Destroy;
 begin
-  LogItems.Free;
+  FLogItems.Free;
   FSplitList.Free;
+  FFilteredItems.Free;
+end;
+
+procedure TLogFile.FilterItems(const FilterType: integer);
+var
+  I: Integer;
+begin
+  FFilteredItems.Clear;
+  case FilterType of
+    0:
+      begin
+        for I := 0 to FLogItems.Count-1 do
+        begin
+          FFilteredItems.Add(FLogItems[i]);
+        end;
+        FFilteredItems := FLogItems;
+        ShowMessage(FilteredItems.Count.ToString());
+      end;
+    1: // info
+      begin
+        ShowMessage(FLogItems.Count.ToString());
+        for I := 0 to FLogItems.Count-1 do
+        begin
+          if FLogItems[i].LogType = 'Info' then
+          begin
+            FFilteredItems.Add(FLogItems[i]);
+          end
+          else
+          begin
+            ShowMessage(FLogItems[i].LogType);
+          end;
+        end;
+        ShowMessage(FilteredItems.Count.ToString());
+      end;
+    2: // error
+      begin
+        for I := 0 to FLogItems.Count-1 do
+        begin
+          if FLogItems[i].LogType = 'Error' then
+          begin
+            FFilteredItems.Add(FLogItems[i]);
+          end;
+        end;
+        ShowMessage(FilteredItems.Count.ToString());
+      end;
+    3: // success
+      begin
+        for I := 0 to FLogItems.Count-1 do
+        begin
+          if FLogItems[i].LogType = 'Success' then
+          begin
+            FFilteredItems.Add(FLogItems[i]);
+          end;
+        end;
+        ShowMessage(FilteredItems.Count.ToString());
+      end;
+    4: // skip
+      begin
+        for I := 0 to FLogItems.Count-1 do
+        begin
+          if FLogItems[i].LogType = 'Skip' then
+          begin
+            FFilteredItems.Add(FLogItems[i]);
+          end;
+        end;
+        ShowMessage(FilteredItems.Count.ToString());
+      end;
+  end;
 end;
 
 function TLogFile.GetAsString: string;
@@ -121,9 +205,9 @@ var
 begin
   LResult := TStringList.Create;
   try
-    for I := 0 to LogItems.Count - 1 do
+    for I := 0 to FLogItems.Count - 1 do
     begin
-      with LogItems[i] do
+      with FLogItems[i] do
       begin
         LResult.Add(LogType + ';' + AddDate + ';' + Source + ';' + Destination + ';' + Operation + ';' + Reason);
       end;
@@ -136,7 +220,76 @@ end;
 
 function TLogFile.GetCount: integer;
 begin
-  Result := LogItems.Count;
+  Result := FLogItems.Count;
+end;
+
+function TLogFile.GetErrorCount: integer;
+var
+  LCounter: integer;
+  I: Integer;
+begin
+  LCounter := 0;
+  for I := 0 to FLogItems.Count-1 do
+  begin
+    if FLogItems[i].LogType = 'Error' then
+    begin
+      Inc(LCounter);
+    end;
+  end;
+  Result := LCounter;
+end;
+
+function TLogFile.GetFilteredCount: integer;
+begin
+  Result := FFilteredItems.Count;
+end;
+
+function TLogFile.GetInfoCount: integer;
+var
+  LCounter: integer;
+  I: Integer;
+begin
+  LCounter := 0;
+  for I := 0 to FLogItems.Count-1 do
+  begin
+    if FLogItems[i].LogType = 'Info' then
+    begin
+      Inc(LCounter);
+    end;
+  end;
+  Result := LCounter;
+end;
+
+function TLogFile.GetReadCount: integer;
+var
+  LCounter: integer;
+  I: Integer;
+begin
+  LCounter := 0;
+  for I := 0 to FLogItems.Count-1 do
+  begin
+    if FLogItems[i].LogType = 'Skip' then
+    begin
+      Inc(LCounter);
+    end;
+  end;
+  Result := LCounter;
+end;
+
+function TLogFile.GetSuccessCount: integer;
+var
+  LCounter: integer;
+  I: Integer;
+begin
+  LCounter := 0;
+  for I := 0 to FLogItems.Count-1 do
+  begin
+    if FLogItems[i].LogType = 'Success' then
+    begin
+      Inc(LCounter);
+    end;
+  end;
+  Result := LCounter;
 end;
 
 procedure TLogFile.LoadFromFile(const FilePath: string);
@@ -164,7 +317,7 @@ begin
             Operation := FSplitList[4];
             Reason := FSplitList[5];
           end;
-          LogItems.Add(LItem);
+          FLogItems.Add(LItem);
         end;
       end;
     finally
@@ -193,9 +346,9 @@ var
 begin
   LSW := TStreamWriter.Create(FilePath, True, TEncoding.UTF8);
   try
-    for I := 0 to LogItems.Count - 1 do
+    for I := 0 to FLogItems.Count - 1 do
     begin
-      LItem := LogItems[i];
+      LItem := FLogItems[i];
       with LItem do
       begin
         LLine := LogType + ';' + AddDate + ';' + Source + ';' + Destination + ';' + Operation + ';' + Reason;
