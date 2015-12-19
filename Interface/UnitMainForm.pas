@@ -34,7 +34,7 @@ uses
   JvThreadTimer, acProgressBar, IdIOHandler, IdIOHandlerSocket, IdIOHandlerStack,
   IdSSL, IdSSLOpenSSL, IniFiles, System.ImageList, Vcl.ImgList, Vcl.Buttons,
   JvComputerInfoEx, IOUtils, JvCaptionButton, JvTrayIcon, UnitLogItems,
-  IdAttachmentFile, IdAttachment, JvFormPlacement, JvAppStorage, JvAppIniStorage;
+  JvFormPlacement, JvAppStorage, JvAppIniStorage, IdText;
 
 type
   TMainForm = class(TForm)
@@ -779,8 +779,7 @@ var
   LEmailSetFile: TIniFile;
   LFrom, LTo, LHost, LPort, LPass, LUser: string;
   LCompareMethodId: integer;
-  LZipLogFile: string;
-  LAttachment: TIdAttachment;
+  LText: TIdText;
 begin
   FDeletedCount := 0;
   FCopiedCount := 0;
@@ -832,12 +831,8 @@ begin
         ResetLogItem(FLogLineToAdd);
 
         FLogLineToAdd.LogType := 'Info';
-        FLogLineToAdd.Source := 'Source folder ' + FProjects[J].SourceFolder;
-        OperationThread.Synchronize(AddToFullLog);
-        ResetLogItem(FLogLineToAdd);
-
-        FLogLineToAdd.LogType := 'Info';
-        FLogLineToAdd.Source := 'Destination folder ' + FProjects[J].DestFolder;
+        FLogLineToAdd.Source := FProjects[J].SourceFolder;
+        FLogLineToAdd.Destination := FProjects[J].DestFolder;
         OperationThread.Synchronize(AddToFullLog);
         ResetLogItem(FLogLineToAdd);
 
@@ -1555,14 +1550,11 @@ begin
       if (not FPreview) and (SendEmailBtn.Checked or FSendEmail) then
       begin
         FLogLineToAdd.LogType := 'Info';
-        FLogLineToAdd.Source := 'Saving and compressing the log';
+        FLogLineToAdd.Source := 'Saving the log';
         OperationThread.Synchronize(AddToFullLog);
         // this will be sent as an attachment to the mail
         try
           FFullLogItems.WriteToFile(LLogFilePath);
-          // compress log to zip
-          LZipLogFile := FFullLogItems.CompressLog(LLogFilePath);
-          LastLogFilePath := LLogFilePath;
         except
           on E: Exception do
           begin
@@ -1595,9 +1587,13 @@ begin
               OperationThread.Synchronize(AddToFullLog);
               IdMessage1.From.Address := LFrom;
               IdMessage1.Recipients.EMailAddresses := LTo;
-              IdMessage1.Body.Text := 'Please see attachment for backup details.';
+              IdMessage1.Body.Clear;
+              LText := TIdText.Create(IdMessage1.MessageParts);
+              LText.Body.Text := FFullLogItems.AsHtml;
               IdMessage1.Subject := 'OneWay Backup Report';
-              LAttachment := TIdAttachmentFile.Create(IdMessage1.MessageParts, LZipLogFile);
+              LText.ContentType := 'text/html';
+//              IdMessage1.ContentType := 'multipart/mixed';
+//              LAttachment := TIdAttachmentFile.Create(IdMessage1.MessageParts, LZipLogFile);
               try
                 IdSMTP1.Host := LHost;
                 IdSMTP1.Port := StrToInt(LPort);
@@ -1625,27 +1621,6 @@ begin
           end;
         finally
           LEmailSetFile.Free;
-          if Assigned(LAttachment) then
-          begin
-            LAttachment.Free;
-          end;
-          try
-            // delete temp zip file containing log
-            if FileExists(LZipLogFile) then
-            begin
-              if '.zip' = ExtractFileExt(LZipLogFile) then
-              begin
-                DeleteFile(LZipLogFile);
-              end;
-            end;
-          except
-            on E: Exception do
-            // ignored
-
-
-
-
-          end;
         end;
       end;
 

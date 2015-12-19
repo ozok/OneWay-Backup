@@ -84,15 +84,11 @@ object LogsForm: TLogsForm
     Align = alClient
     BevelOuter = bvNone
     TabOrder = 1
-    ExplicitLeft = 440
-    ExplicitTop = 216
-    ExplicitWidth = 185
-    ExplicitHeight = 41
     object ContentList: TListView
       Left = 0
-      Top = 30
+      Top = 0
       Width = 859
-      Height = 400
+      Height = 430
       Align = alClient
       Columns = <
         item
@@ -139,42 +135,8 @@ object LogsForm: TLogsForm
       ViewStyle = vsReport
       OnCustomDrawSubItem = ContentListCustomDrawSubItem
       OnData = ContentListData
-      ExplicitLeft = 1
-      ExplicitTop = 1
-      ExplicitWidth = 857
-      ExplicitHeight = 428
-    end
-    object Panel3: TPanel
-      Left = 0
-      Top = 0
-      Width = 859
-      Height = 30
-      Align = alTop
-      TabOrder = 1
-      object Label1: TLabel
-        Left = 6
-        Top = 6
-        Width = 71
-        Height = 13
-        Caption = 'What to show:'
-      end
-      object FilterList: TComboBox
-        Left = 83
-        Top = 3
-        Width = 145
-        Height = 21
-        Style = csDropDownList
-        ItemIndex = 0
-        TabOrder = 0
-        Text = 'All'
-        OnChange = FilterListChange
-        Items.Strings = (
-          'All'
-          'Info'
-          'Error'
-          'Success'
-          'Skip')
-      end
+      ExplicitTop = 30
+      ExplicitHeight = 400
     end
   end
   object Info: TJvComputerInfoEx

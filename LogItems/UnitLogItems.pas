@@ -23,7 +23,7 @@ unit UnitLogItems;
 interface
 
 uses
-  Classes, IniFiles, Generics.Collections, System.SysUtils, System.Zip, Dialogs;
+  Classes, IniFiles, Generics.Collections, System.SysUtils;
 
 type
   TLogItem = record
@@ -39,7 +39,6 @@ type
   TLogFile = class(TObject)
   private
     FLogItems: TList<TLogItem>;
-    FFilteredItems: TList<TLogItem>;
     FSplitList: TStringList;
     function GetCount: integer;
     procedure SetLogItems(const Value: TList<TLogItem>);
@@ -48,25 +47,21 @@ type
     function GetErrorCount: integer;
     function GetReadCount: integer;
     function GetSuccessCount: integer;
-    function GetFilteredCount: integer;
+    function GetAsHtml: string;
   public
     property Count: integer read GetCount;
-    property FilteredCount: integer read GetFilteredCount;
     property LogItems: TList<TLogItem> read FLogItems write SetLogItems;
-    property FilteredItems: TList<TLogItem> read FFilteredItems write FFilteredItems;
     property AsString: string read GetAsString;
     property InfoCount: integer read GetInfoCount;
     property ErrorCount: integer read GetErrorCount;
     property SkipCount: integer read GetReadCount;
     property SuccessCount: integer read GetSuccessCount;
-
+    property AsHtml: string read GetAsHtml;
     constructor Create;
     destructor Destroy;
     procedure LoadFromFile(const FilePath: string);
     procedure WriteToFile(const FilePath: string);
-    function CompressLog(const LogFilePath: string): string;
     procedure Add(const Item: TLogItem);
-    procedure FilterItems(const FilterType: integer);
     procedure Clear();
   end;
 
@@ -91,34 +86,11 @@ end;
 procedure TLogFile.Clear;
 begin
   FLogItems.Clear;
-  FFilteredItems.Clear;
-end;
-
-function TLogFile.CompressLog(const LogFilePath: string): string;
-var
-  LZipFile: TZipFile;
-  LOutputFileName: string;
-begin
-  Result := LogFilePath;
-  if FileExists(LogFilePath) then
-  begin
-    LOutputFileName := ChangeFileExt(LogFilePath, '.zip');
-    LZipFile := TZipFile.Create;
-    try
-      LZipFile.Open(LOutputFileName, zmWrite);
-      LZipFile.Add(LogFilePath);
-      LZipFile.Close;
-      Result := LOutputFileName;
-    finally
-      LZipFile.Free;
-    end;
-  end;
 end;
 
 constructor TLogFile.Create;
 begin
   FLogItems := TList<TLogItem>.Create;
-  FFilteredItems := TList<TLogItem>.Create;
   FSplitList := TStringList.Create;
   FSplitList.StrictDelimiter := True;
   FSplitList.Delimiter := ';';
@@ -128,73 +100,85 @@ destructor TLogFile.Destroy;
 begin
   FLogItems.Free;
   FSplitList.Free;
-  FFilteredItems.Free;
 end;
 
-procedure TLogFile.FilterItems(const FilterType: integer);
+function TLogFile.GetAsHtml: string;
 var
-  I: Integer;
+  LResult: TStringBuilder;
+  i: integer;
+  LItem: TLogItem;
+  LColor: string;
 begin
-  FFilteredItems.Clear;
-  case FilterType of
-    0:
+  LResult := TStringBuilder.Create;
+  try
+    LResult.Append('<html><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0">');
+    LResult.Append('<title>OneWay Backup Report</title>');
+    LResult.Append('<style>');
+    LResult.Append('.col-ok-1{width:4,167% !important} ');
+    LResult.Append('.col-ok-2{width:8,333% !important} ');
+    LResult.Append('.col-ok-3{width:12,500% !important} ');
+    LResult.Append('.col-ok-4{width:16,667% !important} ');
+    LResult.Append('.col-ok-5{width:20,833% !important} ');
+    LResult.Append('.col-ok-6{width:25,000% !important} ');
+    LResult.Append('.col-ok-7{width:29,167% !important} ');
+    LResult.Append('.col-ok-8{width:33,333% !important} ');
+    LResult.Append('.col-ok-9{width:37,500% !important} ');
+    LResult.Append('.col-ok-10{width:41,667% !important} ');
+    LResult.Append('.col-ok-11{width:45,833% !important} ');
+    LResult.Append('.col-ok-12{width:50,000% !important} ');
+    LResult.Append('.col-ok-13{width:54,167% !important} ');
+    LResult.Append('.col-ok-14{width:58,333% !important} ');
+    LResult.Append('.col-ok-15{width:62,500% !important} ');
+    LResult.Append('.col-ok-16{width:66,667% !important} ');
+    LResult.Append('.col-ok-17{width:70,833% !important} ');
+    LResult.Append('.col-ok-18{width:75,000% !important} ');
+    LResult.Append('.col-ok-19{width:79,167% !important} ');
+    LResult.Append('.col-ok-20{width:83,333% !important} ');
+    LResult.Append('.col-ok-21{width:87,500% !important} ');
+    LResult.Append('.col-ok-22{width:91,667% !important} ');
+    LResult.Append('.col-ok-23{width:95,833% !important} ');
+    LResult.Append('.col-ok-24{width:100,000% !important} ');
+    LResult.Append('</style>');
+//    LResult.AppendLine('<link href="http://ozok26.com/Content/fontawesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>');
+//    LResult.AppendLine('<link href="http://ozok26.com/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />');
+    LResult.Append('<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">');
+    LResult.Append('</head><body>');
+    LResult.Append('<table class="table table-responsive table-bordered table-hover table-striped" style="font-size: 14px;">');
+    LResult.Append('<thead><tr><th class="col-ok-1">#</th><th class="col-ok-2">Date</th><th class="col-ok-2">' + 'Type</th class="col-ok-6"><th>Source / Messsage</th><th class="col-ok-3">Operation</th><th class="col-ok-6">Destination</th><th class="col-ok-4">Reason</th></tr></thead><tbody>');
+
+    for I := 0 to FLogItems.Count - 1 do
+    begin
+      LResult.Append('<tr>');
+      LResult.Append('<td class="col-ok-1">' + FloatToStr(i + 1) + '</td>');
+      LResult.Append('<td class="col-ok-2">' + FLogItems[i].AddDate + '</td>');
+      if FLogItems[i].LogType = 'Error' then
       begin
-        for I := 0 to FLogItems.Count-1 do
-        begin
-          FFilteredItems.Add(FLogItems[i]);
-        end;
-        FFilteredItems := FLogItems;
-        ShowMessage(FilteredItems.Count.ToString());
-      end;
-    1: // info
+        LColor := 'red';
+      end
+      else if FLogItems[i].LogType = 'Info' then
       begin
-        ShowMessage(FLogItems.Count.ToString());
-        for I := 0 to FLogItems.Count-1 do
-        begin
-          if FLogItems[i].LogType = 'Info' then
-          begin
-            FFilteredItems.Add(FLogItems[i]);
-          end
-          else
-          begin
-            ShowMessage(FLogItems[i].LogType);
-          end;
-        end;
-        ShowMessage(FilteredItems.Count.ToString());
-      end;
-    2: // error
+        LColor := 'blue';
+      end
+      else if FLogItems[i].LogType = 'Success' then
       begin
-        for I := 0 to FLogItems.Count-1 do
-        begin
-          if FLogItems[i].LogType = 'Error' then
-          begin
-            FFilteredItems.Add(FLogItems[i]);
-          end;
-        end;
-        ShowMessage(FilteredItems.Count.ToString());
-      end;
-    3: // success
+        LColor := 'green';
+      end
+      else if FLogItems[i].LogType = 'Skip' then
       begin
-        for I := 0 to FLogItems.Count-1 do
-        begin
-          if FLogItems[i].LogType = 'Success' then
-          begin
-            FFilteredItems.Add(FLogItems[i]);
-          end;
-        end;
-        ShowMessage(FilteredItems.Count.ToString());
-      end;
-    4: // skip
+        LColor := 'maroon';
+      end
+      else
       begin
-        for I := 0 to FLogItems.Count-1 do
-        begin
-          if FLogItems[i].LogType = 'Skip' then
-          begin
-            FFilteredItems.Add(FLogItems[i]);
-          end;
-        end;
-        ShowMessage(FilteredItems.Count.ToString());
+        LColor := 'black';
       end;
+
+      LResult.Append('<td class="col-ok-2" style="color: ' + LColor + '">' + FLogItems[i].LogType + '</td><td class="col-ok-6">' + FLogItems[i].Source + '</td><td class="col-ok-3">' + FLogItems[i].Operation + '</td><td class="col-ok-6">' + FLogItems[i].Destination + '</td><td class="col-ok-4">' + FLogItems[i].Reason + '</td></tr>');
+    end;
+
+    LResult.Append('</tbody></table></body></html></head>');
+    Result := LResult.ToString;
+  finally
+    LResult.Free;
   end;
 end;
 
@@ -229,7 +213,7 @@ var
   I: Integer;
 begin
   LCounter := 0;
-  for I := 0 to FLogItems.Count-1 do
+  for I := 0 to FLogItems.Count - 1 do
   begin
     if FLogItems[i].LogType = 'Error' then
     begin
@@ -239,18 +223,13 @@ begin
   Result := LCounter;
 end;
 
-function TLogFile.GetFilteredCount: integer;
-begin
-  Result := FFilteredItems.Count;
-end;
-
 function TLogFile.GetInfoCount: integer;
 var
   LCounter: integer;
   I: Integer;
 begin
   LCounter := 0;
-  for I := 0 to FLogItems.Count-1 do
+  for I := 0 to FLogItems.Count - 1 do
   begin
     if FLogItems[i].LogType = 'Info' then
     begin
@@ -266,7 +245,7 @@ var
   I: Integer;
 begin
   LCounter := 0;
-  for I := 0 to FLogItems.Count-1 do
+  for I := 0 to FLogItems.Count - 1 do
   begin
     if FLogItems[i].LogType = 'Skip' then
     begin
@@ -282,7 +261,7 @@ var
   I: Integer;
 begin
   LCounter := 0;
-  for I := 0 to FLogItems.Count-1 do
+  for I := 0 to FLogItems.Count - 1 do
   begin
     if FLogItems[i].LogType = 'Success' then
     begin
