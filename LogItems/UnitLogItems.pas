@@ -138,10 +138,13 @@ begin
     LResult.Append('.col-ok-22{width:91,667% !important} ');
     LResult.Append('.col-ok-23{width:95,833% !important} ');
     LResult.Append('.col-ok-24{width:100,000% !important} ');
+    LResult.Append('.table{max-width:100%;width:100%;margin-bottom:20px}th{text-align:left}.table>tbody>tr>td,.table>tbody>tr>th,.table>tfoot>tr>td,.table>tfoot>tr>th,.table>thead>tr>td,.table>thead>tr>th{padding:8px;line-height:1.428571429;vertical-align:top;border-top:1px ');
+    LResult.Append('solid #ddd}.table>thead>tr>th{vertical-align:bottom;border-bottom:2px solid #ddd}.table>caption+thead>tr:first-child>td,.table>caption+thead>tr:first-child>th,.table>colgroup+thead>tr:first-child>td,.table>colgroup+thead>tr:first-child>th,.table>thead:fir');
+    LResult.Append('st-child>tr:first-child>td,.table>thead:first-child>tr:first-child>th{border-top:0}.table>tbody+tbody{border-top:2px solid #ddd}.table .table{background-color:#fff}.table-condensed>tbody>tr>td,.table-condensed>tbody>tr>th,.table-condensed>tfoot>tr>td,.tab');
+    LResult.Append('le-condensed>tfoot>tr>th,.table-condensed>thead>tr>td,.table-condensed>thead>tr>th{padding:5px}.table-bordered,.table-bordered>tbody>tr>td,.table-bordered>tbody>tr>th,.table-bordered>tfoot>tr>td,.table-bordered>tfoot>tr>th,.table-bordered>thead>tr>td,.tab');
+    LResult.Append('le-bordered>thead>tr>th{border:1px solid #ddd}.table-bordered>thead>tr>td,.table-bordered>thead>tr>th{border-bottom-width:2px}.table-striped>tbody>tr:nth-child(odd)>td,.table-striped>tbody>tr:nth-child(odd)>th{background-color:#eaeaea}.table-hover>tbody>t');
+    LResult.Append('r:hover>td,.table-hover>tbody>tr:hover>th{background-color:#f5f5f5}');
     LResult.Append('</style>');
-//    LResult.AppendLine('<link href="http://ozok26.com/Content/fontawesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>');
-//    LResult.AppendLine('<link href="http://ozok26.com/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />');
-    LResult.Append('<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">');
     LResult.Append('</head><body>');
     LResult.Append('<table class="table table-responsive table-bordered table-hover table-striped" style="font-size: 14px;">');
     LResult.Append('<thead><tr><th class="col-ok-1">#</th><th class="col-ok-2">Date</th><th class="col-ok-2">' + 'Type</th class="col-ok-6"><th>Source / Messsage</th><th class="col-ok-3">Operation</th><th class="col-ok-6">Destination</th><th class="col-ok-4">Reason</th></tr></thead><tbody>');
