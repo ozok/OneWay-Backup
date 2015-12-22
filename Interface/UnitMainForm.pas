@@ -34,7 +34,8 @@ uses
   JvThreadTimer, acProgressBar, IdIOHandler, IdIOHandlerSocket, IdIOHandlerStack,
   IdSSL, IdSSLOpenSSL, IniFiles, System.ImageList, Vcl.ImgList, Vcl.Buttons,
   JvComputerInfoEx, IOUtils, JvCaptionButton, JvTrayIcon, UnitLogItems,
-  JvFormPlacement, JvAppStorage, JvAppIniStorage, IdText;
+  JvFormPlacement, JvAppStorage, JvAppIniStorage, IdText, IdAttachmentFile,
+  IdAttachment;
 
 type
   TMainForm = class(TForm)
@@ -779,6 +780,8 @@ var
   LEmailSetFile: TIniFile;
   LFrom, LTo, LHost, LPort, LPass, LUser: string;
   LCompareMethodId: integer;
+  LZipLogFile: string;
+  LAttachment: TIdAttachment;
   LText: TIdText;
 begin
   FDeletedCount := 0;
@@ -1529,7 +1532,18 @@ begin
   finally
     OperationThread.Synchronize(StopSpeedTimer);
 //    OperationThread.Synchronize(UpdateState);
-    LLogFilePath := AppDataFolder + '\logs\' + FormatDateTime('ddmmyyyyhhnnss', Now) + '.csv';
+    case EmailConfForm.ReportTypeList.ItemIndex of
+      0:
+        LLogFilePath := AppDataFolder + '\logs\' + FormatDateTime('ddmmyyyyhhnnss', Now) + '.csv';
+      1:
+        LLogFilePath := AppDataFolder + '\logs\' + FormatDateTime('ddmmyyyyhhnnss', Now) + '.html';
+      2:
+        LLogFilePath := AppDataFolder + '\logs\' + FormatDateTime('ddmmyyyyhhnnss', Now) + '.html';
+    end;
+    ResetLogItem(FLogLineToAdd);
+    FLogLineToAdd.LogType := 'Info';
+    FLogLineToAdd.Source := LLogFilePath;
+    OperationThread.Synchronize(AddToFullLog);
     if FStop then
     begin
       ResetLogItem(FLogLineToAdd);
@@ -1552,9 +1566,27 @@ begin
         FLogLineToAdd.LogType := 'Info';
         FLogLineToAdd.Source := 'Saving the log';
         OperationThread.Synchronize(AddToFullLog);
+        // write log file for attachment
+        FFullLogItems.WriteToFile(LLogFilePath, EmailConfForm.ReportTypeList.ItemIndex = 0);
+        case EmailConfForm.ReportTypeList.ItemIndex of
+          0: // csv
+            begin
+               // compress log to zip
+              LZipLogFile := FFullLogItems.CompressLog(LLogFilePath);
+              LastLogFilePath := LLogFilePath;
+            end;
+          1: // html
+            begin
+              // no need to save report to a file
+            end;
+          2: // html attachment
+            begin
+              LZipLogFile := FFullLogItems.CompressLog(LLogFilePath);
+              LastLogFilePath := LLogFilePath;
+            end;
+        end;
         // this will be sent as an attachment to the mail
         try
-          FFullLogItems.WriteToFile(LLogFilePath);
         except
           on E: Exception do
           begin
@@ -1585,21 +1617,46 @@ begin
               FLogLineToAdd.LogType := 'Info';
               FLogLineToAdd.Source := 'Sending email';
               OperationThread.Synchronize(AddToFullLog);
+              ResetLogItem(FLogLineToAdd);
+              FLogLineToAdd.LogType := 'Info';
+              FLogLineToAdd.Source := EmailConfForm.ReportTypeList.Text;
+              OperationThread.Synchronize(AddToFullLog);
               IdMessage1.From.Address := LFrom;
               IdMessage1.Recipients.EMailAddresses := LTo;
-              IdMessage1.Body.Clear;
-              LText := TIdText.Create(IdMessage1.MessageParts);
-              LText.Body.Text := FFullLogItems.AsHtml;
+              case EmailConfForm.ReportTypeList.ItemIndex of
+                0: // csv
+                  begin
+                    IdMessage1.Body.Clear;
+                    IdMessage1.Body.Text := 'Please see attachment for backup details.';
+                    IdMessage1.ContentType := 'multipart/mixed';
+                    LAttachment := TIdAttachmentFile.Create(IdMessage1.MessageParts, LZipLogFile);
+                  end;
+                1: // html
+                  begin
+                    IdMessage1.Body.Clear;
+                    LText := TIdText.Create(IdMessage1.MessageParts);
+                    LText.Body.Text := FFullLogItems.AsHtml;
+                    LText.ContentType := 'text/html';
+                  end;
+                2: // html zip
+                  begin
+                    IdMessage1.Body.Clear;
+                    IdMessage1.Body.Text := 'Please see attachment for backup details.';
+                    IdMessage1.ContentType := 'multipart/mixed';
+                    LAttachment := TIdAttachmentFile.Create(IdMessage1.MessageParts, LZipLogFile);
+                  end;
+              end;
               IdMessage1.Subject := 'OneWay Backup Report';
-              LText.ContentType := 'text/html';
-//              IdMessage1.ContentType := 'multipart/mixed';
-//              LAttachment := TIdAttachmentFile.Create(IdMessage1.MessageParts, LZipLogFile);
               try
                 IdSMTP1.Host := LHost;
                 IdSMTP1.Port := StrToInt(LPort);
                 IdSMTP1.AuthType := satDefault;
                 IdSMTP1.Username := LUser;
                 IdSMTP1.Password := LPass;
+                if IdSMTP1.Connected then
+                begin
+                  IdSMTP1.Disconnect();
+                end;
                 IdSMTP1.Connect;
                 IdSMTP1.Send(IdMessage1);
                 ResetLogItem(FLogLineToAdd);
@@ -1621,11 +1678,35 @@ begin
           end;
         finally
           LEmailSetFile.Free;
+          try
+            LAttachment.Free;
+          except
+            on E: Exception do
+
+
+          end;
+          try
+             // delete temp zip file containing log
+            if FileExists(LZipLogFile) then
+            begin
+              if '.zip' = ExtractFileExt(LZipLogFile) then
+              begin
+                DeleteFile(LZipLogFile);
+              end;
+            end;
+          except
+            on E: Exception do
+            // ignored
+
+
+
+
+          end;
         end;
       end;
 
       try
-        FFullLogItems.WriteToFile(LLogFilePath);
+        FFullLogItems.WriteToFile(LLogFilePath, False);
         LastLogFilePath := LLogFilePath;
       except
         on E: Exception do

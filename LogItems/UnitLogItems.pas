@@ -23,7 +23,7 @@ unit UnitLogItems;
 interface
 
 uses
-  Classes, IniFiles, Generics.Collections, System.SysUtils;
+  Classes, IniFiles, Generics.Collections, System.SysUtils, System.Zip;
 
 type
   TLogItem = record
@@ -60,9 +60,10 @@ type
     constructor Create;
     destructor Destroy;
     procedure LoadFromFile(const FilePath: string);
-    procedure WriteToFile(const FilePath: string);
+    procedure WriteToFile(const FilePath: string; const IsHtml: Boolean);
     procedure Add(const Item: TLogItem);
     procedure Clear();
+    function CompressLog(const LogFilePath: string): string;
   end;
 
 implementation
@@ -86,6 +87,27 @@ end;
 procedure TLogFile.Clear;
 begin
   FLogItems.Clear;
+end;
+
+function TLogFile.CompressLog(const LogFilePath: string): string;
+var
+  LZipFile: TZipFile;
+  LOutputFileName: string;
+begin
+  Result := LogFilePath;
+  if FileExists(LogFilePath) then
+  begin
+    LOutputFileName := ChangeFileExt(LogFilePath, '.zip');
+    LZipFile := TZipFile.Create;
+    try
+      LZipFile.Open(LOutputFileName, zmWrite);
+      LZipFile.Add(LogFilePath);
+      LZipFile.Close;
+      Result := LOutputFileName;
+    finally
+      LZipFile.Free;
+    end;
+  end;
 end;
 
 constructor TLogFile.Create;
@@ -319,7 +341,7 @@ begin
   FLogItems := Value;
 end;
 
-procedure TLogFile.WriteToFile(const FilePath: string);
+procedure TLogFile.WriteToFile(const FilePath: string; const IsHtml: Boolean);
 var
   LSW: TStreamWriter;
   I: Integer;
@@ -328,14 +350,23 @@ var
 begin
   LSW := TStreamWriter.Create(FilePath, True, TEncoding.UTF8);
   try
-    for I := 0 to FLogItems.Count - 1 do
+    if not IsHtml then
     begin
-      LItem := FLogItems[i];
-      with LItem do
+      // csv
+      for I := 0 to FLogItems.Count - 1 do
       begin
-        LLine := LogType + ';' + AddDate + ';' + Source + ';' + Destination + ';' + Operation + ';' + Reason;
+        LItem := FLogItems[i];
+        with LItem do
+        begin
+          LLine := LogType + ';' + AddDate + ';' + Source + ';' + Destination + ';' + Operation + ';' + Reason;
+        end;
+        LSW.WriteLine(LLine);
       end;
-      LSW.WriteLine(LLine);
+    end
+    else
+    begin
+      // html
+      LSW.Write(GetAsHtml);
     end;
   finally
     LSW.Close;

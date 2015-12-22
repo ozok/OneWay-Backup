@@ -3,7 +3,7 @@ object EmailConfForm: TEmailConfForm
   Top = 0
   BorderStyle = bsToolWindow
   Caption = 'Email Configuration'
-  ClientHeight = 256
+  ClientHeight = 278
   ClientWidth = 369
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -14,15 +14,15 @@ object EmailConfForm: TEmailConfForm
   OldCreateOrder = False
   Position = poMainFormCenter
   OnClose = FormClose
-  OnShow = FormShow
+  OnCreate = FormCreate
   DesignSize = (
     369
-    256)
+    278)
   PixelsPerInch = 96
   TextHeight = 13
   object sLabel1: TLabel
     Left = 64
-    Top = 191
+    Top = 218
     Width = 281
     Height = 14
     Anchors = [akLeft, akTop, akRight]
@@ -75,6 +75,13 @@ object EmailConfForm: TEmailConfForm
     Width = 50
     Height = 13
     Caption = 'Password:'
+  end
+  object Label7: TLabel
+    Left = 21
+    Top = 194
+    Width = 37
+    Height = 13
+    Caption = 'Report:'
   end
   object FromEdit: TEdit
     Left = 64
@@ -149,33 +156,36 @@ object EmailConfForm: TEmailConfForm
   end
   object SaveBtn: TButton
     Left = 286
-    Top = 223
+    Top = 245
     Width = 75
     Height = 25
     Anchors = [akRight, akBottom]
     Caption = 'Save'
     TabOrder = 6
     OnClick = SaveBtnClick
+    ExplicitTop = 223
   end
   object CancelBtn: TButton
     Left = 205
-    Top = 223
+    Top = 245
     Width = 75
     Height = 25
     Anchors = [akRight, akBottom]
     Caption = 'Cancel'
     TabOrder = 7
     OnClick = CancelBtnClick
+    ExplicitTop = 223
   end
   object SendTestBtn: TButton
     Left = 8
-    Top = 223
+    Top = 245
     Width = 97
     Height = 25
     Anchors = [akLeft, akBottom]
     Caption = 'Send Test Mail'
     TabOrder = 8
     OnClick = SendTestBtnClick
+    ExplicitTop = 223
   end
   object PortEdit: TJvSpinEdit
     Left = 64
@@ -186,6 +196,20 @@ object EmailConfForm: TEmailConfForm
     ButtonKind = bkClassic
     Value = 25.000000000000000000
     TabOrder = 3
+  end
+  object ReportTypeList: TComboBox
+    Left = 64
+    Top = 191
+    Width = 291
+    Height = 21
+    Style = csDropDownList
+    ItemIndex = 1
+    TabOrder = 9
+    Text = 'HTML'
+    Items.Strings = (
+      'CSV'
+      'HTML'
+      'HTML Attachment')
   end
   object IdMessage1: TIdMessage
     AttachmentEncoding = 'UUE'
@@ -198,14 +222,14 @@ object EmailConfForm: TEmailConfForm
     Recipients = <>
     ReplyTo = <>
     ConvertPreamble = True
-    Left = 245
-    Top = 164
+    Left = 269
+    Top = 100
   end
   object IdSMTP1: TIdSMTP
     IOHandler = IdSSLIOHandlerSocketOpenSSL1
     SASLMechanisms = <>
-    Left = 317
-    Top = 164
+    Left = 325
+    Top = 116
   end
   object IdSSLIOHandlerSocketOpenSSL1: TIdSSLIOHandlerSocketOpenSSL
     Destination = ':25'
@@ -215,7 +239,7 @@ object EmailConfForm: TEmailConfForm
     SSLOptions.Mode = sslmUnassigned
     SSLOptions.VerifyMode = []
     SSLOptions.VerifyDepth = 0
-    Left = 141
-    Top = 200
+    Left = 181
+    Top = 104
   end
 end

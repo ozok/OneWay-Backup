@@ -51,11 +51,13 @@ type
     Label4: TLabel;
     Label5: TLabel;
     Label6: TLabel;
+    ReportTypeList: TComboBox;
+    Label7: TLabel;
     procedure CancelBtnClick(Sender: TObject);
     procedure SaveBtnClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
-    procedure FormShow(Sender: TObject);
     procedure SendTestBtnClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
   private
     { Private declarations }
   public
@@ -85,7 +87,7 @@ begin
   MainForm.BringToFront;
 end;
 
-procedure TEmailConfForm.FormShow(Sender: TObject);
+procedure TEmailConfForm.FormCreate(Sender: TObject);
 var
   LEmailSetFile: TIniFile;
 begin
@@ -99,6 +101,7 @@ begin
       PortEdit.Text := ReadString('Email', 'Port', '25');
       UserNameEdit.Text := ReadString('Email', 'User', '');
       PassEdit.Text := ReadString('Email', 'Pass', '');
+      ReportTypeList.ItemIndex := ReadInteger('Email', 'ReportType', 1);
     end;
   finally
     LEmailSetFile.Free;
@@ -119,10 +122,12 @@ begin
       WriteString('Email', 'Port', PortEdit.Text);
       WriteString('Email', 'User', UserNameEdit.Text);
       WriteString('Email', 'Pass', PassEdit.Text);
+      WriteInteger('Email', 'ReportType', ReportTypeList.ItemIndex);
     end;
   finally
     LEmailSetFile.Free;
   end;
+  Close;
 end;
 
 procedure TEmailConfForm.SendTestBtnClick(Sender: TObject);
