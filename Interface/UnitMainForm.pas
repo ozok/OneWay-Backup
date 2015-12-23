@@ -1567,7 +1567,7 @@ begin
         FLogLineToAdd.Source := 'Saving the log';
         OperationThread.Synchronize(AddToFullLog);
         // write log file for attachment
-        FFullLogItems.WriteToFile(LLogFilePath, EmailConfForm.ReportTypeList.ItemIndex = 0);
+        FFullLogItems.WriteToFile(LLogFilePath, EmailConfForm.ReportTypeList.ItemIndex <> 0);
         case EmailConfForm.ReportTypeList.ItemIndex of
           0: // csv
             begin
@@ -1634,6 +1634,7 @@ begin
                 1: // html
                   begin
                     IdMessage1.Body.Clear;
+                    IdMessage1.Body.Text := '';
                     LText := TIdText.Create(IdMessage1.MessageParts);
                     LText.Body.Text := FFullLogItems.AsHtml;
                     LText.ContentType := 'text/html';
@@ -1642,8 +1643,8 @@ begin
                   begin
                     IdMessage1.Body.Clear;
                     IdMessage1.Body.Text := 'Please see attachment for backup details.';
-                    IdMessage1.ContentType := 'multipart/mixed';
                     LAttachment := TIdAttachmentFile.Create(IdMessage1.MessageParts, LZipLogFile);
+                    IdMessage1.ContentType := 'multipart/mixed';
                   end;
               end;
               IdMessage1.Subject := 'OneWay Backup Report';

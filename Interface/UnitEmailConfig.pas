@@ -101,7 +101,7 @@ begin
       PortEdit.Text := ReadString('Email', 'Port', '25');
       UserNameEdit.Text := ReadString('Email', 'User', '');
       PassEdit.Text := ReadString('Email', 'Pass', '');
-      ReportTypeList.ItemIndex := ReadInteger('Email', 'ReportType', 1);
+      ReportTypeList.ItemIndex := ReadInteger('Email', 'ReportType', 2);
     end;
   finally
     LEmailSetFile.Free;

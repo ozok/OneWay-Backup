@@ -163,7 +163,6 @@ object EmailConfForm: TEmailConfForm
     Caption = 'Save'
     TabOrder = 6
     OnClick = SaveBtnClick
-    ExplicitTop = 223
   end
   object CancelBtn: TButton
     Left = 205
@@ -174,7 +173,6 @@ object EmailConfForm: TEmailConfForm
     Caption = 'Cancel'
     TabOrder = 7
     OnClick = CancelBtnClick
-    ExplicitTop = 223
   end
   object SendTestBtn: TButton
     Left = 8
@@ -185,7 +183,6 @@ object EmailConfForm: TEmailConfForm
     Caption = 'Send Test Mail'
     TabOrder = 8
     OnClick = SendTestBtnClick
-    ExplicitTop = 223
   end
   object PortEdit: TJvSpinEdit
     Left = 64
@@ -203,13 +200,13 @@ object EmailConfForm: TEmailConfForm
     Width = 291
     Height = 21
     Style = csDropDownList
-    ItemIndex = 1
+    ItemIndex = 2
     TabOrder = 9
-    Text = 'HTML'
+    Text = 'HTML Zipped Attachment'
     Items.Strings = (
-      'CSV'
-      'HTML'
-      'HTML Attachment')
+      'CSV Zipped Attachment'
+      'HTML EMail Body'
+      'HTML Zipped Attachment')
   end
   object IdMessage1: TIdMessage
     AttachmentEncoding = 'UUE'
