@@ -28,7 +28,7 @@ uses
   IdIOHandler, IdIOHandlerSocket, IdIOHandlerStack, IdSSL, IdSSLOpenSSL,
   IdComponent, IdTCPConnection, IdTCPClient, IdExplicitTLSClientServerBase,
   IdMessageClient, IdSMTPBase, IdSMTP, IdBaseComponent, IdMessage, Vcl.Mask,
-  JvExMask, JvSpin;
+  JvExMask, JvSpin, Vcl.ComCtrls;
 
 type
   TEmailConfForm = class(TForm)
@@ -53,6 +53,8 @@ type
     Label6: TLabel;
     ReportTypeList: TComboBox;
     Label7: TLabel;
+    PageControl1: TPageControl;
+    TabSheet1: TTabSheet;
     procedure CancelBtnClick(Sender: TObject);
     procedure SaveBtnClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);

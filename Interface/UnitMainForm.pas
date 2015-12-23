@@ -35,7 +35,7 @@ uses
   IdSSL, IdSSLOpenSSL, IniFiles, System.ImageList, Vcl.ImgList, Vcl.Buttons,
   JvComputerInfoEx, IOUtils, JvCaptionButton, JvTrayIcon, UnitLogItems,
   JvFormPlacement, JvAppStorage, JvAppIniStorage, IdText, IdAttachmentFile,
-  IdAttachment;
+  IdAttachment, Vcl.ToolWin;
 
 type
   TMainForm = class(TForm)
@@ -43,21 +43,13 @@ type
     SearchSourceFiles: TJvSearchFiles;
     ToolBar: TPanel;
     StateLabel: TLabel;
-    RunJobsBtn: TButton;
     ProjectNameLabel: TLabel;
-    AddNewProjectBtn: TButton;
-    StopBtn: TButton;
-    EditProjectBtn: TButton;
     OperationThread: TIdThreadComponent;
     SearchDestFiles: TJvSearchFiles;
     Taskbar1: TTaskbar;
     JobListMenu: TPopupMenu;
     O1: TMenuItem;
     O2: TMenuItem;
-    ActivatePanel: TPanel;
-    SelectAllLabel: TLabel;
-    SelectNoneLabel: TLabel;
-    SelectReverseLabel: TLabel;
     IdSMTP1: TIdSMTP;
     IdMessage1: TIdMessage;
     ChangesLabel: TLabel;
@@ -66,27 +58,61 @@ type
     TimeLabel: TLabel;
     PassedTimeTimer: TJvThreadTimer;
     IdSSLIOHandlerSocketOpenSSL1: TIdSSLIOHandlerSocketOpenSSL;
-    ConfEmailBtn: TButton;
     ProgressTimer: TTimer;
-    DeleteBtn: TButton;
-    PreviewBtn: TButton;
     ProgressBar: TsProgressBar;
     PercentageLabel: TLabel;
     SendEmailBtn: TCheckBox;
     Info: TJvComputerInfoEx;
     ShutdownBtn: TCheckBox;
-    AboutBtn: TButton;
-    DonateBtn: TButton;
     ImageList1: TImageList;
     MinimizeToTrayBtn: TJvCaptionButton;
     TrayIcon: TJvTrayIcon;
     GeneralPage: TPageControl;
     TabSheet4: TTabSheet;
     TabSheet5: TTabSheet;
-    LogsBtn: TButton;
     FormStorage: TJvFormStorage;
     AppIniFileStorage: TJvAppIniFileStorage;
     FullLogList: TListView;
+    tlb1: TToolBar;
+    AddNewProjectBtn: TToolButton;
+    EditProjectBtn: TToolButton;
+    DeleteBtn: TToolButton;
+    ConfEmailBtn: TToolButton;
+    LogsBtn: TToolButton;
+    DonateBtn: TToolButton;
+    AboutBtn: TToolButton;
+    PreviewBtn: TToolButton;
+    RunJobsBtn: TToolButton;
+    ToolButton8: TToolButton;
+    ToolButton1: TToolButton;
+    StopBtn: TToolButton;
+    ToolButton2: TToolButton;
+    MainMenu1: TMainMenu;
+    P1: TMenuItem;
+    N1: TMenuItem;
+    E1: TMenuItem;
+    D1: TMenuItem;
+    o3: TMenuItem;
+    S1: TMenuItem;
+    L1: TMenuItem;
+    O4: TMenuItem;
+    R1: TMenuItem;
+    P2: TMenuItem;
+    S2: TMenuItem;
+    A1: TMenuItem;
+    D2: TMenuItem;
+    C1: TMenuItem;
+    A2: TMenuItem;
+    StatusBar1: TStatusBar;
+    SelectAllBtn: TToolButton;
+    SelectNoneBtn: TToolButton;
+    SelectReverseBtn: TToolButton;
+    ToolButton3: TToolButton;
+    Bevel1: TBevel;
+    Bevel2: TBevel;
+    S3: TMenuItem;
+    S4: TMenuItem;
+    R2: TMenuItem;
     procedure FormCreate(Sender: TObject);
     procedure RunJobsBtnClick(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -120,6 +146,7 @@ type
     procedure TrayIconBalloonClick(Sender: TObject);
     procedure LogsBtnClick(Sender: TObject);
     procedure FullLogListCustomDrawSubItem(Sender: TCustomListView; Item: TListItem; SubItem: Integer; State: TCustomDrawState; var DefaultDraw: Boolean);
+    procedure C1Click(Sender: TObject);
   private
     { Private declarations }
     FFiles: TStringList;
@@ -222,6 +249,11 @@ begin
   end;
 end;
 
+procedure TMainForm.C1Click(Sender: TObject);
+begin
+  ShellExecute(Handle, 'open', 'changelog.txt', nil, nil, SW_SHOWNORMAL);
+end;
+
 function TMainForm.CheckIfFileCanBeAdded(const FilePath: string): Boolean;
 var
   I: Integer;
@@ -315,17 +347,29 @@ begin
 end;
 
 procedure TMainForm.DisableUI;
+var
+  I: Integer;
 begin
   JobsList.Enabled := False;
   RunJobsBtn.Enabled := False;
   AddNewProjectBtn.Enabled := False;
   EditProjectBtn.Enabled := False;
   StopBtn.Enabled := True;
-  ActivatePanel.Enabled := False;
   ConfEmailBtn.Enabled := False;
   DeleteBtn.Enabled := False;
   PreviewBtn.Enabled := False;
   AboutBtn.Enabled := False;
+  SelectAllBtn.Enabled := False;
+  SelectNoneBtn.Enabled := False;
+  SelectReverseBtn.Enabled := False;
+  for I := 0 to MainMenu1.Items.Count - 1 do
+  begin
+    MainMenu1.Items[i].Enabled := False;
+  end;
+  MainMenu1.Items[2].Enabled := True;
+  MainMenu1.Items[2].Items[0].Enabled := False;
+  MainMenu1.Items[2].Items[1].Enabled := False;
+  MainMenu1.Items[2].Items[2].Enabled := True;
 end;
 
 procedure TMainForm.EditProjectBtnClick(Sender: TObject);
@@ -339,13 +383,14 @@ begin
 end;
 
 procedure TMainForm.EnableUI;
+var
+  i: integer;
 begin
   JobsList.Enabled := True;
   RunJobsBtn.Enabled := True;
   AddNewProjectBtn.Enabled := True;
   EditProjectBtn.Enabled := True;
   StopBtn.Enabled := False;
-  ActivatePanel.Enabled := True;
   ConfEmailBtn.Enabled := True;
   AboutBtn.Enabled := True;
   StateLabel.Caption := '';
@@ -360,6 +405,17 @@ begin
   DeleteBtn.Enabled := True;
   PreviewBtn.Enabled := True;
   GeneralPage.ActivePageIndex := 0;
+  SelectAllBtn.Enabled := True;
+  SelectNoneBtn.Enabled := True;
+  SelectReverseBtn.Enabled := True;
+  for I := 0 to MainMenu1.Items.Count - 1 do
+  begin
+    MainMenu1.Items[i].Enabled := True;
+  end;
+  MainMenu1.Items[2].Enabled := True;
+  MainMenu1.Items[2].Items[0].Enabled := True;
+  MainMenu1.Items[2].Items[1].Enabled := True;
+  MainMenu1.Items[2].Items[2].Enabled := False;
 end;
 
 procedure TMainForm.FormClose(Sender: TObject; var Action: TCloseAction);
@@ -429,6 +485,7 @@ begin
   FFileTypeSplitList := TStringList.Create;
   FFileTypeSplitList.StrictDelimiter := True;
   FFileTypeSplitList.Delimiter := ';';
+  ToolBar.Height := 54;
 end;
 
 procedure TMainForm.FormDestroy(Sender: TObject);
@@ -1142,6 +1199,7 @@ begin
                         FLogLineToAdd.Reason := '1st copy failed';
                         OperationThread.Synchronize(AddToFullLog);
                         Inc(FCopiedCount);
+                        Dec(FErrorCount);
                       end;
                     except
                       on E: Exception do
@@ -1175,6 +1233,7 @@ begin
                           FLogLineToAdd.Operation := 'SHFileOperations file copy';
                           OperationThread.Synchronize(AddToFullLog);
                           Inc(FCopiedCount);
+                          Dec(FErrorCount);
                         end;
 
                         Continue;
@@ -1227,7 +1286,6 @@ begin
                       FLogLineToAdd.Operation := 'Delete file at destination';
                       FLogLineToAdd.Reason := 'Source file doesn''t exist';
                       OperationThread.Synchronize(AddToFullLog);
-                      Inc(FSkippedCount);
 
                       FChangeCount := LFilesToDelete.Count;
                     end;
@@ -1559,155 +1617,150 @@ begin
       OperationThread.Synchronize(AddToFullLog);
     end;
     FStop := True;
-    try
-    finally
-      if (not FPreview) and (SendEmailBtn.Checked or FSendEmail) then
-      begin
-        FLogLineToAdd.LogType := 'Info';
-        FLogLineToAdd.Source := 'Saving the log';
-        OperationThread.Synchronize(AddToFullLog);
+
+    if (not FPreview) and (SendEmailBtn.Checked or FSendEmail) then
+    begin
+      FLogLineToAdd.LogType := 'Info';
+      FLogLineToAdd.Source := 'Saving the log';
+      OperationThread.Synchronize(AddToFullLog);
         // write log file for attachment
-        FFullLogItems.WriteToFile(LLogFilePath, EmailConfForm.ReportTypeList.ItemIndex <> 0);
-        case EmailConfForm.ReportTypeList.ItemIndex of
-          0: // csv
-            begin
-               // compress log to zip
-              LZipLogFile := FFullLogItems.CompressLog(LLogFilePath);
-              LastLogFilePath := LLogFilePath;
-            end;
-          1: // html
-            begin
-              // no need to save report to a file
-            end;
-          2: // html attachment
-            begin
-              LZipLogFile := FFullLogItems.CompressLog(LLogFilePath);
-              LastLogFilePath := LLogFilePath;
-            end;
-        end;
-        // this will be sent as an attachment to the mail
-        try
-        except
-          on E: Exception do
+      FFullLogItems.WriteToFile(LLogFilePath, EmailConfForm.ReportTypeList.ItemIndex <> 0);
+      case EmailConfForm.ReportTypeList.ItemIndex of
+        0: // csv
           begin
-            ResetLogItem(FLogLineToAdd);
-            FLogLineToAdd.LogType := 'Error';
-            FLogLineToAdd.Operation := 'Save log';
-            FLogLineToAdd.Reason := E.Message;
-            OperationThread.Synchronize(AddToFullLog);
-            Inc(FErrorCount);
+               // compress log to zip
+            LZipLogFile := FFullLogItems.CompressLog(LLogFilePath);
+            LastLogFilePath := LLogFilePath;
           end;
+        1: // html
+          begin
+              // no need to save report to a file
+          end;
+        2: // html attachment
+          begin
+            LZipLogFile := FFullLogItems.CompressLog(LLogFilePath);
+            LastLogFilePath := LLogFilePath;
+          end;
+      end;
+        // this will be sent as an attachment to the mail
+      try
+      except
+        on E: Exception do
+        begin
+          ResetLogItem(FLogLineToAdd);
+          FLogLineToAdd.LogType := 'Error';
+          FLogLineToAdd.Operation := 'Save log';
+          FLogLineToAdd.Reason := E.Message;
+          OperationThread.Synchronize(AddToFullLog);
+          Inc(FErrorCount);
         end;
+      end;
 
         // send email
-        LEmailSetFile := TIniFile.Create(AppDataFolder + '\email.ini');
-        try
-          with LEmailSetFile do
+      LEmailSetFile := TIniFile.Create(AppDataFolder + '\email.ini');
+      try
+        with LEmailSetFile do
+        begin
+          LFrom := ReadString('EMail', 'From', '');
+          LTo := ReadString('EMail', 'To', '');
+          LHost := ReadString('EMail', 'Host', '');
+          LPort := ReadString('EMail', 'Port', '');
+          LUser := ReadString('EMail', 'User', '');
+          LPass := ReadString('EMail', 'Pass', '');
+
+          if (Length(LFrom) > 0) and (Length(LTo) > 0) and (Length(LHost) > 0) and (Length(LPort) > 0) and (Length(LUser) > 0) and (Length(LPass) > 0) then
           begin
-            LFrom := ReadString('EMail', 'From', '');
-            LTo := ReadString('EMail', 'To', '');
-            LHost := ReadString('EMail', 'Host', '');
-            LPort := ReadString('EMail', 'Port', '');
-            LUser := ReadString('EMail', 'User', '');
-            LPass := ReadString('EMail', 'Pass', '');
-
-            if (Length(LFrom) > 0) and (Length(LTo) > 0) and (Length(LHost) > 0) and (Length(LPort) > 0) and (Length(LUser) > 0) and (Length(LPass) > 0) then
-            begin
-              ResetLogItem(FLogLineToAdd);
-              FLogLineToAdd.LogType := 'Info';
-              FLogLineToAdd.Source := 'Sending email';
-              OperationThread.Synchronize(AddToFullLog);
-              ResetLogItem(FLogLineToAdd);
-              FLogLineToAdd.LogType := 'Info';
-              FLogLineToAdd.Source := EmailConfForm.ReportTypeList.Text;
-              OperationThread.Synchronize(AddToFullLog);
-              IdMessage1.From.Address := LFrom;
-              IdMessage1.Recipients.EMailAddresses := LTo;
-              case EmailConfForm.ReportTypeList.ItemIndex of
-                0: // csv
-                  begin
-                    IdMessage1.Body.Clear;
-                    IdMessage1.Body.Text := 'Please see attachment for backup details.';
-                    IdMessage1.ContentType := 'multipart/mixed';
-                    LAttachment := TIdAttachmentFile.Create(IdMessage1.MessageParts, LZipLogFile);
-                  end;
-                1: // html
-                  begin
-                    IdMessage1.Body.Clear;
-                    IdMessage1.Body.Text := '';
-                    LText := TIdText.Create(IdMessage1.MessageParts);
-                    LText.Body.Text := FFullLogItems.AsHtml;
-                    LText.ContentType := 'text/html';
-                  end;
-                2: // html zip
-                  begin
-                    IdMessage1.Body.Clear;
-                    IdMessage1.Body.Text := 'Please see attachment for backup details.';
-                    LAttachment := TIdAttachmentFile.Create(IdMessage1.MessageParts, LZipLogFile);
-                    IdMessage1.ContentType := 'multipart/mixed';
-                  end;
-              end;
-              IdMessage1.Subject := 'OneWay Backup Report';
-              try
-                IdSMTP1.Host := LHost;
-                IdSMTP1.Port := StrToInt(LPort);
-                IdSMTP1.AuthType := satDefault;
-                IdSMTP1.Username := LUser;
-                IdSMTP1.Password := LPass;
-                if IdSMTP1.Connected then
+            ResetLogItem(FLogLineToAdd);
+            FLogLineToAdd.LogType := 'Info';
+            FLogLineToAdd.Source := 'Sending email';
+            OperationThread.Synchronize(AddToFullLog);
+            ResetLogItem(FLogLineToAdd);
+            FLogLineToAdd.LogType := 'Info';
+            FLogLineToAdd.Source := EmailConfForm.ReportTypeList.Text;
+            OperationThread.Synchronize(AddToFullLog);
+            IdMessage1.From.Address := LFrom;
+            IdMessage1.Recipients.EMailAddresses := LTo;
+            case EmailConfForm.ReportTypeList.ItemIndex of
+              0: // csv
                 begin
-                  IdSMTP1.Disconnect();
+                  IdMessage1.Body.Clear;
+                  IdMessage1.Body.Text := 'Please see attachment for backup details.';
+                  IdMessage1.ContentType := 'multipart/mixed';
+                  LAttachment := TIdAttachmentFile.Create(IdMessage1.MessageParts, LZipLogFile);
                 end;
-                IdSMTP1.Connect;
-                IdSMTP1.Send(IdMessage1);
-                ResetLogItem(FLogLineToAdd);
-                FLogLineToAdd.LogType := 'Info';
-                FLogLineToAdd.Source := 'Sent email';
-                OperationThread.Synchronize(AddToFullLog);
-              except
-                on E: Exception do
+              1: // html
                 begin
-                  ResetLogItem(FLogLineToAdd);
-                  FLogLineToAdd.LogType := 'Error';
-                  FLogLineToAdd.Operation := 'Send email';
-                  FLogLineToAdd.Reason := E.Message;
-                  OperationThread.Synchronize(AddToFullLog);
-                  Inc(FErrorCount);
+                  IdMessage1.Body.Clear;
+                  IdMessage1.Body.Text := '';
+                  LText := TIdText.Create(IdMessage1.MessageParts);
+                  LText.Body.Text := FFullLogItems.AsHtml;
+                  LText.ContentType := 'text/html';
                 end;
-              end;
+              2: // html zip
+                begin
+                  IdMessage1.Body.Clear;
+                  IdMessage1.Body.Text := 'Please see attachment for backup details.';
+                  LAttachment := TIdAttachmentFile.Create(IdMessage1.MessageParts, LZipLogFile);
+                  IdMessage1.ContentType := 'multipart/mixed';
+                end;
             end;
-          end;
-        finally
-          LEmailSetFile.Free;
-          try
-            LAttachment.Free;
-          except
-            on E: Exception do
-
-
-          end;
-          try
-             // delete temp zip file containing log
-            if FileExists(LZipLogFile) then
-            begin
-              if '.zip' = ExtractFileExt(LZipLogFile) then
+            IdMessage1.Subject := 'OneWay Backup Report';
+            try
+              IdSMTP1.Host := LHost;
+              IdSMTP1.Port := StrToInt(LPort);
+              IdSMTP1.AuthType := satDefault;
+              IdSMTP1.Username := LUser;
+              IdSMTP1.Password := LPass;
+              if IdSMTP1.Connected then
               begin
-                DeleteFile(LZipLogFile);
+                IdSMTP1.Disconnect();
+              end;
+              IdSMTP1.Connect;
+              IdSMTP1.Send(IdMessage1);
+              ResetLogItem(FLogLineToAdd);
+              FLogLineToAdd.LogType := 'Info';
+              FLogLineToAdd.Source := 'Sent email';
+              OperationThread.Synchronize(AddToFullLog);
+            except
+              on E: Exception do
+              begin
+                ResetLogItem(FLogLineToAdd);
+                FLogLineToAdd.LogType := 'Error';
+                FLogLineToAdd.Operation := 'Send email';
+                FLogLineToAdd.Reason := E.Message;
+                OperationThread.Synchronize(AddToFullLog);
+                Inc(FErrorCount);
               end;
             end;
-          except
-            on E: Exception do
+          end;
+        end;
+      finally
+        LEmailSetFile.Free;
+        try
+          LAttachment.Free;
+        except
+          on E: Exception do
+
+
+        end;
+        try
+             // delete temp zip file containing log
+          if FileExists(LZipLogFile) then
+          begin
+            if '.zip' = ExtractFileExt(LZipLogFile) then
+            begin
+              DeleteFile(LZipLogFile);
+            end;
+          end;
+        except
+          on E: Exception do
             // ignored
 
-
-
-
-          end;
         end;
       end;
 
       try
-        FFullLogItems.WriteToFile(LLogFilePath, False);
+        FFullLogItems.WriteToFile(ChangeFileExt(LLogFilePath, '.csv'), False);
         LastLogFilePath := LLogFilePath;
       except
         on E: Exception do

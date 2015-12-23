@@ -2,9 +2,9 @@ object EmailConfForm: TEmailConfForm
   Left = 0
   Top = 0
   BorderStyle = bsToolWindow
-  Caption = 'Email Configuration'
-  ClientHeight = 278
-  ClientWidth = 369
+  Caption = 'Settings'
+  ClientHeight = 304
+  ClientWidth = 375
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -15,198 +15,223 @@ object EmailConfForm: TEmailConfForm
   Position = poMainFormCenter
   OnClose = FormClose
   OnCreate = FormCreate
-  DesignSize = (
-    369
-    278)
   PixelsPerInch = 96
   TextHeight = 13
-  object sLabel1: TLabel
-    Left = 64
-    Top = 218
-    Width = 281
-    Height = 14
-    Anchors = [akLeft, akTop, akRight]
-    Caption = '!!!Your password will be saved in plain text!!!'
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clRed
-    Font.Height = -12
-    Font.Name = 'Tahoma'
-    Font.Style = [fsBold, fsUnderline]
-    ParentFont = False
-  end
-  object Label1: TLabel
-    Left = 30
-    Top = 11
-    Width = 28
-    Height = 13
-    Caption = 'From:'
-  end
-  object Label2: TLabel
-    Left = 42
-    Top = 38
-    Width = 16
-    Height = 13
-    Caption = 'To:'
-  end
-  object Label3: TLabel
-    Left = 32
-    Top = 75
-    Width = 26
-    Height = 13
-    Caption = 'Host:'
-  end
-  object Label4: TLabel
-    Left = 34
-    Top = 100
-    Width = 24
-    Height = 13
-    Caption = 'Port:'
-  end
-  object Label5: TLabel
-    Left = 8
-    Top = 142
-    Width = 55
-    Height = 13
-    Caption = 'User name:'
-  end
-  object Label6: TLabel
-    Left = 8
-    Top = 167
-    Width = 50
-    Height = 13
-    Caption = 'Password:'
-  end
-  object Label7: TLabel
-    Left = 21
-    Top = 194
-    Width = 37
-    Height = 13
-    Caption = 'Report:'
-  end
-  object FromEdit: TEdit
-    Left = 64
-    Top = 8
-    Width = 291
-    Height = 21
-    Anchors = [akLeft, akTop, akRight]
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clWindowText
-    Font.Height = -11
-    Font.Name = 'Tahoma'
-    Font.Style = []
-    ParentFont = False
+  object PageControl1: TPageControl
+    Left = 0
+    Top = 0
+    Width = 375
+    Height = 304
+    ActivePage = TabSheet1
+    Align = alClient
     TabOrder = 0
-  end
-  object ToEdit: TEdit
-    Left = 64
-    Top = 35
-    Width = 291
-    Height = 21
-    Anchors = [akLeft, akTop, akRight]
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clWindowText
-    Font.Height = -11
-    Font.Name = 'Tahoma'
-    Font.Style = []
-    ParentFont = False
-    TabOrder = 1
-  end
-  object HostEdit: TEdit
-    Left = 64
-    Top = 70
-    Width = 291
-    Height = 21
-    Anchors = [akLeft, akTop, akRight]
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clWindowText
-    Font.Height = -11
-    Font.Name = 'Tahoma'
-    Font.Style = []
-    ParentFont = False
-    TabOrder = 2
-  end
-  object UserNameEdit: TEdit
-    Left = 64
-    Top = 137
-    Width = 291
-    Height = 21
-    Anchors = [akLeft, akTop, akRight]
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clWindowText
-    Font.Height = -11
-    Font.Name = 'Tahoma'
-    Font.Style = []
-    ParentFont = False
-    TabOrder = 4
-  end
-  object PassEdit: TEdit
-    Left = 64
-    Top = 164
-    Width = 291
-    Height = 21
-    Anchors = [akLeft, akTop, akRight]
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clWindowText
-    Font.Height = -11
-    Font.Name = 'Tahoma'
-    Font.Style = []
-    ParentFont = False
-    PasswordChar = '*'
-    TabOrder = 5
-  end
-  object SaveBtn: TButton
-    Left = 286
-    Top = 245
-    Width = 75
-    Height = 25
-    Anchors = [akRight, akBottom]
-    Caption = 'Save'
-    TabOrder = 6
-    OnClick = SaveBtnClick
-  end
-  object CancelBtn: TButton
-    Left = 205
-    Top = 245
-    Width = 75
-    Height = 25
-    Anchors = [akRight, akBottom]
-    Caption = 'Cancel'
-    TabOrder = 7
-    OnClick = CancelBtnClick
-  end
-  object SendTestBtn: TButton
-    Left = 8
-    Top = 245
-    Width = 97
-    Height = 25
-    Anchors = [akLeft, akBottom]
-    Caption = 'Send Test Mail'
-    TabOrder = 8
-    OnClick = SendTestBtnClick
-  end
-  object PortEdit: TJvSpinEdit
-    Left = 64
-    Top = 97
-    Width = 121
-    Height = 21
-    CheckMinValue = True
-    ButtonKind = bkClassic
-    Value = 25.000000000000000000
-    TabOrder = 3
-  end
-  object ReportTypeList: TComboBox
-    Left = 64
-    Top = 191
-    Width = 291
-    Height = 21
-    Style = csDropDownList
-    ItemIndex = 2
-    TabOrder = 9
-    Text = 'HTML Zipped Attachment'
-    Items.Strings = (
-      'CSV Zipped Attachment'
-      'HTML EMail Body'
-      'HTML Zipped Attachment')
+    ExplicitWidth = 369
+    ExplicitHeight = 278
+    object TabSheet1: TTabSheet
+      Caption = 'Email Settings'
+      ExplicitWidth = 281
+      ExplicitHeight = 165
+      DesignSize = (
+        367
+        276)
+      object Label1: TLabel
+        Left = 30
+        Top = 11
+        Width = 28
+        Height = 13
+        Caption = 'From:'
+      end
+      object Label2: TLabel
+        Left = 42
+        Top = 38
+        Width = 16
+        Height = 13
+        Caption = 'To:'
+      end
+      object Label3: TLabel
+        Left = 32
+        Top = 75
+        Width = 26
+        Height = 13
+        Caption = 'Host:'
+      end
+      object Label4: TLabel
+        Left = 34
+        Top = 100
+        Width = 24
+        Height = 13
+        Caption = 'Port:'
+      end
+      object Label5: TLabel
+        Left = 8
+        Top = 142
+        Width = 55
+        Height = 13
+        Caption = 'User name:'
+      end
+      object Label6: TLabel
+        Left = 8
+        Top = 167
+        Width = 50
+        Height = 13
+        Caption = 'Password:'
+      end
+      object Label7: TLabel
+        Left = 21
+        Top = 194
+        Width = 37
+        Height = 13
+        Caption = 'Report:'
+      end
+      object sLabel1: TLabel
+        Left = 64
+        Top = 218
+        Width = 279
+        Height = 14
+        Anchors = [akLeft, akTop, akRight]
+        Caption = '!!!Your password will be saved in plain text!!!'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clRed
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold, fsUnderline]
+        ParentFont = False
+        ExplicitWidth = 281
+      end
+      object CancelBtn: TButton
+        Left = 203
+        Top = 248
+        Width = 75
+        Height = 25
+        Anchors = [akRight, akBottom]
+        Caption = 'Cancel'
+        TabOrder = 0
+        OnClick = CancelBtnClick
+        ExplicitTop = 260
+      end
+      object FromEdit: TEdit
+        Left = 64
+        Top = 8
+        Width = 297
+        Height = 21
+        Anchors = [akLeft, akTop, akRight]
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 1
+        ExplicitWidth = 291
+      end
+      object HostEdit: TEdit
+        Left = 64
+        Top = 70
+        Width = 297
+        Height = 21
+        Anchors = [akLeft, akTop, akRight]
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 2
+        ExplicitWidth = 291
+      end
+      object PassEdit: TEdit
+        Left = 64
+        Top = 164
+        Width = 297
+        Height = 21
+        Anchors = [akLeft, akTop, akRight]
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        PasswordChar = '*'
+        TabOrder = 3
+        ExplicitWidth = 291
+      end
+      object PortEdit: TJvSpinEdit
+        Left = 64
+        Top = 97
+        Width = 121
+        Height = 21
+        CheckMinValue = True
+        ButtonKind = bkClassic
+        Value = 25.000000000000000000
+        TabOrder = 4
+      end
+      object ReportTypeList: TComboBox
+        Left = 64
+        Top = 191
+        Width = 297
+        Height = 21
+        Style = csDropDownList
+        ItemIndex = 2
+        TabOrder = 5
+        Text = 'HTML Zipped Attachment'
+        Items.Strings = (
+          'CSV Zipped Attachment'
+          'HTML EMail Body'
+          'HTML Zipped Attachment')
+      end
+      object SaveBtn: TButton
+        Left = 286
+        Top = 248
+        Width = 75
+        Height = 25
+        Anchors = [akRight, akBottom]
+        Caption = 'Save'
+        TabOrder = 6
+        OnClick = SaveBtnClick
+        ExplicitTop = 260
+      end
+      object SendTestBtn: TButton
+        Left = 3
+        Top = 248
+        Width = 97
+        Height = 25
+        Anchors = [akLeft, akBottom]
+        Caption = 'Send Test Mail'
+        TabOrder = 7
+        OnClick = SendTestBtnClick
+        ExplicitTop = 260
+      end
+      object ToEdit: TEdit
+        Left = 64
+        Top = 35
+        Width = 297
+        Height = 21
+        Anchors = [akLeft, akTop, akRight]
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 8
+        ExplicitWidth = 291
+      end
+      object UserNameEdit: TEdit
+        Left = 64
+        Top = 137
+        Width = 297
+        Height = 21
+        Anchors = [akLeft, akTop, akRight]
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 9
+        ExplicitWidth = 291
+      end
+    end
   end
   object IdMessage1: TIdMessage
     AttachmentEncoding = 'UUE'
