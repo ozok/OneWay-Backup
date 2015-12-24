@@ -321,6 +321,10 @@ procedure TMainForm.DeleteBtnClick(Sender: TObject);
 var
   I: Integer;
 begin
+  if ID_YES <> Application.MessageBox('Delete selected projects from the list?', 'Confirm', MB_ICONQUESTION or MB_YESNO) then
+  begin
+    Exit;
+  end;
   for I := JobsList.Items.Count - 1 downto 0 do
   begin
     if JobsList.Items[i].Selected then

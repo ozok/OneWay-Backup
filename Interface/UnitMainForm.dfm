@@ -49,12 +49,9 @@ object MainForm: TMainForm
     MultiLine = True
     Style = tsFlatButtons
     TabOrder = 0
-    ExplicitTop = 54
-    ExplicitHeight = 521
     object TabSheet5: TTabSheet
       Caption = 'TabSheet5'
       ImageIndex = 1
-      ExplicitHeight = 490
       object JobsList: TListView
         Left = 0
         Top = 0
@@ -104,12 +101,10 @@ object MainForm: TMainForm
         TabOrder = 0
         ViewStyle = vsReport
         OnMouseDown = JobsListMouseDown
-        ExplicitTop = -2
       end
     end
     object TabSheet4: TTabSheet
       Caption = 'TabSheet4'
-      ExplicitHeight = 490
       object ChangesLabel: TLabel
         AlignWithMargins = True
         Left = 3
@@ -117,7 +112,6 @@ object MainForm: TMainForm
         Width = 994
         Height = 13
         Align = alBottom
-        ExplicitTop = 425
         ExplicitWidth = 3
       end
       object PercentageLabel: TLabel
@@ -134,7 +128,6 @@ object MainForm: TMainForm
         Font.Name = 'Tahoma'
         Font.Style = [fsBold]
         ParentFont = False
-        ExplicitTop = 477
         ExplicitWidth = 20
       end
       object ProjectNameLabel: TLabel
@@ -150,7 +143,6 @@ object MainForm: TMainForm
         Font.Name = 'Tahoma'
         Font.Style = [fsBold]
         ParentFont = False
-        ExplicitTop = 368
         ExplicitWidth = 3
       end
       object SpeedLabel: TLabel
@@ -160,7 +152,6 @@ object MainForm: TMainForm
         Width = 994
         Height = 13
         Align = alBottom
-        ExplicitTop = 444
         ExplicitWidth = 3
       end
       object StateLabel: TLabel
@@ -170,7 +161,6 @@ object MainForm: TMainForm
         Width = 994
         Height = 13
         Align = alBottom
-        ExplicitTop = 406
         ExplicitWidth = 3
       end
       object TimeLabel: TLabel
@@ -180,7 +170,6 @@ object MainForm: TMainForm
         Width = 994
         Height = 13
         Align = alBottom
-        ExplicitTop = 387
         ExplicitWidth = 3
       end
       object ProgressBar: TsProgressBar
@@ -192,7 +181,6 @@ object MainForm: TMainForm
         Smooth = True
         SmoothReverse = True
         TabOrder = 0
-        ExplicitTop = 460
       end
       object FullLogList: TListView
         Left = 0
@@ -246,7 +234,6 @@ object MainForm: TMainForm
         ViewStyle = vsReport
         OnCustomDrawSubItem = FullLogListCustomDrawSubItem
         OnData = FullLogListData
-        ExplicitHeight = 365
       end
     end
   end
@@ -258,7 +245,6 @@ object MainForm: TMainForm
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 1
-    ExplicitTop = 0
     object tlb1: TToolBar
       Left = 0
       Top = 0
@@ -423,8 +409,6 @@ object MainForm: TMainForm
       Align = alRight
       Caption = 'Send email at the end'
       TabOrder = 1
-      ExplicitLeft = 751
-      ExplicitTop = -3
     end
     object ShutdownBtn: TCheckBox
       Left = 884
@@ -561,7 +545,7 @@ object MainForm: TMainForm
     Left = 408
     Top = 312
     Bitmap = {
-      494C01010D006800600030003000FFFFFFFF2000FFFFFFFFFFFFFFFF424D3600
+      494C01010D006800640030003000FFFFFFFF2000FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000C0000000C000000001002000000000000040
       0200000000000000000000000000000000000000000000000000000000000000
       000000000004000000080000000A0000000A0000000A0000000A0000000A0000
@@ -11445,14 +11429,17 @@ object MainForm: TMainForm
       Caption = 'Project'
       object N1: TMenuItem
         Caption = 'New'
+        ShortCut = 16462
         OnClick = AddNewProjectBtnClick
       end
       object E1: TMenuItem
         Caption = 'Edit'
+        ShortCut = 16453
         OnClick = EditProjectBtnClick
       end
       object D1: TMenuItem
         Caption = 'Delete'
+        ShortCut = 46
         OnClick = DeleteBtnClick
       end
     end
@@ -11460,14 +11447,17 @@ object MainForm: TMainForm
       Caption = 'Edit'
       object S1: TMenuItem
         Caption = 'Settings'
+        ShortCut = 16463
         OnClick = ConfEmailBtnClick
       end
       object L1: TMenuItem
         Caption = 'Logs'
+        ShortCut = 16460
         OnClick = LogsBtnClick
       end
       object S3: TMenuItem
         Caption = 'Select All'
+        ShortCut = 16449
         OnClick = SelectAllLabelClick
       end
       object S4: TMenuItem
@@ -11483,15 +11473,18 @@ object MainForm: TMainForm
       Caption = 'Operation'
       object R1: TMenuItem
         Caption = 'Run'
+        ShortCut = 16466
         OnClick = RunJobsBtnClick
       end
       object P2: TMenuItem
         Caption = 'Preview'
+        ShortCut = 16464
         OnClick = PreviewBtnClick
       end
       object S2: TMenuItem
         Caption = 'Stop'
         Enabled = False
+        ShortCut = 16467
         OnClick = StopBtnClick
       end
     end
