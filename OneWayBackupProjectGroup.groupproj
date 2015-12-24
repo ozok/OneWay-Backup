@@ -1,0 +1,48 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{F7F54310-5A3A-464E-B1B2-7458E0658330}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="OneWayBackup.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="TaskManager\OneWayBackupTaskManager.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="OneWayBackup">
+        <MSBuild Projects="OneWayBackup.dproj"/>
+    </Target>
+    <Target Name="OneWayBackup:Clean">
+        <MSBuild Projects="OneWayBackup.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="OneWayBackup:Make">
+        <MSBuild Projects="OneWayBackup.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="OneWayBackupTaskManager">
+        <MSBuild Projects="TaskManager\OneWayBackupTaskManager.dproj"/>
+    </Target>
+    <Target Name="OneWayBackupTaskManager:Clean">
+        <MSBuild Projects="TaskManager\OneWayBackupTaskManager.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="OneWayBackupTaskManager:Make">
+        <MSBuild Projects="TaskManager\OneWayBackupTaskManager.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="OneWayBackup;OneWayBackupTaskManager"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="OneWayBackup:Clean;OneWayBackupTaskManager:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="OneWayBackup:Make;OneWayBackupTaskManager:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>
