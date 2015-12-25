@@ -195,6 +195,7 @@ type
     function CheckIfFileCanBeAdded(const FilePath: string): Boolean;
     function CopyFileUsingSHFO(const Source: string; const Dest: string): Boolean;
     function DeleteFileUsingSHFO(const Source: string): Boolean;
+    function GenerateEmailShortInfoText(): string;
   public
     { Public declarations }
     FProjects: TProjectFiles;
@@ -634,6 +635,11 @@ begin
     Item.SubItems.Add(FFullLogItems.LogItems[Item.Index].Destination);
     Item.SubItems.Add(FFullLogItems.LogItems[Item.Index].Reason);
   end;
+end;
+
+function TMainForm.GenerateEmailShortInfoText: string;
+begin
+  Result := 'Copied: ' + FloatToStr(FCopiedCount) + sLineBreak + 'Deleted: ' + FloatToStr(FDeletedCount) + sLineBreak + 'Skipped: ' + FloatToStr(FSkippedCount) + sLineBreak + 'Errors: ' + FloatToStr(FErrorCount);
 end;
 
 procedure TMainForm.JobsListMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
@@ -1678,7 +1684,7 @@ begin
               0: // csv
                 begin
                   IdMessage1.Body.Clear;
-                  IdMessage1.Body.Text := 'Please see attachment for backup details.';
+                  IdMessage1.Body.Text := GenerateEmailShortInfoText;
                   IdMessage1.ContentType := 'multipart/mixed';
                   LAttachment := TIdAttachmentFile.Create(IdMessage1.MessageParts, LZipLogFile);
                 end;
@@ -1693,7 +1699,7 @@ begin
               2: // html zip
                 begin
                   IdMessage1.Body.Clear;
-                  IdMessage1.Body.Text := 'Please see attachment for backup details.';
+                  IdMessage1.Body.Text := GenerateEmailShortInfoText;
                   LAttachment := TIdAttachmentFile.Create(IdMessage1.MessageParts, LZipLogFile);
                   IdMessage1.ContentType := 'multipart/mixed';
                 end;
@@ -1749,6 +1755,9 @@ begin
         except
           on E: Exception do
             // ignored
+
+
+
 
         end;
       end;

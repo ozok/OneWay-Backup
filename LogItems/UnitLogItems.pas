@@ -168,6 +168,16 @@ begin
     LResult.Append('r:hover>td,.table-hover>tbody>tr:hover>th{background-color:#f5f5f5}');
     LResult.Append('</style>');
     LResult.Append('</head><body>');
+
+    if GetErrorCount > 0 then
+    begin
+      LResult.Append('<p style="color: red"><b>Errors: ' + FloatToStr(GetErrorCount) + '<b><br></p>');
+    end
+    else
+    begin
+      LResult.Append('<p>No errors<br></p>');
+    end;
+
     LResult.Append('<table class="table table-responsive table-bordered table-hover table-striped" style="font-size: 14px;">');
     LResult.Append('<thead><tr><th class="col-ok-1">#</th><th class="col-ok-2">Date</th><th class="col-ok-2">' + 'Type</th class="col-ok-6"><th>Source / Messsage</th><th class="col-ok-3">Operation</th><th class="col-ok-6">Destination</th><th class="col-ok-4">Reason</th></tr></thead><tbody>');
 
@@ -196,7 +206,6 @@ begin
       begin
         LColor := 'black';
       end;
-
       LResult.Append('<td class="col-ok-2" style="color: ' + LColor + '">' + FLogItems[i].LogType + '</td><td class="col-ok-6">' + FLogItems[i].Source + '</td><td class="col-ok-3">' + FLogItems[i].Operation + '</td><td class="col-ok-6">' + FLogItems[i].Destination + '</td><td class="col-ok-4">' + FLogItems[i].Reason + '</td></tr>');
     end;
 

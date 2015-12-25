@@ -52,10 +52,6 @@ object MainForm: TMainForm
     object TabSheet5: TTabSheet
       Caption = 'TabSheet5'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object JobsList: TListView
         Left = 0
         Top = 0
