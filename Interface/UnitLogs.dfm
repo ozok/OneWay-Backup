@@ -135,8 +135,6 @@ object LogsForm: TLogsForm
       ViewStyle = vsReport
       OnCustomDrawSubItem = ContentListCustomDrawSubItem
       OnData = ContentListData
-      ExplicitTop = 30
-      ExplicitHeight = 400
     end
   end
   object Info: TJvComputerInfoEx

@@ -11,7 +11,8 @@ uses
   UnitFileCompare in 'File\UnitFileCompare.pas',
   UnitFileCopyPair in 'File\UnitFileCopyPair.pas',
   UnitProjectFile in 'Project\UnitProjectFile.pas',
-  UnitProjectSettingsForm in 'Interface\UnitProjectSettingsForm.pas' {ProjectSettingsForm} ,
+  UnitProjectSettingsForm
+    in 'Interface\UnitProjectSettingsForm.pas' {ProjectSettingsForm} ,
   UnitFolderCreatePair in 'File\UnitFolderCreatePair.pas',
   Vcl.Themes,
   Vcl.Styles,

@@ -170,6 +170,7 @@ type
     FFileTypeSplitList: TStringList;
     FDeletedCount, FCopiedCount, FSkippedCount, FErrorCount: integer;
     FSourceDirectory, FDestDirectory: string;
+    FEmailMode: integer;
     procedure Log(LogItem: TLogItem);
     procedure ResetLogItem(var LogItem: TLogItem);
     procedure AddToFullLog();
@@ -542,6 +543,7 @@ begin
   FShutDown := False;
   FCompareMethodId := -1;
   FSendEmail := False;
+  FEmailMode := -1;
 
   // parse command lines
   for I := 1 to ParamCount do
@@ -583,7 +585,24 @@ begin
     else if LParamStr = '/method3' then
     begin
       FCompareMethodId := 3;
+    end
+    else if LParamStr = '/email0' then
+    begin
+      FEmailMode := 0;
+    end
+    else if LParamStr = '/email1' then
+    begin
+      FEmailMode := 1;
+    end
+    else if LParamStr = '/email2' then
+    begin
+      FEmailMode := 2;
     end;
+  end;
+
+  if FSendEmail and (FEmailMode > -1) then
+  begin
+    EmailConfForm.ReportTypeList.ItemIndex := FEmailMode;
   end;
 
   if FRun then
@@ -1711,16 +1730,16 @@ begin
             end;
             IdMessage1.Subject := 'OneWay Backup Report';
             try
+              if IdSMTP1.Connected then
+              begin
+                IdSMTP1.Disconnect(True);
+              end;
               IdSMTP1.Host := LHost;
               IdSMTP1.Port := StrToInt(LPort);
               IdSMTP1.AuthType := satDefault;
               IdSMTP1.Username := LUser;
               IdSMTP1.Password := LPass;
-              if IdSMTP1.Connected then
-              begin
-                IdSMTP1.Disconnect();
-              end;
-
+              IdSMTP1.UseTLS := utUseExplicitTLS;
               IdSMTP1.Connect;
               IdSMTP1.Send(IdMessage1);
               ResetLogItem(FLogLineToAdd);
