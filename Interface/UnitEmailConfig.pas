@@ -146,6 +146,11 @@ begin
       IdSMTP1.AuthType := satDefault;
       IdSMTP1.Username := UserNameEdit.Text;
       IdSMTP1.Password := PassEdit.Text;
+      if IdSMTP1.Connected then
+      begin
+        IdSMTP1.Disconnect();
+      end;
+      IdSMTP1.UseTLS := utUseExplicitTLS;
       IdSMTP1.Connect;
       IdSMTP1.Send(IdMessage1);
       Application.MessageBox('Sent test email.', 'Info', MB_ICONINFORMATION);

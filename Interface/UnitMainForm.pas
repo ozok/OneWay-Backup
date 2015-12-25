@@ -912,6 +912,11 @@ begin
         OperationThread.Synchronize(AddToFullLog);
         FSourceDirectory := FProjects[j].SourceFolder;
         FDestDirectory := FProjects[J].DestFolder;
+
+        FLogLineToAdd.LogType := 'Info';
+        FLogLineToAdd.Source := 'Listing files';
+        OperationThread.Synchronize(AddToFullLog);
+
         // file types that will be ignored
         FFileTypeSplitList.DelimitedText := FProjects[J].IgnoredFileTypes;
 
@@ -1715,6 +1720,7 @@ begin
               begin
                 IdSMTP1.Disconnect();
               end;
+
               IdSMTP1.Connect;
               IdSMTP1.Send(IdMessage1);
               ResetLogItem(FLogLineToAdd);

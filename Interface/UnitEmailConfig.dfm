@@ -25,12 +25,8 @@ object EmailConfForm: TEmailConfForm
     ActivePage = TabSheet1
     Align = alClient
     TabOrder = 0
-    ExplicitWidth = 369
-    ExplicitHeight = 278
     object TabSheet1: TTabSheet
       Caption = 'Email Settings'
-      ExplicitWidth = 281
-      ExplicitHeight = 165
       DesignSize = (
         367
         276)
@@ -86,7 +82,7 @@ object EmailConfForm: TEmailConfForm
       object sLabel1: TLabel
         Left = 64
         Top = 218
-        Width = 279
+        Width = 281
         Height = 14
         Anchors = [akLeft, akTop, akRight]
         Caption = '!!!Your password will be saved in plain text!!!'
@@ -96,7 +92,6 @@ object EmailConfForm: TEmailConfForm
         Font.Name = 'Tahoma'
         Font.Style = [fsBold, fsUnderline]
         ParentFont = False
-        ExplicitWidth = 281
       end
       object CancelBtn: TButton
         Left = 203
@@ -107,7 +102,6 @@ object EmailConfForm: TEmailConfForm
         Caption = 'Cancel'
         TabOrder = 0
         OnClick = CancelBtnClick
-        ExplicitTop = 260
       end
       object FromEdit: TEdit
         Left = 64
@@ -122,7 +116,6 @@ object EmailConfForm: TEmailConfForm
         Font.Style = []
         ParentFont = False
         TabOrder = 1
-        ExplicitWidth = 291
       end
       object HostEdit: TEdit
         Left = 64
@@ -137,7 +130,6 @@ object EmailConfForm: TEmailConfForm
         Font.Style = []
         ParentFont = False
         TabOrder = 2
-        ExplicitWidth = 291
       end
       object PassEdit: TEdit
         Left = 64
@@ -153,7 +145,6 @@ object EmailConfForm: TEmailConfForm
         ParentFont = False
         PasswordChar = '*'
         TabOrder = 3
-        ExplicitWidth = 291
       end
       object PortEdit: TJvSpinEdit
         Left = 64
@@ -188,7 +179,6 @@ object EmailConfForm: TEmailConfForm
         Caption = 'Save'
         TabOrder = 6
         OnClick = SaveBtnClick
-        ExplicitTop = 260
       end
       object SendTestBtn: TButton
         Left = 3
@@ -199,7 +189,6 @@ object EmailConfForm: TEmailConfForm
         Caption = 'Send Test Mail'
         TabOrder = 7
         OnClick = SendTestBtnClick
-        ExplicitTop = 260
       end
       object ToEdit: TEdit
         Left = 64
@@ -214,7 +203,6 @@ object EmailConfForm: TEmailConfForm
         Font.Style = []
         ParentFont = False
         TabOrder = 8
-        ExplicitWidth = 291
       end
       object UserNameEdit: TEdit
         Left = 64
@@ -229,7 +217,6 @@ object EmailConfForm: TEmailConfForm
         Font.Style = []
         ParentFont = False
         TabOrder = 9
-        ExplicitWidth = 291
       end
     end
   end
@@ -244,7 +231,7 @@ object EmailConfForm: TEmailConfForm
     Recipients = <>
     ReplyTo = <>
     ConvertPreamble = True
-    Left = 269
+    Left = 245
     Top = 100
   end
   object IdSMTP1: TIdSMTP
@@ -261,7 +248,7 @@ object EmailConfForm: TEmailConfForm
     SSLOptions.Mode = sslmUnassigned
     SSLOptions.VerifyMode = []
     SSLOptions.VerifyDepth = 0
-    Left = 181
+    Left = 133
     Top = 104
   end
 end
