@@ -31,8 +31,8 @@ uses
   JvExComCtrls, JvComCtrls, Generics.Collections, Vcl.Menus, ShellAPI,
   UnitFolderCreatePair, IdMessage, IdComponent, IdTCPConnection, IdTCPClient,
   IdExplicitTLSClientServerBase, IdMessageClient, IdSMTPBase, IdSMTP,
-  JvThreadTimer, acProgressBar, IdIOHandler, IdIOHandlerSocket, IdIOHandlerStack,
-  IdSSL, IdSSLOpenSSL, IniFiles, System.ImageList, Vcl.ImgList, Vcl.Buttons,
+  JvThreadTimer, IdIOHandler, IdIOHandlerSocket, IdIOHandlerStack, IdSSL,
+  IdSSLOpenSSL, IniFiles, System.ImageList, Vcl.ImgList, Vcl.Buttons,
   JvComputerInfoEx, IOUtils, JvCaptionButton, JvTrayIcon, UnitLogItems,
   JvFormPlacement, JvAppStorage, JvAppIniStorage, IdText, IdAttachmentFile,
   IdAttachment, Vcl.ToolWin;
@@ -59,7 +59,6 @@ type
     PassedTimeTimer: TJvThreadTimer;
     IdSSLIOHandlerSocketOpenSSL1: TIdSSLIOHandlerSocketOpenSSL;
     ProgressTimer: TTimer;
-    ProgressBar: TsProgressBar;
     PercentageLabel: TLabel;
     SendEmailBtn: TCheckBox;
     Info: TJvComputerInfoEx;
@@ -113,6 +112,7 @@ type
     S3: TMenuItem;
     S4: TMenuItem;
     R2: TMenuItem;
+    ProgressBar: TProgressBar;
     procedure FormCreate(Sender: TObject);
     procedure RunJobsBtnClick(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -886,6 +886,7 @@ begin
         FItemIndex := J;
         OperationThread.Synchronize(JumpToItem);
 
+        // info about current project
         FCurrentProjectName := Format('%d/%d %s', [(j + 1), FProjects.Count, FProjects[J].ProjectName]);
         OperationThread.Synchronize(UpdateProjectName);
         ResetLogItem(FLogLineToAdd);
@@ -1217,6 +1218,7 @@ begin
                         OperationThread.Synchronize(AddToFullLog);
                         Inc(FErrorCount);
 
+                        // try using windows API
                         if not CopyFileUsingSHFO(LFileCopyAgainPairs[i].SourceFile, LFileCopyAgainPairs[i].DestFile) then
                         begin
                           ResetLogItem(FLogLineToAdd);
@@ -1408,6 +1410,7 @@ begin
                     begin
                       LDirsToDelete.Add(LDestDir);
 
+                      // todo: a procedure to do all these in itself
                       ResetLogItem(FLogLineToAdd);
                       FLogLineToAdd.LogType := 'Info';
                       FLogLineToAdd.Source := LSourceDir;
@@ -1593,7 +1596,9 @@ begin
     end;
   finally
     OperationThread.Synchronize(StopSpeedTimer);
-//    OperationThread.Synchronize(UpdateState);
+    // log file name.
+    // this file will be attached to the email.
+    // a csv file should always be saved.
     case EmailConfForm.ReportTypeList.ItemIndex of
       0:
         LLogFilePath := AppDataFolder + '\logs\' + FormatDateTime('ddmmyyyyhhnnss', Now) + '.csv';
@@ -1602,10 +1607,7 @@ begin
       2:
         LLogFilePath := AppDataFolder + '\logs\' + FormatDateTime('ddmmyyyyhhnnss', Now) + '.html';
     end;
-    ResetLogItem(FLogLineToAdd);
-    FLogLineToAdd.LogType := 'Info';
-    FLogLineToAdd.Source := LLogFilePath;
-    OperationThread.Synchronize(AddToFullLog);
+
     if FStop then
     begin
       ResetLogItem(FLogLineToAdd);
@@ -1622,12 +1624,13 @@ begin
     end;
     FStop := True;
 
+    // send email
     if (not FPreview) and (SendEmailBtn.Checked or FSendEmail) then
     begin
       FLogLineToAdd.LogType := 'Info';
       FLogLineToAdd.Source := 'Saving the log';
       OperationThread.Synchronize(AddToFullLog);
-        // write log file for attachment
+      // write log file for attachment
       FFullLogItems.WriteToFile(LLogFilePath, EmailConfForm.ReportTypeList.ItemIndex <> 0);
       case EmailConfForm.ReportTypeList.ItemIndex of
         0: // csv
@@ -1646,21 +1649,8 @@ begin
             LastLogFilePath := LLogFilePath;
           end;
       end;
-        // this will be sent as an attachment to the mail
-      try
-      except
-        on E: Exception do
-        begin
-          ResetLogItem(FLogLineToAdd);
-          FLogLineToAdd.LogType := 'Error';
-          FLogLineToAdd.Operation := 'Save log';
-          FLogLineToAdd.Reason := E.Message;
-          OperationThread.Synchronize(AddToFullLog);
-          Inc(FErrorCount);
-        end;
-      end;
 
-        // send email
+      // send email
       LEmailSetFile := TIniFile.Create(AppDataFolder + '\email.ini');
       try
         with LEmailSetFile do
@@ -1762,20 +1752,22 @@ begin
 
         end;
       end;
+    end;
 
-      try
-        FFullLogItems.WriteToFile(ChangeFileExt(LLogFilePath, '.csv'), False);
-        LastLogFilePath := LLogFilePath;
-      except
-        on E: Exception do
-        begin
-          ResetLogItem(FLogLineToAdd);
-          FLogLineToAdd.LogType := 'Error';
-          FLogLineToAdd.Operation := 'Save log';
-          FLogLineToAdd.Reason := E.Message;
-          OperationThread.Synchronize(AddToFullLog);
-          Inc(FErrorCount);
-        end;
+    // this is the csv file that will be show
+    // in logs list
+    try
+      FFullLogItems.WriteToFile(ChangeFileExt(LLogFilePath, '.csv'), False);
+      LastLogFilePath := LLogFilePath;
+    except
+      on E: Exception do
+      begin
+        ResetLogItem(FLogLineToAdd);
+        FLogLineToAdd.LogType := 'Error';
+        FLogLineToAdd.Operation := 'Save log';
+        FLogLineToAdd.Reason := E.Message;
+        OperationThread.Synchronize(AddToFullLog);
+        Inc(FErrorCount);
       end;
     end;
     // post operation stuff

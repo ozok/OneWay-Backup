@@ -44,7 +44,7 @@ object MainForm: TMainForm
     Top = 60
     Width = 1008
     Height = 515
-    ActivePage = TabSheet5
+    ActivePage = TabSheet4
     Align = alClient
     MultiLine = True
     Style = tsFlatButtons
@@ -52,6 +52,10 @@ object MainForm: TMainForm
     object TabSheet5: TTabSheet
       Caption = 'TabSheet5'
       ImageIndex = 1
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object JobsList: TListView
         Left = 0
         Top = 0
@@ -116,7 +120,7 @@ object MainForm: TMainForm
       end
       object PercentageLabel: TLabel
         Left = 0
-        Top = 471
+        Top = 454
         Width = 1000
         Height = 13
         Align = alBottom
@@ -172,16 +176,6 @@ object MainForm: TMainForm
         Align = alBottom
         ExplicitWidth = 3
       end
-      object ProgressBar: TsProgressBar
-        Left = 0
-        Top = 454
-        Width = 1000
-        Height = 17
-        Align = alBottom
-        Smooth = True
-        SmoothReverse = True
-        TabOrder = 0
-      end
       object FullLogList: TListView
         Left = 0
         Top = 0
@@ -230,10 +224,18 @@ object MainForm: TMainForm
         ReadOnly = True
         RowSelect = True
         ParentFont = False
-        TabOrder = 1
+        TabOrder = 0
         ViewStyle = vsReport
         OnCustomDrawSubItem = FullLogListCustomDrawSubItem
         OnData = FullLogListData
+      end
+      object ProgressBar: TProgressBar
+        Left = 0
+        Top = 467
+        Width = 1000
+        Height = 17
+        Align = alBottom
+        TabOrder = 1
       end
     end
   end
@@ -545,7 +547,7 @@ object MainForm: TMainForm
     Left = 408
     Top = 312
     Bitmap = {
-      494C01010D006800640030003000FFFFFFFF2000FFFFFFFFFFFFFFFF424D3600
+      494C01010D006800740030003000FFFFFFFF2000FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000C0000000C000000001002000000000000040
       0200000000000000000000000000000000000000000000000000000000000000
       000000000004000000080000000A0000000A0000000A0000000A0000000A0000
