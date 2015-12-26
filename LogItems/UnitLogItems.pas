@@ -171,11 +171,11 @@ begin
 
     if GetErrorCount > 0 then
     begin
-      LResult.Append('<p style="color: red"><b>Errors: ' + FloatToStr(GetErrorCount) + '<b><br></p>');
+      LResult.Append('<p style="color: red"><b>Error count: ' + FloatToStr(GetErrorCount) + '<b><br></p>');
     end
     else
     begin
-      LResult.Append('<p>No errors<br></p>');
+      LResult.Append('<p>No errors occured.<br></p>');
     end;
 
     LResult.Append('<table class="table table-responsive table-bordered table-hover table-striped" style="font-size: 14px;">');
