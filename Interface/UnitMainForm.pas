@@ -921,9 +921,6 @@ begin
         UpdateLogItem(INFO_MSG, 'Using ' + CompareMethodToStr(LCompareMethodId));
         OperationThread.Synchronize(AddToFullLog);
 
-        UpdateLogItem(INFO_MSG, FProjects[j].SourceFolder, FProjects[J].DestFolder);
-        OperationThread.Synchronize(AddToFullLog);
-
         UpdateLogItem(INFO_MSG, 'Listing files');
         OperationThread.Synchronize(AddToFullLog);
 
