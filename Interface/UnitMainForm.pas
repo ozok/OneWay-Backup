@@ -1188,7 +1188,6 @@ begin
                       begin
                         UpdateLogItem(ERROR_MSG, LFileCopyAgainPairs[i].SourceFile, LFileCopyAgainPairs[i].DestFile, '2nd copy attemp', E.Message);
                         OperationThread.Synchronize(AddToFullLog);
-                        Inc(FErrorCount);
 
                         // try using windows API
                         if not CopyFileUsingSHFO(LFileCopyAgainPairs[i].SourceFile, LFileCopyAgainPairs[i].DestFile) then
