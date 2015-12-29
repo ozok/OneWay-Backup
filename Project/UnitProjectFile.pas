@@ -35,8 +35,6 @@ type
     BufferSize: integer;
     IgnoredFileTypes: string;
     CompareMethod: integer;
-    AcceptedFileTypes: string;
-    NoEmptyFolder: Boolean;
   end;
 
   TProjectFiles = TList<TProjectFile>;

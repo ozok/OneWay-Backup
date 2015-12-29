@@ -3,7 +3,7 @@ object ProjectSettingsForm: TProjectSettingsForm
   Top = 0
   BorderStyle = bsToolWindow
   Caption = 'Project Settings'
-  ClientHeight = 377
+  ClientHeight = 308
   ClientWidth = 693
   Color = clBtnFace
   DoubleBuffered = True
@@ -18,7 +18,7 @@ object ProjectSettingsForm: TProjectSettingsForm
   OnShow = FormShow
   DesignSize = (
     693
-    377)
+    308)
   PixelsPerInch = 96
   TextHeight = 13
   object Label1: TLabel
@@ -51,26 +51,17 @@ object ProjectSettingsForm: TProjectSettingsForm
   end
   object Label5: TLabel
     Left = 8
-    Top = 285
+    Top = 216
     Width = 98
     Height = 13
     Caption = 'Buffer size (kbytes):'
   end
   object Label6: TLabel
     Left = 25
-    Top = 312
+    Top = 243
     Width = 86
     Height = 13
     Caption = 'Compare method:'
-  end
-  object Label7: TLabel
-    Left = 8
-    Top = 187
-    Width = 453
-    Height = 13
-    Caption = 
-      'File types to accept (only these file types will be processed). ' +
-      'Separate with ";" (.mp3;.avi;.zip)'
   end
   object ProjectNameEdit: TEdit
     AlignWithMargins = True
@@ -89,24 +80,24 @@ object ProjectSettingsForm: TProjectSettingsForm
   end
   object SaveProjectBtn: TButton
     Left = 540
-    Top = 344
+    Top = 275
     Width = 145
     Height = 25
     Anchors = [akRight, akBottom]
     Caption = 'Save'
-    TabOrder = 8
+    TabOrder = 7
     OnClick = SaveProjectBtnClick
-    ExplicitTop = 270
+    ExplicitTop = 344
   end
   object DeleteFromDestBtn: TCheckBox
     Left = 8
-    Top = 233
+    Top = 187
     Width = 342
     Height = 20
     Caption = 
       'Delete files in destination folder if they do not exist in sourc' +
       'e folder'
-    TabOrder = 5
+    TabOrder = 4
   end
   object IgnoreTypesEdit: TEdit
     AlignWithMargins = True
@@ -125,13 +116,13 @@ object ProjectSettingsForm: TProjectSettingsForm
   end
   object CompareMethodList: TComboBox
     Left = 117
-    Top = 309
+    Top = 240
     Width = 233
     Height = 21
     Style = csDropDownList
     Anchors = [akTop, akRight]
     ItemIndex = 0
-    TabOrder = 7
+    TabOrder = 6
     Text = 'Full File Search + Last Modified Date'
     Items.Strings = (
       'Full File Search + Last Modified Date'
@@ -146,7 +137,7 @@ object ProjectSettingsForm: TProjectSettingsForm
     Height = 67
     Anchors = [akTop, akRight]
     Caption = 'Switch Source with Destination'
-    TabOrder = 9
+    TabOrder = 8
     WordWrap = True
     OnClick = SwapFoldersBTnClick
   end
@@ -172,36 +163,13 @@ object ProjectSettingsForm: TProjectSettingsForm
   end
   object BufferEdit: TJvSpinEdit
     Left = 117
-    Top = 282
+    Top = 213
     Width = 125
     Height = 21
     CheckMinValue = True
     Alignment = taCenter
     ButtonKind = bkClassic
     Value = 8192.000000000000000000
-    TabOrder = 6
-  end
-  object AcceptedFileTypesEdit: TEdit
-    AlignWithMargins = True
-    Left = 8
-    Top = 206
-    Width = 677
-    Height = 21
-    AutoSize = False
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clBlack
-    Font.Height = -11
-    Font.Name = 'Tahoma'
-    Font.Style = []
-    ParentFont = False
-    TabOrder = 4
-  end
-  object NoEmptyFolderBtn: TCheckBox
-    Left = 8
-    Top = 259
-    Width = 289
-    Height = 17
-    Caption = 'Do not create empty folders, only when a file is copied'
-    TabOrder = 10
+    TabOrder = 5
   end
 end

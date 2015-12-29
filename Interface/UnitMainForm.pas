@@ -120,8 +120,9 @@ type
     Bevel3: TBevel;
     DeletedLabel: TLabel;
     ProgressBar: TGauge;
-    Panel1: TPanel;
+    ProgressPanel: TPanel;
     PercentageLabel: TLabel;
+    Bevel4: TBevel;
     procedure FormCreate(Sender: TObject);
     procedure RunJobsBtnClick(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -177,7 +178,6 @@ type
     FPreview: Boolean;
     FSendEmail: Boolean;
     FIgnoredFileTypesSplitList: TStringList;
-    FAcceptedFileTypesSplitList: TStringList;
     FDeletedCount, FCopiedCount, FSkippedCount, FErrorCount: integer;
     FSourceDirectory, FDestDirectory: string;
     FEmailMode: integer;
@@ -205,7 +205,6 @@ type
     procedure SaveSettings;
     procedure LoadSettings;
     function CheckIfFileCanBeAdded(const FilePath: string): Boolean;
-    function CheckIfFileShouldBeAdded(const FilePath: string): Boolean;
     function CopyFileUsingSHFO(const Source: string; const Dest: string): Boolean;
     function DeleteFileUsingSHFO(const Source: string): Boolean;
     function GenerateEmailShortInfoText(): string;
@@ -290,29 +289,6 @@ begin
       if LFileExt = FIgnoredFileTypesSplitList[i].ToLower then
       begin
         Result := False;
-        Break;
-      end;
-    end;
-  end;
-end;
-
-function TMainForm.CheckIfFileShouldBeAdded(const FilePath: string): Boolean;
-var
-  I: Integer;
-  LFileExt: string;
-begin
-  Result := False;
-  // file's extension
-  LFileExt := ExtractFileExt(FilePath).ToLower;
-
-  if FAcceptedFileTypesSplitList.Count > 0 then
-  begin
-    for I := 0 to FAcceptedFileTypesSplitList.Count - 1 do
-    begin
-      // if file's extension is in ignore list
-      if LFileExt = FAcceptedFileTypesSplitList[i].ToLower then
-      begin
-        Result := True;
         Break;
       end;
     end;
@@ -531,9 +507,6 @@ begin
   FIgnoredFileTypesSplitList := TStringList.Create;
   FIgnoredFileTypesSplitList.StrictDelimiter := True;
   FIgnoredFileTypesSplitList.Delimiter := ';';
-  FAcceptedFileTypesSplitList := TStringList.Create;
-  FAcceptedFileTypesSplitList.StrictDelimiter := True;
-  FAcceptedFileTypesSplitList.Delimiter := ';';
 
   ToolBar.Height := 54;
 end;
@@ -551,7 +524,6 @@ begin
   end;
   FFullLogItems.Free;
   FIgnoredFileTypesSplitList.Free;
-  FAcceptedFileTypesSplitList.Free;
 end;
 
 procedure TMainForm.FormResize(Sender: TObject);
@@ -774,7 +746,7 @@ begin
           // are added to projects
 
           // creating or editing a project
-          if LSplitList.Count >= 9 then
+          if LSplitList.Count >= 8 then
           begin
             LProject := TProjectFile.Create();
 
@@ -792,18 +764,6 @@ begin
             LProject.BufferSize := LSplitList[5].ToInteger();
             LProject.IgnoredFileTypes := LSplitList[6];
             LProject.CompareMethod := LSplitList[7].ToInteger();
-            if LSplitList.Count > 8 then
-            begin
-              LProject.AcceptedFileTypes := LSplitList[8];
-            end;
-            if LSplitList.Count > 9 then
-            begin
-              LProject.NoEmptyFolder := LSplitList[9] = 'True'
-            end
-            else
-            begin
-              LProject.NoEmptyFolder := False;
-            end;
             FProjects.Add(LProject);
 
             LItem := JobsList.Items.Add;
@@ -812,7 +772,6 @@ begin
             LItem.SubItems.Add(LProject.DestFolder);
             LItem.SubItems.Add(LProject.BufferSize.ToString());
             LItem.SubItems.Add(LProject.IgnoredFileTypes);
-            LItem.SubItems.Add(LProject.AcceptedFileTypes);
             LItem.SubItems.Add(CompareMethodToStr(LProject.CompareMethod));
             LItem.Checked := LProject.Active;
           end;
@@ -976,8 +935,6 @@ begin
 
         // file types that will be ignored
         FIgnoredFileTypesSplitList.DelimitedText := FProjects[J].IgnoredFileTypes;
-        // file types that will be added only
-        FAcceptedFileTypesSplitList.DelimitedText := FProjects[J].AcceptedFileTypes;
 
         // reset lists
         FProgress := 0;
@@ -1064,7 +1021,7 @@ begin
 {$ENDREGION}
 
             // list directories that will be created at destination
-            if (not FStop) and (not FProjects[J].NoEmptyFolder) then
+            if not FStop then
             begin
               LDirsToCreate := TFolderCreatePairs.Create;
               try
@@ -1816,7 +1773,7 @@ begin
     end;
     for I := 0 to FProjects.Count - 1 do
     begin
-      LLine := FProjects[i].SourceFolder + '|' + FProjects[i].DestFolder + '|' + FProjects[i].ProjectName + '|' + BoolToStr(FProjects[i].Active, True) + '|' + BoolToStr(FProjects[i].DeleteFromDest, True) + '|' + FProjects[i].BufferSize.ToString() + '|' + FProjects[i].IgnoredFileTypes + '|' + FProjects[i].CompareMethod.ToString + '|' + FProjects[i].AcceptedFileTypes + '|' + BoolToStr(FProjects[i].NoEmptyFolder, True);
+      LLine := FProjects[i].SourceFolder + '|' + FProjects[i].DestFolder + '|' + FProjects[i].ProjectName + '|' + BoolToStr(FProjects[i].Active, True) + '|' + BoolToStr(FProjects[i].DeleteFromDest, True) + '|' + FProjects[i].BufferSize.ToString() + '|' + FProjects[i].IgnoredFileTypes + '|' + FProjects[i].CompareMethod.ToString;
       LProjectFile.Add(LLine);
     end;
   finally
@@ -1858,12 +1815,6 @@ begin
   begin
     FFiles.Add(AName);
     FStateMsg := 'Found ' + FFiles.Count.ToString + ' files';
-  end
-  else if CheckIfFileShouldBeAdded(AName) then
-  begin
-    FFiles.Add(AName);
-    FStateMsg := 'Found ' + FFiles.Count.ToString + ' files';
-
   end;
 end;
 

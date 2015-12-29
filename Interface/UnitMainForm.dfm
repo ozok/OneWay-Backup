@@ -84,11 +84,6 @@ object MainForm: TMainForm
             Width = 100
           end
           item
-            Alignment = taCenter
-            Caption = 'Accepted Types'
-            Width = 100
-          end
-          item
             Caption = 'Compare Method'
           end>
         Font.Charset = DEFAULT_CHARSET
@@ -108,11 +103,20 @@ object MainForm: TMainForm
     end
     object TabSheet4: TTabSheet
       Caption = 'TabSheet4'
+      object Bevel4: TBevel
+        Left = 0
+        Top = 451
+        Width = 1000
+        Height = 3
+        Align = alBottom
+        Shape = bsBottomLine
+        ExplicitTop = 453
+      end
       object FullLogList: TListView
         Left = 0
         Top = 0
         Width = 1000
-        Height = 357
+        Height = 351
         Align = alClient
         BorderStyle = bsNone
         Columns = <
@@ -147,7 +151,7 @@ object MainForm: TMainForm
           end>
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
-        Font.Height = -11
+        Font.Height = -15
         Font.Name = 'Tahoma'
         Font.Style = []
         GridLines = True
@@ -160,55 +164,50 @@ object MainForm: TMainForm
         ViewStyle = vsReport
         OnCustomDrawSubItem = FullLogListCustomDrawSubItem
         OnData = FullLogListData
-        ExplicitHeight = 359
+        ExplicitHeight = 346
       end
       object BottomPanel: TPanel
         Left = 0
-        Top = 357
+        Top = 351
         Width = 1000
-        Height = 127
+        Height = 100
         Align = alBottom
-        AutoSize = True
         BevelOuter = bvNone
         TabOrder = 1
-        ExplicitTop = 328
+        ExplicitTop = 354
         object Bevel3: TBevel
           Left = 895
           Top = 0
           Width = 1
-          Height = 127
+          Height = 100
           Align = alRight
           Shape = bsLeftLine
           ExplicitLeft = 863
+          ExplicitHeight = 127
         end
         object BottomClientPanel: TPanel
           Left = 0
           Top = 0
           Width = 895
-          Height = 127
+          Height = 100
           Align = alClient
           AutoSize = True
           BevelOuter = bvNone
           TabOrder = 0
-          ExplicitLeft = 1
-          ExplicitTop = 1
-          ExplicitWidth = 998
-          ExplicitHeight = 125
+          ExplicitHeight = 127
           object ChangesLabel: TLabel
             AlignWithMargins = True
             Left = 3
-            Top = 24
+            Top = 27
             Width = 889
             Height = 13
             Align = alBottom
-            ExplicitLeft = 4
-            ExplicitTop = 61
-            ExplicitWidth = 992
+            ExplicitWidth = 3
           end
           object ProjectNameLabel: TLabel
             AlignWithMargins = True
             Left = 3
-            Top = 5
+            Top = 8
             Width = 889
             Height = 13
             Align = alBottom
@@ -218,164 +217,160 @@ object MainForm: TMainForm
             Font.Name = 'Tahoma'
             Font.Style = [fsBold]
             ParentFont = False
-            ExplicitLeft = 4
-            ExplicitTop = 0
-            ExplicitWidth = 906
+            ExplicitWidth = 3
           end
           object SpeedLabel: TLabel
             AlignWithMargins = True
             Left = 3
-            Top = 62
+            Top = 65
             Width = 889
             Height = 13
             Align = alBottom
-            ExplicitLeft = 1
-            ExplicitTop = 78
-            ExplicitWidth = 906
+            ExplicitWidth = 3
           end
           object StateLabel: TLabel
             AlignWithMargins = True
             Left = 3
-            Top = 43
+            Top = 46
             Width = 889
             Height = 13
             Align = alBottom
-            ExplicitLeft = 4
-            ExplicitTop = 42
-            ExplicitWidth = 992
+            ExplicitWidth = 3
           end
           object TimeLabel: TLabel
             AlignWithMargins = True
             Left = 3
-            Top = 81
+            Top = 84
             Width = 889
             Height = 13
             Align = alBottom
-            ExplicitLeft = 4
-            ExplicitTop = 23
-            ExplicitWidth = 992
-          end
-          object Panel1: TPanel
-            Left = 0
-            Top = 97
-            Width = 895
-            Height = 30
-            Align = alBottom
-            BevelOuter = bvNone
-            Caption = 'Panel1'
-            TabOrder = 0
-            object ProgressBar: TGauge
-              Left = 80
-              Top = 0
-              Width = 815
-              Height = 30
-              Align = alClient
-              BackColor = clBtnFace
-              BorderStyle = bsNone
-              ForeColor = clActiveCaption
-              ParentShowHint = False
-              Progress = 0
-              ShowHint = False
-              ShowText = False
-              ExplicitLeft = 0
-              ExplicitTop = 89
-              ExplicitWidth = 895
-              ExplicitHeight = 25
-            end
-            object PercentageLabel: TLabel
-              Left = 0
-              Top = 0
-              Width = 80
-              Height = 30
-              Align = alLeft
-              Alignment = taCenter
-              AutoSize = False
-              Caption = '0%'
-              Font.Charset = DEFAULT_CHARSET
-              Font.Color = clWindowText
-              Font.Height = -13
-              Font.Name = 'Tahoma'
-              Font.Style = [fsBold]
-              ParentFont = False
-              Layout = tlCenter
-              ExplicitLeft = 432
-              ExplicitTop = 16
-              ExplicitHeight = 13
-            end
+            ExplicitWidth = 3
           end
         end
         object BottomSummarPanel: TPanel
           Left = 896
           Top = 0
           Width = 104
-          Height = 127
+          Height = 100
           Align = alRight
+          AutoSize = True
           BevelOuter = bvNone
           TabOrder = 1
+          ExplicitHeight = 127
           object CopiedLabel: TLabel
             AlignWithMargins = True
             Left = 3
             Top = 3
             Width = 98
-            Height = 16
+            Height = 18
             Align = alTop
             Caption = 'Copied:'
             Font.Charset = DEFAULT_CHARSET
             Font.Color = clGreen
-            Font.Height = -13
+            Font.Height = -15
             Font.Name = 'Tahoma'
             Font.Style = [fsBold]
             ParentFont = False
-            ExplicitWidth = 48
+            ExplicitWidth = 56
           end
           object SkippedLabel: TLabel
             AlignWithMargins = True
             Left = 3
-            Top = 25
+            Top = 27
             Width = 98
-            Height = 16
+            Height = 18
             Align = alTop
             Caption = 'Skipped:'
             Font.Charset = DEFAULT_CHARSET
             Font.Color = clHighlight
-            Font.Height = -13
+            Font.Height = -15
             Font.Name = 'Tahoma'
             Font.Style = [fsBold]
             ParentFont = False
-            ExplicitWidth = 55
+            ExplicitWidth = 65
           end
           object ErrorLabel: TLabel
             AlignWithMargins = True
             Left = 3
-            Top = 47
+            Top = 51
             Width = 98
-            Height = 16
+            Height = 18
             Align = alTop
             Caption = 'Errors:'
             Font.Charset = DEFAULT_CHARSET
             Font.Color = clRed
-            Font.Height = -13
+            Font.Height = -15
             Font.Name = 'Tahoma'
             Font.Style = [fsBold]
             ParentFont = False
-            ExplicitWidth = 45
+            ExplicitTop = 49
+            ExplicitWidth = 52
           end
           object DeletedLabel: TLabel
             AlignWithMargins = True
             Left = 3
-            Top = 69
+            Top = 75
             Width = 98
-            Height = 14
+            Height = 18
             Align = alTop
             Caption = 'Deleted:'
             Font.Charset = DEFAULT_CHARSET
             Font.Color = clMaroon
-            Font.Height = -12
+            Font.Height = -15
             Font.Name = 'Tahoma'
             Font.Style = [fsBold]
             ParentFont = False
-            ExplicitWidth = 51
+            ExplicitTop = 71
+            ExplicitWidth = 63
           end
+        end
+      end
+      object ProgressPanel: TPanel
+        Left = 0
+        Top = 454
+        Width = 1000
+        Height = 30
+        Align = alBottom
+        BevelOuter = bvNone
+        Caption = 'ProgressPanel'
+        TabOrder = 2
+        ExplicitLeft = 3
+        ExplicitTop = 468
+        object ProgressBar: TGauge
+          Left = 80
+          Top = 0
+          Width = 920
+          Height = 30
+          Align = alClient
+          BackColor = clBtnFace
+          BorderStyle = bsNone
+          ForeColor = clActiveCaption
+          ParentShowHint = False
+          Progress = 0
+          ShowHint = False
+          ShowText = False
+          ExplicitLeft = 0
+          ExplicitTop = 89
+          ExplicitWidth = 895
+          ExplicitHeight = 25
+        end
+        object PercentageLabel: TLabel
+          Left = 0
+          Top = 0
+          Width = 80
+          Height = 30
+          Align = alLeft
+          Alignment = taCenter
+          AutoSize = False
+          Caption = '0%'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -13
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
+          Layout = tlCenter
+          ExplicitTop = -6
         end
       end
     end
@@ -688,7 +683,7 @@ object MainForm: TMainForm
     Left = 408
     Top = 312
     Bitmap = {
-      494C01010D0068008C0030003000FFFFFFFF2000FFFFFFFFFFFFFFFF424D3600
+      494C01010D006800900030003000FFFFFFFF2000FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000C0000000C000000001002000000000000040
       0200000000000000000000000000000000000000000000000000000000000000
       000000000004000000080000000A0000000A0000000A0000000A0000000A0000
