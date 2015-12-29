@@ -1194,7 +1194,6 @@ begin
                         begin
                           UpdateLogItem(ERROR_MSG, LFileCopyAgainPairs[i].SourceFile, LFileCopyAgainPairs[i].DestFile, 'SHFileOperations file copy', E.Message);
                           OperationThread.Synchronize(AddToFullLog);
-                          Inc(FErrorCount);
                         end
                         else
                         begin
