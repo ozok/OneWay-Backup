@@ -80,13 +80,16 @@ object MainForm: TMainForm
           end
           item
             Alignment = taCenter
-            Caption = 'Ignored File Types'
-            Width = 125
+            Caption = 'Ignored Types'
+            Width = 100
           end
           item
             Alignment = taCenter
+            Caption = 'Accepted Types'
+            Width = 100
+          end
+          item
             Caption = 'Compare Method'
-            Width = 120
           end>
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
@@ -105,78 +108,11 @@ object MainForm: TMainForm
     end
     object TabSheet4: TTabSheet
       Caption = 'TabSheet4'
-      object ChangesLabel: TLabel
-        AlignWithMargins = True
-        Left = 3
-        Top = 419
-        Width = 994
-        Height = 13
-        Align = alBottom
-        ExplicitWidth = 3
-      end
-      object PercentageLabel: TLabel
-        Left = 0
-        Top = 454
-        Width = 1000
-        Height = 13
-        Align = alBottom
-        Alignment = taCenter
-        Caption = '0%'
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = clWindowText
-        Font.Height = -11
-        Font.Name = 'Tahoma'
-        Font.Style = [fsBold]
-        ParentFont = False
-        ExplicitWidth = 20
-      end
-      object ProjectNameLabel: TLabel
-        AlignWithMargins = True
-        Left = 3
-        Top = 362
-        Width = 994
-        Height = 13
-        Align = alBottom
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = clWindowText
-        Font.Height = -11
-        Font.Name = 'Tahoma'
-        Font.Style = [fsBold]
-        ParentFont = False
-        ExplicitWidth = 3
-      end
-      object SpeedLabel: TLabel
-        AlignWithMargins = True
-        Left = 3
-        Top = 438
-        Width = 994
-        Height = 13
-        Align = alBottom
-        ExplicitWidth = 3
-      end
-      object StateLabel: TLabel
-        AlignWithMargins = True
-        Left = 3
-        Top = 400
-        Width = 994
-        Height = 13
-        Align = alBottom
-        ExplicitWidth = 3
-      end
-      object TimeLabel: TLabel
-        AlignWithMargins = True
-        Left = 3
-        Top = 381
-        Width = 994
-        Height = 13
-        Align = alBottom
-        ExplicitWidth = 3
-      end
       object FullLogList: TListView
         Left = 0
         Top = 0
         Width = 1000
-        Height = 359
+        Height = 357
         Align = alClient
         BorderStyle = bsNone
         Columns = <
@@ -224,14 +160,223 @@ object MainForm: TMainForm
         ViewStyle = vsReport
         OnCustomDrawSubItem = FullLogListCustomDrawSubItem
         OnData = FullLogListData
+        ExplicitHeight = 359
       end
-      object ProgressBar: TProgressBar
+      object BottomPanel: TPanel
         Left = 0
-        Top = 467
+        Top = 357
         Width = 1000
-        Height = 17
+        Height = 127
         Align = alBottom
+        AutoSize = True
+        BevelOuter = bvNone
         TabOrder = 1
+        ExplicitTop = 328
+        object Bevel3: TBevel
+          Left = 895
+          Top = 0
+          Width = 1
+          Height = 127
+          Align = alRight
+          Shape = bsLeftLine
+          ExplicitLeft = 863
+        end
+        object BottomClientPanel: TPanel
+          Left = 0
+          Top = 0
+          Width = 895
+          Height = 127
+          Align = alClient
+          AutoSize = True
+          BevelOuter = bvNone
+          TabOrder = 0
+          ExplicitLeft = 1
+          ExplicitTop = 1
+          ExplicitWidth = 998
+          ExplicitHeight = 125
+          object ChangesLabel: TLabel
+            AlignWithMargins = True
+            Left = 3
+            Top = 24
+            Width = 889
+            Height = 13
+            Align = alBottom
+            ExplicitLeft = 4
+            ExplicitTop = 61
+            ExplicitWidth = 992
+          end
+          object ProjectNameLabel: TLabel
+            AlignWithMargins = True
+            Left = 3
+            Top = 5
+            Width = 889
+            Height = 13
+            Align = alBottom
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = [fsBold]
+            ParentFont = False
+            ExplicitLeft = 4
+            ExplicitTop = 0
+            ExplicitWidth = 906
+          end
+          object SpeedLabel: TLabel
+            AlignWithMargins = True
+            Left = 3
+            Top = 62
+            Width = 889
+            Height = 13
+            Align = alBottom
+            ExplicitLeft = 1
+            ExplicitTop = 78
+            ExplicitWidth = 906
+          end
+          object StateLabel: TLabel
+            AlignWithMargins = True
+            Left = 3
+            Top = 43
+            Width = 889
+            Height = 13
+            Align = alBottom
+            ExplicitLeft = 4
+            ExplicitTop = 42
+            ExplicitWidth = 992
+          end
+          object TimeLabel: TLabel
+            AlignWithMargins = True
+            Left = 3
+            Top = 81
+            Width = 889
+            Height = 13
+            Align = alBottom
+            ExplicitLeft = 4
+            ExplicitTop = 23
+            ExplicitWidth = 992
+          end
+          object Panel1: TPanel
+            Left = 0
+            Top = 97
+            Width = 895
+            Height = 30
+            Align = alBottom
+            BevelOuter = bvNone
+            Caption = 'Panel1'
+            TabOrder = 0
+            object ProgressBar: TGauge
+              Left = 80
+              Top = 0
+              Width = 815
+              Height = 30
+              Align = alClient
+              BackColor = clBtnFace
+              BorderStyle = bsNone
+              ForeColor = clActiveCaption
+              ParentShowHint = False
+              Progress = 0
+              ShowHint = False
+              ShowText = False
+              ExplicitLeft = 0
+              ExplicitTop = 89
+              ExplicitWidth = 895
+              ExplicitHeight = 25
+            end
+            object PercentageLabel: TLabel
+              Left = 0
+              Top = 0
+              Width = 80
+              Height = 30
+              Align = alLeft
+              Alignment = taCenter
+              AutoSize = False
+              Caption = '0%'
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -13
+              Font.Name = 'Tahoma'
+              Font.Style = [fsBold]
+              ParentFont = False
+              Layout = tlCenter
+              ExplicitLeft = 432
+              ExplicitTop = 16
+              ExplicitHeight = 13
+            end
+          end
+        end
+        object BottomSummarPanel: TPanel
+          Left = 896
+          Top = 0
+          Width = 104
+          Height = 127
+          Align = alRight
+          BevelOuter = bvNone
+          TabOrder = 1
+          object CopiedLabel: TLabel
+            AlignWithMargins = True
+            Left = 3
+            Top = 3
+            Width = 98
+            Height = 16
+            Align = alTop
+            Caption = 'Copied:'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clGreen
+            Font.Height = -13
+            Font.Name = 'Tahoma'
+            Font.Style = [fsBold]
+            ParentFont = False
+            ExplicitWidth = 48
+          end
+          object SkippedLabel: TLabel
+            AlignWithMargins = True
+            Left = 3
+            Top = 25
+            Width = 98
+            Height = 16
+            Align = alTop
+            Caption = 'Skipped:'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clHighlight
+            Font.Height = -13
+            Font.Name = 'Tahoma'
+            Font.Style = [fsBold]
+            ParentFont = False
+            ExplicitWidth = 55
+          end
+          object ErrorLabel: TLabel
+            AlignWithMargins = True
+            Left = 3
+            Top = 47
+            Width = 98
+            Height = 16
+            Align = alTop
+            Caption = 'Errors:'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clRed
+            Font.Height = -13
+            Font.Name = 'Tahoma'
+            Font.Style = [fsBold]
+            ParentFont = False
+            ExplicitWidth = 45
+          end
+          object DeletedLabel: TLabel
+            AlignWithMargins = True
+            Left = 3
+            Top = 69
+            Width = 98
+            Height = 14
+            Align = alTop
+            Caption = 'Deleted:'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clMaroon
+            Font.Height = -12
+            Font.Name = 'Tahoma'
+            Font.Style = [fsBold]
+            ParentFont = False
+            ExplicitWidth = 51
+          end
+        end
       end
     end
   end

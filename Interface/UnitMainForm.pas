@@ -35,7 +35,7 @@ uses
   IdSSLOpenSSL, IniFiles, System.ImageList, Vcl.ImgList, Vcl.Buttons,
   JvComputerInfoEx, IOUtils, JvCaptionButton, JvTrayIcon, UnitLogItems,
   JvFormPlacement, JvAppStorage, JvAppIniStorage, IdText, IdAttachmentFile,
-  IdAttachment, Vcl.ToolWin;
+  IdAttachment, Vcl.ToolWin, Vcl.Samples.Gauges;
 
 type
   TMainForm = class(TForm)
@@ -59,7 +59,6 @@ type
     PassedTimeTimer: TJvThreadTimer;
     IdSSLIOHandlerSocketOpenSSL1: TIdSSLIOHandlerSocketOpenSSL;
     ProgressTimer: TTimer;
-    PercentageLabel: TLabel;
     SendEmailBtn: TCheckBox;
     Info: TJvComputerInfoEx;
     ShutdownBtn: TCheckBox;
@@ -112,7 +111,17 @@ type
     S3: TMenuItem;
     S4: TMenuItem;
     R2: TMenuItem;
-    ProgressBar: TProgressBar;
+    BottomPanel: TPanel;
+    BottomClientPanel: TPanel;
+    BottomSummarPanel: TPanel;
+    CopiedLabel: TLabel;
+    SkippedLabel: TLabel;
+    ErrorLabel: TLabel;
+    Bevel3: TBevel;
+    DeletedLabel: TLabel;
+    ProgressBar: TGauge;
+    Panel1: TPanel;
+    PercentageLabel: TLabel;
     procedure FormCreate(Sender: TObject);
     procedure RunJobsBtnClick(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -167,7 +176,8 @@ type
     FCompareMethodId: integer;
     FPreview: Boolean;
     FSendEmail: Boolean;
-    FFileTypeSplitList: TStringList;
+    FIgnoredFileTypesSplitList: TStringList;
+    FAcceptedFileTypesSplitList: TStringList;
     FDeletedCount, FCopiedCount, FSkippedCount, FErrorCount: integer;
     FSourceDirectory, FDestDirectory: string;
     FEmailMode: integer;
@@ -189,11 +199,13 @@ type
     procedure UpdateMaxProgres();
     procedure JumpToItem();
     procedure UpdateProjectName;
+    procedure UpdatedSummary;
     procedure DisableUI;
     procedure EnableUI;
     procedure SaveSettings;
     procedure LoadSettings;
     function CheckIfFileCanBeAdded(const FilePath: string): Boolean;
+    function CheckIfFileShouldBeAdded(const FilePath: string): Boolean;
     function CopyFileUsingSHFO(const Source: string; const Dest: string): Boolean;
     function DeleteFileUsingSHFO(const Source: string): Boolean;
     function GenerateEmailShortInfoText(): string;
@@ -270,14 +282,37 @@ begin
   // file's extension
   LFileExt := ExtractFileExt(FilePath).ToLower;
 
-  if FFileTypeSplitList.Count > 0 then
+  if FIgnoredFileTypesSplitList.Count > 0 then
   begin
-    for I := 0 to FFileTypeSplitList.Count - 1 do
+    for I := 0 to FIgnoredFileTypesSplitList.Count - 1 do
     begin
       // if file's extension is in ignore list
-      if LFileExt = FFileTypeSplitList[i].ToLower then
+      if LFileExt = FIgnoredFileTypesSplitList[i].ToLower then
       begin
         Result := False;
+        Break;
+      end;
+    end;
+  end;
+end;
+
+function TMainForm.CheckIfFileShouldBeAdded(const FilePath: string): Boolean;
+var
+  I: Integer;
+  LFileExt: string;
+begin
+  Result := False;
+  // file's extension
+  LFileExt := ExtractFileExt(FilePath).ToLower;
+
+  if FAcceptedFileTypesSplitList.Count > 0 then
+  begin
+    for I := 0 to FAcceptedFileTypesSplitList.Count - 1 do
+    begin
+      // if file's extension is in ignore list
+      if LFileExt = FAcceptedFileTypesSplitList[i].ToLower then
+      begin
+        Result := True;
         Break;
       end;
     end;
@@ -409,7 +444,7 @@ begin
   ChangesLabel.Caption := '';
   SpeedLabel.Caption := '';
   TimeLabel.Caption := '';
-  ProgressBar.Position := 0;
+  ProgressBar.Progress := 0;
   Taskbar1.ProgressValue := 0;
   PercentageLabel.Caption := '0%';
   Self.Caption := PROGRAM_TITLE;
@@ -493,9 +528,13 @@ begin
   GeneralPage.Pages[0].TabVisible := False;
   GeneralPage.Pages[1].TabVisible := False;
   GeneralPage.ActivePageIndex := 0;
-  FFileTypeSplitList := TStringList.Create;
-  FFileTypeSplitList.StrictDelimiter := True;
-  FFileTypeSplitList.Delimiter := ';';
+  FIgnoredFileTypesSplitList := TStringList.Create;
+  FIgnoredFileTypesSplitList.StrictDelimiter := True;
+  FIgnoredFileTypesSplitList.Delimiter := ';';
+  FAcceptedFileTypesSplitList := TStringList.Create;
+  FAcceptedFileTypesSplitList.StrictDelimiter := True;
+  FAcceptedFileTypesSplitList.Delimiter := ';';
+
   ToolBar.Height := 54;
 end;
 
@@ -511,7 +550,8 @@ begin
     FProjects[i].Free;
   end;
   FFullLogItems.Free;
-  FFileTypeSplitList.Free;
+  FIgnoredFileTypesSplitList.Free;
+  FAcceptedFileTypesSplitList.Free;
 end;
 
 procedure TMainForm.FormResize(Sender: TObject);
@@ -527,15 +567,15 @@ var
 begin
   // place label on the progressbar
   // looks better this way
-  PercentageLabel.Parent := ProgressBar;
-  PercentageLabel.AutoSize := False;
-  PercentageLabel.Transparent := True;
-  PercentageLabel.Top := 0;
-  PercentageLabel.Left := 0;
-  PercentageLabel.Width := ProgressBar.ClientWidth;
-  PercentageLabel.Height := ProgressBar.ClientHeight;
-  PercentageLabel.Alignment := taCenter;
-  PercentageLabel.Layout := tlCenter;
+//  PercentageLabel.Parent := ProgressBar.;
+//  PercentageLabel.AutoSize := False;
+//  PercentageLabel.Transparent := True;
+//  PercentageLabel.Top := 0;
+//  PercentageLabel.Left := 0;
+//  PercentageLabel.Width := ProgressBar.ClientWidth;
+//  PercentageLabel.Height := ProgressBar.ClientHeight;
+//  PercentageLabel.Alignment := taCenter;
+//  PercentageLabel.Layout := tlCenter;
 
   Self.Caption := PROGRAM_TITLE;
   LoadProjects;
@@ -734,7 +774,7 @@ begin
           // are added to projects
 
           // creating or editing a project
-          if LSplitList.Count = 8 then
+          if LSplitList.Count >= 9 then
           begin
             LProject := TProjectFile.Create();
 
@@ -752,6 +792,18 @@ begin
             LProject.BufferSize := LSplitList[5].ToInteger();
             LProject.IgnoredFileTypes := LSplitList[6];
             LProject.CompareMethod := LSplitList[7].ToInteger();
+            if LSplitList.Count > 8 then
+            begin
+              LProject.AcceptedFileTypes := LSplitList[8];
+            end;
+            if LSplitList.Count > 9 then
+            begin
+              LProject.NoEmptyFolder := LSplitList[9] = 'True'
+            end
+            else
+            begin
+              LProject.NoEmptyFolder := False;
+            end;
             FProjects.Add(LProject);
 
             LItem := JobsList.Items.Add;
@@ -760,6 +812,7 @@ begin
             LItem.SubItems.Add(LProject.DestFolder);
             LItem.SubItems.Add(LProject.BufferSize.ToString());
             LItem.SubItems.Add(LProject.IgnoredFileTypes);
+            LItem.SubItems.Add(LProject.AcceptedFileTypes);
             LItem.SubItems.Add(CompareMethodToStr(LProject.CompareMethod));
             LItem.Checked := LProject.Active;
           end;
@@ -914,18 +967,17 @@ begin
         OperationThread.Synchronize(UpdateProjectName);
         UpdateLogItem(INFO_MSG, 'Starting ' + FProjects[J].ProjectName);
         OperationThread.Synchronize(AddToFullLog);
-
         UpdateLogItem(INFO_MSG, FProjects[J].SourceFolder, FProjects[J].DestFolder);
         OperationThread.Synchronize(AddToFullLog);
-
         UpdateLogItem(INFO_MSG, 'Using ' + CompareMethodToStr(LCompareMethodId));
         OperationThread.Synchronize(AddToFullLog);
-
         UpdateLogItem(INFO_MSG, 'Listing files');
         OperationThread.Synchronize(AddToFullLog);
 
         // file types that will be ignored
-        FFileTypeSplitList.DelimitedText := FProjects[J].IgnoredFileTypes;
+        FIgnoredFileTypesSplitList.DelimitedText := FProjects[J].IgnoredFileTypes;
+        // file types that will be added only
+        FAcceptedFileTypesSplitList.DelimitedText := FProjects[J].AcceptedFileTypes;
 
         // reset lists
         FProgress := 0;
@@ -1012,7 +1064,7 @@ begin
 {$ENDREGION}
 
             // list directories that will be created at destination
-            if not FStop then
+            if (not FStop) and (not FProjects[J].NoEmptyFolder) then
             begin
               LDirsToCreate := TFolderCreatePairs.Create;
               try
@@ -1068,7 +1120,7 @@ begin
                         end
                         else
                         begin
-                          UpdateLogItem(INFO_MSG, '', LDirsToCreate[i].Directory, 'Create directory', 'Folder did not exist');
+                          UpdateLogItem(INFO_MSG, '', LDirsToCreate[i].Directory, 'Create directory', 'Folder does not exist');
                           OperationThread.Synchronize(AddToFullLog);
                         end;
                       end;
@@ -1120,6 +1172,14 @@ begin
                     if FileExists(LFileCopyPairs[i].DestFile) then
                     begin
                       DeleteFile(LFileCopyPairs[i].DestFile);
+                    end;
+
+                    if not TDirectory.Exists(ExtractFileDir(LFileCopyPairs[i].DestFile)) then
+                    begin
+                      if not ForceDirectories(ExtractFileDir(LFileCopyPairs[i].DestFile)) then
+                      begin
+                        RaiseLastOSError;
+                      end;
                     end;
 
                     TFile.Copy(LFileCopyPairs[i].SourceFile, LFileCopyPairs[i].DestFile, True);
@@ -1704,6 +1764,7 @@ begin
   UpdateProgress;
   UpdateState;
   UpdateChangeCount;
+  UpdatedSummary;
 end;
 
 procedure TMainForm.ResetLogItem(var LogItem: TLogItem);
@@ -1755,7 +1816,7 @@ begin
     end;
     for I := 0 to FProjects.Count - 1 do
     begin
-      LLine := FProjects[i].SourceFolder + '|' + FProjects[i].DestFolder + '|' + FProjects[i].ProjectName + '|' + BoolToStr(FProjects[i].Active, True) + '|' + BoolToStr(FProjects[i].DeleteFromDest, True) + '|' + FProjects[i].BufferSize.ToString() + '|' + FProjects[i].IgnoredFileTypes + '|' + FProjects[i].CompareMethod.ToString;
+      LLine := FProjects[i].SourceFolder + '|' + FProjects[i].DestFolder + '|' + FProjects[i].ProjectName + '|' + BoolToStr(FProjects[i].Active, True) + '|' + BoolToStr(FProjects[i].DeleteFromDest, True) + '|' + FProjects[i].BufferSize.ToString() + '|' + FProjects[i].IgnoredFileTypes + '|' + FProjects[i].CompareMethod.ToString + '|' + FProjects[i].AcceptedFileTypes + '|' + BoolToStr(FProjects[i].NoEmptyFolder, True);
       LProjectFile.Add(LLine);
     end;
   finally
@@ -1797,6 +1858,12 @@ begin
   begin
     FFiles.Add(AName);
     FStateMsg := 'Found ' + FFiles.Count.ToString + ' files';
+  end
+  else if CheckIfFileShouldBeAdded(AName) then
+  begin
+    FFiles.Add(AName);
+    FStateMsg := 'Found ' + FFiles.Count.ToString + ' files';
+
   end;
 end;
 
@@ -1943,6 +2010,14 @@ begin
   ChangesLabel.Caption := 'Changes found: ' + FloatToStr(FChangeCount);
 end;
 
+procedure TMainForm.UpdatedSummary;
+begin
+  CopiedLabel.Caption := 'Copied: ' + FloatToStr(FCopiedCount);
+  SkippedLabel.Caption := 'Skipped: ' + FloatToStr(FSkippedCount);
+  ErrorLabel.Caption := 'Errors: ' + FloatToStr(FErrorCount);
+  DeletedLabel.Caption := 'Deleted: ' + FloatToStr(FDeletedCount);
+end;
+
 procedure TMainForm.UpdateLogItem(const LogType: string; const Source: string; const Dest: string = ''; const Operation: string = ''; const Reason: string = '');
 begin
   ResetLogItem(FLogLineToAdd);
@@ -1955,7 +2030,7 @@ end;
 
 procedure TMainForm.UpdateMaxProgres;
 begin
-  ProgressBar.Max := FMaxProgress;
+  ProgressBar.MaxValue := FMaxProgress;
   Taskbar1.ProgressMaxValue := FMaxProgress;
 end;
 
@@ -1964,7 +2039,7 @@ var
   LProgress: Extended;
   LProgressStr: string;
 begin
-  ProgressBar.Position := FProgress;
+  ProgressBar.Progress := FProgress;
   Taskbar1.ProgressValue := FProgress;
   if FMaxProgress > 0 then
   begin

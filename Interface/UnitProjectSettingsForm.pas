@@ -44,6 +44,9 @@ type
     Label4: TLabel;
     Label5: TLabel;
     Label6: TLabel;
+    Label7: TLabel;
+    AcceptedFileTypesEdit: TEdit;
+    NoEmptyFolderBtn: TCheckBox;
     procedure SaveProjectBtnClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormShow(Sender: TObject);
@@ -82,6 +85,8 @@ begin
     BufferEdit.Value := MainForm.FProjects[FItemIndex].BufferSize;
     IgnoreTypesEdit.Text := MainForm.FProjects[FItemIndex].IgnoredFileTypes;
     CompareMethodList.ItemIndex := MainForm.FProjects[FItemIndex].CompareMethod;
+    AcceptedFileTypesEdit.Text := MainForm.FProjects[FItemIndex].AcceptedFileTypes;
+    NoEmptyFolderBtn.Checked := MainForm.FProjects[FItemIndex].NoEmptyFolder;
   end;
 end;
 
@@ -90,7 +95,7 @@ var
   LProjectFile: TProjectFile;
   LItem: TListItem;
 begin
-  if ContainsText(SourceDirEdit.Text, '|') or ContainsText(DestDirEdit.Text, '|') or ContainsText(ProjectNameEdit.Text, '|') or ContainsText(IgnoreTypesEdit.Text, '|') then
+  if ContainsText(SourceDirEdit.Text, '|') or ContainsText(DestDirEdit.Text, '|') or ContainsText(ProjectNameEdit.Text, '|') or ContainsText(IgnoreTypesEdit.Text, '|') or ContainsText(AcceptedFileTypesEdit.Text, '|') then
   begin
     Application.MessageBox('None of the text fields can contain "|". Please remove this character.', 'Error', MB_ICONERROR);
     Exit;
@@ -110,6 +115,8 @@ begin
         LProjectFile.BufferSize := Round(BufferEdit.Value);
         LProjectFile.IgnoredFileTypes := IgnoreTypesEdit.Text;
         LProjectFile.CompareMethod := CompareMethodList.ItemIndex;
+        LProjectFile.AcceptedFileTypes := AcceptedFileTypesEdit.Text;
+        LProjectFile.NoEmptyFolder := NoEmptyFolderBtn.Checked;
         LProjectFile.Active := True;
         if FItemIndex > -1 then
         begin
@@ -134,6 +141,7 @@ begin
         LItem.SubItems.Add(LProjectFile.DestFolder);
         LItem.SubItems.Add(LProjectFile.BufferSize.ToString());
         LItem.SubItems.Add(LProjectFile.IgnoredFileTypes);
+        LItem.SubItems.Add(LProjectFile.AcceptedFileTypes);
         LItem.SubItems.Add(MainForm.CompareMethodToStr(LProjectFile.CompareMethod));
         LItem.Checked := LProjectFile.Active;
 //
