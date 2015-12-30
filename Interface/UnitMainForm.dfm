@@ -44,7 +44,7 @@ object MainForm: TMainForm
     Top = 60
     Width = 1008
     Height = 515
-    ActivePage = TabSheet4
+    ActivePage = TabSheet5
     Align = alClient
     MultiLine = True
     Style = tsFlatButtons
@@ -85,6 +85,7 @@ object MainForm: TMainForm
           end
           item
             Caption = 'Compare Method'
+            Width = 125
           end>
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
@@ -151,7 +152,7 @@ object MainForm: TMainForm
           end>
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
-        Font.Height = -15
+        Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
         GridLines = True
@@ -164,7 +165,6 @@ object MainForm: TMainForm
         ViewStyle = vsReport
         OnCustomDrawSubItem = FullLogListCustomDrawSubItem
         OnData = FullLogListData
-        ExplicitHeight = 346
       end
       object BottomPanel: TPanel
         Left = 0
@@ -174,7 +174,6 @@ object MainForm: TMainForm
         Align = alBottom
         BevelOuter = bvNone
         TabOrder = 1
-        ExplicitTop = 354
         object Bevel3: TBevel
           Left = 895
           Top = 0
@@ -194,7 +193,6 @@ object MainForm: TMainForm
           AutoSize = True
           BevelOuter = bvNone
           TabOrder = 0
-          ExplicitHeight = 127
           object ChangesLabel: TLabel
             AlignWithMargins = True
             Left = 3
@@ -256,7 +254,6 @@ object MainForm: TMainForm
           AutoSize = True
           BevelOuter = bvNone
           TabOrder = 1
-          ExplicitHeight = 127
           object CopiedLabel: TLabel
             AlignWithMargins = True
             Left = 3
@@ -303,7 +300,6 @@ object MainForm: TMainForm
             Font.Name = 'Tahoma'
             Font.Style = [fsBold]
             ParentFont = False
-            ExplicitTop = 49
             ExplicitWidth = 52
           end
           object DeletedLabel: TLabel
@@ -320,7 +316,6 @@ object MainForm: TMainForm
             Font.Name = 'Tahoma'
             Font.Style = [fsBold]
             ParentFont = False
-            ExplicitTop = 71
             ExplicitWidth = 63
           end
         end
@@ -334,8 +329,6 @@ object MainForm: TMainForm
         BevelOuter = bvNone
         Caption = 'ProgressPanel'
         TabOrder = 2
-        ExplicitLeft = 3
-        ExplicitTop = 468
         object ProgressBar: TGauge
           Left = 80
           Top = 0
@@ -492,6 +485,7 @@ object MainForm: TMainForm
         Cursor = crHandPoint
         Hint = 'Support this project by making a donation through PayPal'
         ImageIndex = 5
+        OnClick = DonateBtnClick
       end
       object AboutBtn: TToolButton
         Left = 519
@@ -683,7 +677,7 @@ object MainForm: TMainForm
     Left = 408
     Top = 312
     Bitmap = {
-      494C01010D006800900030003000FFFFFFFF2000FFFFFFFFFFFFFFFF424D3600
+      494C01010D006800940030003000FFFFFFFF2000FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000C0000000C000000001002000000000000040
       0200000000000000000000000000000000000000000000000000000000000000
       000000000004000000080000000A0000000A0000000A0000000A0000000A0000

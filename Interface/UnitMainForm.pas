@@ -157,6 +157,7 @@ type
     procedure LogsBtnClick(Sender: TObject);
     procedure FullLogListCustomDrawSubItem(Sender: TCustomListView; Item: TListItem; SubItem: Integer; State: TCustomDrawState; var DefaultDraw: Boolean);
     procedure C1Click(Sender: TObject);
+    procedure DonateBtnClick(Sender: TObject);
   private
     { Private declarations }
     FFiles: TStringList;
@@ -392,6 +393,11 @@ begin
   MainMenu1.Items[2].Items[0].Enabled := False;
   MainMenu1.Items[2].Items[1].Enabled := False;
   MainMenu1.Items[2].Items[2].Enabled := True;
+end;
+
+procedure TMainForm.DonateBtnClick(Sender: TObject);
+begin
+  ShellExecute(Handle, 'open', 'https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=W23WXKQXNABK8', nil, nil, SW_SHOWNORMAL);
 end;
 
 procedure TMainForm.EditProjectBtnClick(Sender: TObject);
