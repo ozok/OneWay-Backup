@@ -6265,8 +6265,8 @@ object AboutForm: TAboutForm
     Height = 13
     Align = alTop
     Alignment = taCenter
-    Caption = 'OneWay Backup 1.0'
-    ExplicitWidth = 98
+    Caption = 'OneWay Backup 1.0.933'
+    ExplicitWidth = 120
   end
   object sLabel2: TLabel
     AlignWithMargins = True

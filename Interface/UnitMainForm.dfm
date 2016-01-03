@@ -677,7 +677,7 @@ object MainForm: TMainForm
     Left = 408
     Top = 312
     Bitmap = {
-      494C01010D006800940030003000FFFFFFFF2000FFFFFFFFFFFFFFFF424D3600
+      494C01010D006800980030003000FFFFFFFF2000FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000C0000000C000000001002000000000000040
       0200000000000000000000000000000000000000000000000000000000000000
       000000000004000000080000000A0000000A0000000A0000000A0000000A0000
@@ -11549,6 +11549,7 @@ object MainForm: TMainForm
   object AppIniFileStorage: TJvAppIniFileStorage
     StorageOptions.BooleanStringTrueValues = 'TRUE, YES, Y'
     StorageOptions.BooleanStringFalseValues = 'FALSE, NO, N'
+    Location = flCustom
     SubStorages = <>
     Left = 864
     Top = 308
@@ -11634,5 +11635,25 @@ object MainForm: TMainForm
         OnClick = AboutBtnClick
       end
     end
+  end
+  object UpdateChecker: TJvHttpUrlGrabber
+    FileName = 'output.txt'
+    OutputMode = omStream
+    Agent = 'JEDI-VCL'
+    Port = 0
+    ProxyAddresses = 'proxyserver'
+    ProxyIgnoreList = '<local>'
+    OnDoneStream = UpdateCheckerDoneStream
+    Left = 883
+    Top = 386
+  end
+  object UpdateThread: TJvThread
+    Exclusive = True
+    MaxCount = 0
+    RunOnCreate = True
+    FreeOnTerminate = True
+    OnExecute = UpdateThreadExecute
+    Left = 800
+    Top = 384
   end
 end

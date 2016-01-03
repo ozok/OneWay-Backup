@@ -35,7 +35,8 @@ uses
   IdSSLOpenSSL, IniFiles, System.ImageList, Vcl.ImgList, Vcl.Buttons,
   JvComputerInfoEx, IOUtils, JvCaptionButton, JvTrayIcon, UnitLogItems,
   JvFormPlacement, JvAppStorage, JvAppIniStorage, IdText, IdAttachmentFile,
-  IdAttachment, Vcl.ToolWin, Vcl.Samples.Gauges;
+  IdAttachment, Vcl.ToolWin, Vcl.Samples.Gauges, JvThread, JvUrlListGrabber,
+  JvUrlGrabbers;
 
 type
   TMainForm = class(TForm)
@@ -123,6 +124,8 @@ type
     ProgressPanel: TPanel;
     PercentageLabel: TLabel;
     Bevel4: TBevel;
+    UpdateChecker: TJvHttpUrlGrabber;
+    UpdateThread: TJvThread;
     procedure FormCreate(Sender: TObject);
     procedure RunJobsBtnClick(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -158,6 +161,8 @@ type
     procedure FullLogListCustomDrawSubItem(Sender: TCustomListView; Item: TListItem; SubItem: Integer; State: TCustomDrawState; var DefaultDraw: Boolean);
     procedure C1Click(Sender: TObject);
     procedure DonateBtnClick(Sender: TObject);
+    procedure UpdateThreadExecute(Sender: TObject; Params: Pointer);
+    procedure UpdateCheckerDoneStream(Sender: TObject; Stream: TStream; StreamSize: Integer; Url: string);
   private
     { Private declarations }
     FFiles: TStringList;
@@ -210,6 +215,9 @@ type
     function DeleteFileUsingSHFO(const Source: string): Boolean;
     function GenerateEmailShortInfoText(): string;
     procedure UpdateLogItem(const LogType: string; const Source: string; const Dest: string = ''; const Operation: string = ''; const Reason: string = '');
+
+    // checks if a parameter is passed to the program
+    function CheckIfArgumentExists(const Param: string): Boolean;
   public
     { Public declarations }
     FProjects: TProjectFiles;
@@ -223,13 +231,15 @@ type
 
 var
   MainForm: TMainForm;
+  CheckUpdate: Boolean;
 
 const
-  PROGRAM_TITLE = 'OneWay Backup RC';
+  PROGRAM_TITLE = 'OneWay Backup';
   ERROR_MSG = 'Error';
   INFO_MSG = 'Info';
   SKIPPED_MSG = 'Skip';
   SUCCESS_MSG = 'Success';
+  BuildInt = 933;
 
 implementation
 
@@ -253,6 +263,7 @@ begin
   ProjectSettingsForm.ProjectNameEdit.Clear;
   ProjectSettingsForm.BufferEdit.Text := '8192';
   ProjectSettingsForm.DeleteFromDestBtn.Checked := False;
+  ProjectSettingsForm.IgnoreTypesEdit.Clear;
   ProjectSettingsForm.Show;
   Self.Enabled := False;
 end;
@@ -271,6 +282,21 @@ end;
 procedure TMainForm.C1Click(Sender: TObject);
 begin
   ShellExecute(Handle, 'open', 'changelog.txt', nil, nil, SW_SHOWNORMAL);
+end;
+
+function TMainForm.CheckIfArgumentExists(const Param: string): Boolean;
+var
+  I: Integer;
+begin
+  Result := False;
+  for I := 0 to ParamCount do
+  begin
+    if Param = ParamStr(i).ToLower then
+    begin
+      Result := True;
+      Break;
+    end;
+  end;
 end;
 
 function TMainForm.CheckIfFileCanBeAdded(const FilePath: string): Boolean;
@@ -543,18 +569,6 @@ var
   I: Integer;
   LParamStr: string;
 begin
-  // place label on the progressbar
-  // looks better this way
-//  PercentageLabel.Parent := ProgressBar.;
-//  PercentageLabel.AutoSize := False;
-//  PercentageLabel.Transparent := True;
-//  PercentageLabel.Top := 0;
-//  PercentageLabel.Left := 0;
-//  PercentageLabel.Width := ProgressBar.ClientWidth;
-//  PercentageLabel.Height := ProgressBar.ClientHeight;
-//  PercentageLabel.Alignment := taCenter;
-//  PercentageLabel.Layout := tlCenter;
-
   Self.Caption := PROGRAM_TITLE;
   LoadProjects;
   LoadSettings;
@@ -631,6 +645,14 @@ begin
   if FRun then
   begin
     RunJobsBtnClick(Self);
+  end
+  else
+  begin
+    CheckUpdate := not CheckIfArgumentExists('/nocheckupdate');
+    if CheckUpdate then
+    begin
+      UpdateThread.Execute(nil);
+    end;
   end;
 end;
 
@@ -1967,6 +1989,35 @@ begin
   ChangesLabel.Caption := 'Changes found: ' + FloatToStr(FChangeCount);
 end;
 
+procedure TMainForm.UpdateCheckerDoneStream(Sender: TObject; Stream: TStream; StreamSize: Integer; Url: string);
+var
+  LVersionFile: TStringList;
+  LLatestVersion: Integer;
+begin
+  LVersionFile := TStringList.Create;
+  try
+    if StreamSize > 0 then
+    begin
+      LVersionFile.LoadFromStream(Stream);
+      if LVersionFile.Count = 1 then
+      begin
+        if TryStrToInt(LVersionFile.Strings[0], LLatestVersion) then
+        begin
+          if LLatestVersion > BuildInt then
+          begin
+            if ID_YES = Application.MessageBox('There is a new version. Would you like to go homepage and download it?', 'New Version', MB_ICONQUESTION or MB_YESNO) then
+            begin
+              ShellExecute(handle, 'open', 'http://www.ozok26.com/oneway-backup-9', nil, nil, SW_NORMAL);
+            end;
+          end;
+        end;
+      end;
+    end;
+  finally
+    FreeAndNil(LVersionFile);
+  end;
+end;
+
 procedure TMainForm.UpdatedSummary;
 begin
   CopiedLabel.Caption := 'Copied: ' + FloatToStr(FCopiedCount);
@@ -2016,6 +2067,17 @@ end;
 procedure TMainForm.UpdateState;
 begin
   StateLabel.Caption := FStateMsg;
+end;
+
+procedure TMainForm.UpdateThreadExecute(Sender: TObject; Params: Pointer);
+begin
+  // download version text from server
+  with UpdateChecker do
+  begin
+    URL := 'http://sourceforge.net/projects/oneway-backup/files/version.txt/download';
+    Start;
+  end;
+  UpdateThread.CancelExecute;
 end;
 
 end.

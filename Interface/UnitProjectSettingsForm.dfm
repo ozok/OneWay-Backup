@@ -87,7 +87,6 @@ object ProjectSettingsForm: TProjectSettingsForm
     Caption = 'Save'
     TabOrder = 7
     OnClick = SaveProjectBtnClick
-    ExplicitTop = 344
   end
   object DeleteFromDestBtn: TCheckBox
     Left = 8
@@ -121,9 +120,9 @@ object ProjectSettingsForm: TProjectSettingsForm
     Height = 21
     Style = csDropDownList
     Anchors = [akTop, akRight]
-    ItemIndex = 0
+    ItemIndex = 3
     TabOrder = 6
-    Text = 'Full File Search + Last Modified Date'
+    Text = 'Just Last Modified Date'
     Items.Strings = (
       'Full File Search + Last Modified Date'
       'MD5 + Last Modified Date'
