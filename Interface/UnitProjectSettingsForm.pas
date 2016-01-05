@@ -44,10 +44,13 @@ type
     Label4: TLabel;
     Label5: TLabel;
     Label6: TLabel;
+    Button1: TButton;
+    Button2: TButton;
     procedure SaveProjectBtnClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormShow(Sender: TObject);
     procedure SwapFoldersBTnClick(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -64,6 +67,11 @@ uses
   UnitMainForm;
 
 {$R *.dfm}
+
+procedure TProjectSettingsForm.Button1Click(Sender: TObject);
+begin
+  // todo: link to wiki page
+end;
 
 procedure TProjectSettingsForm.FormClose(Sender: TObject; var Action: TCloseAction);
 begin

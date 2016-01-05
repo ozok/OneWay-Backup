@@ -55,6 +55,10 @@ type
     Label7: TLabel;
     PageControl1: TPageControl;
     TabSheet1: TTabSheet;
+    TabSheet2: TTabSheet;
+    TabSheet3: TTabSheet;
+    ComboBox1: TComboBox;
+    Label8: TLabel;
     procedure CancelBtnClick(Sender: TObject);
     procedure SaveBtnClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);

@@ -70,30 +70,16 @@ begin
     Reason := 'Destination file doesn''t exist';
     Exit;
   end;
-  if CompareMethod <> 3 then
-  begin
-    if not CompareLastModifiedDate(FileName1, FileName2) then
-    begin
-      Reason := 'Last modified dates are different';
-      Result := False;
-      Exit;
-    end;
-  end;
-
-  // if just compare last modified date is selected
-  // no need to go any further
-  if CompareMethod = 3 then
-  begin
-    Result := CompareLastModifiedDate(FileName1, FileName2);
-    Reason := 'Last modified dates are different';
-    Exit;
-  end;
 
   try
-    LFS1 := TFileStream.Create(FileName1, fmOpenRead or fmShareDenyWrite);
-    LFS2 := TFileStream.Create(FileName2, fmOpenRead or fmShareDenyWrite);
-    LFS1.Seek(0, soBeginning);
-    LFS2.Seek(0, soBeginning);
+    // last modified date comparison does not require files to be opened
+    if CompareMethod <> 3 then
+    begin
+      LFS1 := TFileStream.Create(FileName1, fmOpenRead or fmShareDenyWrite);
+      LFS2 := TFileStream.Create(FileName2, fmOpenRead or fmShareDenyWrite);
+      LFS1.Seek(0, soBeginning);
+      LFS2.Seek(0, soBeginning);
+    end;
     case CompareMethod of
       0:
         begin
@@ -110,19 +96,29 @@ begin
           Reason := 'Different file sizes';
           Result := LFS1.Size = LFS2.Size;
         end;
+      3:
+        begin
+          Result := CompareLastModifiedDate(FileName1, FileName2);
+          Reason := 'Last modified dates are different';
+        end;
     end;
     if Result then
     begin
       Reason := '';
     end;
   finally
-    if Assigned(LFS1) then
-    begin
-      LFS1.Free;
-    end;
-    if Assigned(LFS2) then
-    begin
-      LFS2.Free;
+    try
+      if Assigned(LFS1) then
+      begin
+        LFS1.Free;
+      end;
+      if Assigned(LFS2) then
+      begin
+        LFS2.Free;
+      end;
+    except
+      on E: Exception do
+
     end;
   end;
 end;

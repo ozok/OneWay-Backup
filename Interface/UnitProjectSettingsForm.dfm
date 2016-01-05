@@ -122,12 +122,12 @@ object ProjectSettingsForm: TProjectSettingsForm
     Anchors = [akTop, akRight]
     ItemIndex = 3
     TabOrder = 6
-    Text = 'Just Last Modified Date'
+    Text = 'Last Modified Date'
     Items.Strings = (
-      'Full File Search + Last Modified Date'
-      'MD5 + Last Modified Date'
-      'Compare Sizes + Last Modified Date'
-      'Just Last Modified Date')
+      'Full File Search'
+      'MD5'
+      'Compare Sizes'
+      'Last Modified Date')
   end
   object SwapFoldersBTn: TButton
     Left = 607
@@ -170,5 +170,23 @@ object ProjectSettingsForm: TProjectSettingsForm
     ButtonKind = bkClassic
     Value = 8192.000000000000000000
     TabOrder = 5
+  end
+  object Button1: TButton
+    Left = 356
+    Top = 238
+    Width = 25
+    Height = 25
+    Caption = '?'
+    TabOrder = 9
+    OnClick = Button1Click
+  end
+  object Button2: TButton
+    Left = 248
+    Top = 209
+    Width = 25
+    Height = 25
+    Caption = '?'
+    TabOrder = 10
+    OnClick = Button1Click
   end
 end

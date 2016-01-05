@@ -22,9 +22,36 @@ object EmailConfForm: TEmailConfForm
     Top = 0
     Width = 375
     Height = 304
-    ActivePage = TabSheet1
+    ActivePage = TabSheet3
     Align = alClient
     TabOrder = 0
+    object TabSheet3: TTabSheet
+      Caption = 'General'
+      ImageIndex = 2
+    end
+    object TabSheet2: TTabSheet
+      Caption = 'Logs'
+      ImageIndex = 1
+      DesignSize = (
+        367
+        276)
+      object Label8: TLabel
+        Left = 20
+        Top = 6
+        Width = 102
+        Height = 13
+        Caption = 'Log file name format:'
+      end
+      object ComboBox1: TComboBox
+        Left = 128
+        Top = 3
+        Width = 236
+        Height = 21
+        Anchors = [akLeft, akTop, akRight]
+        TabOrder = 0
+        Text = 'ComboBox1'
+      end
+    end
     object TabSheet1: TTabSheet
       Caption = 'Email Settings'
       DesignSize = (
@@ -82,10 +109,10 @@ object EmailConfForm: TEmailConfForm
       object sLabel1: TLabel
         Left = 64
         Top = 218
-        Width = 281
+        Width = 251
         Height = 14
         Anchors = [akLeft, akTop, akRight]
-        Caption = '!!!Your password will be saved in plain text!!!'
+        Caption = 'Your password will be saved in plain text'
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clRed
         Font.Height = -12

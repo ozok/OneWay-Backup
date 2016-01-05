@@ -126,6 +126,7 @@ type
     Bevel4: TBevel;
     UpdateChecker: TJvHttpUrlGrabber;
     UpdateThread: TJvThread;
+    OnlineHelp1: TMenuItem;
     procedure FormCreate(Sender: TObject);
     procedure RunJobsBtnClick(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -163,6 +164,7 @@ type
     procedure DonateBtnClick(Sender: TObject);
     procedure UpdateThreadExecute(Sender: TObject; Params: Pointer);
     procedure UpdateCheckerDoneStream(Sender: TObject; Stream: TStream; StreamSize: Integer; Url: string);
+    procedure OnlineHelp1Click(Sender: TObject);
   private
     { Private declarations }
     FFiles: TStringList;
@@ -872,6 +874,11 @@ begin
   begin
     ShellExecute(handle, 'open', PWideChar(FProjects[JobsList.ItemIndex].DestFolder), nil, nil, SW_NORMAL);
   end;
+end;
+
+procedure TMainForm.OnlineHelp1Click(Sender: TObject);
+begin
+  ShellExecute(Handle, 'open', 'https://github.com/ozok/OneWay-Backup/wiki', nil, nil, SW_SHOWNORMAL);
 end;
 
 procedure TMainForm.OperationThreadException(Sender: TIdThreadComponent; AException: Exception);
