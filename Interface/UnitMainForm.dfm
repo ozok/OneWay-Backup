@@ -44,7 +44,7 @@ object MainForm: TMainForm
     Top = 60
     Width = 1008
     Height = 515
-    ActivePage = TabSheet4
+    ActivePage = TabSheet5
     Align = alClient
     MultiLine = True
     Style = tsFlatButtons
@@ -106,7 +106,7 @@ object MainForm: TMainForm
       Caption = 'TabSheet4'
       object Bevel4: TBevel
         Left = 0
-        Top = 451
+        Top = 461
         Width = 1000
         Height = 3
         Align = alBottom
@@ -117,7 +117,7 @@ object MainForm: TMainForm
         Left = 0
         Top = 0
         Width = 1000
-        Height = 351
+        Height = 361
         Align = alClient
         BorderStyle = bsNone
         Columns = <
@@ -168,7 +168,7 @@ object MainForm: TMainForm
       end
       object BottomPanel: TPanel
         Left = 0
-        Top = 351
+        Top = 361
         Width = 1000
         Height = 100
         Align = alBottom
@@ -193,7 +193,6 @@ object MainForm: TMainForm
           AutoSize = True
           BevelOuter = bvNone
           TabOrder = 0
-          ExplicitWidth = 895
           object ChangesLabel: TLabel
             AlignWithMargins = True
             Left = 3
@@ -322,9 +321,9 @@ object MainForm: TMainForm
       end
       object ProgressPanel: TPanel
         Left = 0
-        Top = 454
+        Top = 464
         Width = 1000
-        Height = 30
+        Height = 20
         Align = alBottom
         BevelOuter = bvNone
         Caption = 'ProgressPanel'
@@ -333,7 +332,7 @@ object MainForm: TMainForm
           Left = 80
           Top = 0
           Width = 920
-          Height = 30
+          Height = 20
           Align = alClient
           BackColor = clBtnFace
           BorderStyle = bsNone
@@ -351,7 +350,7 @@ object MainForm: TMainForm
           Left = 0
           Top = 0
           Width = 80
-          Height = 30
+          Height = 20
           Align = alLeft
           Alignment = taCenter
           AutoSize = False
@@ -364,6 +363,7 @@ object MainForm: TMainForm
           ParentFont = False
           Layout = tlCenter
           ExplicitTop = -6
+          ExplicitHeight = 30
         end
       end
     end
@@ -390,7 +390,6 @@ object MainForm: TMainForm
       Images = ImageList1
       List = True
       TabOrder = 0
-      ExplicitWidth = 757
       object AddNewProjectBtn: TToolButton
         Left = 0
         Top = 0
@@ -678,7 +677,7 @@ object MainForm: TMainForm
     Left = 408
     Top = 312
     Bitmap = {
-      494C01010D006800C40030003000FFFFFFFF2000FFFFFFFFFFFFFFFF424D3600
+      494C01010D006800CC0030003000FFFFFFFF2000FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000C0000000C000000001002000000000000040
       0200000000000000000000000000000000000000000000000000000000000000
       000000000002000000080000000C0000000C0000000C0000000D0000000D0000

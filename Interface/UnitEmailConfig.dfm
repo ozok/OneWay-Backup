@@ -28,6 +28,16 @@ object EmailConfForm: TEmailConfForm
     object TabSheet3: TTabSheet
       Caption = 'General'
       ImageIndex = 2
+      object CheckUpdateBtn: TCheckBox
+        Left = 20
+        Top = 3
+        Width = 165
+        Height = 17
+        Caption = 'Check updates on start up'
+        Checked = True
+        State = cbChecked
+        TabOrder = 0
+      end
     end
     object TabSheet2: TTabSheet
       Caption = 'Logs'
@@ -42,14 +52,23 @@ object EmailConfForm: TEmailConfForm
         Height = 13
         Caption = 'Log file name format:'
       end
-      object ComboBox1: TComboBox
+      object LogFilePatterList: TComboBox
         Left = 128
         Top = 3
         Width = 236
         Height = 21
+        Style = csDropDownList
         Anchors = [akLeft, akTop, akRight]
+        ItemIndex = 0
         TabOrder = 0
-        Text = 'ComboBox1'
+        Text = 'YYYYMMDDHHMMSS'
+        Items.Strings = (
+          'YYYYMMDDHHMMSS'
+          'YYYY-MM-DD-HH-MM-SS'
+          'MMDDYYYYHHMMSS'
+          'MM-DD-YYYY-HH-MM-SS'
+          'DDMMYYYYHHMMSS'
+          'DD-MM-YYYY-HH-MM-SS')
       end
     end
     object TabSheet1: TTabSheet
@@ -120,16 +139,6 @@ object EmailConfForm: TEmailConfForm
         Font.Style = [fsBold, fsUnderline]
         ParentFont = False
       end
-      object CancelBtn: TButton
-        Left = 203
-        Top = 248
-        Width = 75
-        Height = 25
-        Anchors = [akRight, akBottom]
-        Caption = 'Cancel'
-        TabOrder = 0
-        OnClick = CancelBtnClick
-      end
       object FromEdit: TEdit
         Left = 64
         Top = 8
@@ -142,7 +151,7 @@ object EmailConfForm: TEmailConfForm
         Font.Name = 'Tahoma'
         Font.Style = []
         ParentFont = False
-        TabOrder = 1
+        TabOrder = 0
       end
       object HostEdit: TEdit
         Left = 64
@@ -156,7 +165,7 @@ object EmailConfForm: TEmailConfForm
         Font.Name = 'Tahoma'
         Font.Style = []
         ParentFont = False
-        TabOrder = 2
+        TabOrder = 1
       end
       object PassEdit: TEdit
         Left = 64
@@ -171,7 +180,7 @@ object EmailConfForm: TEmailConfForm
         Font.Style = []
         ParentFont = False
         PasswordChar = '*'
-        TabOrder = 3
+        TabOrder = 2
       end
       object PortEdit: TJvSpinEdit
         Left = 64
@@ -181,7 +190,7 @@ object EmailConfForm: TEmailConfForm
         CheckMinValue = True
         ButtonKind = bkClassic
         Value = 25.000000000000000000
-        TabOrder = 4
+        TabOrder = 3
       end
       object ReportTypeList: TComboBox
         Left = 64
@@ -190,22 +199,12 @@ object EmailConfForm: TEmailConfForm
         Height = 21
         Style = csDropDownList
         ItemIndex = 2
-        TabOrder = 5
+        TabOrder = 4
         Text = 'HTML Zipped Attachment'
         Items.Strings = (
           'CSV Zipped Attachment'
           'HTML EMail Body'
           'HTML Zipped Attachment')
-      end
-      object SaveBtn: TButton
-        Left = 286
-        Top = 248
-        Width = 75
-        Height = 25
-        Anchors = [akRight, akBottom]
-        Caption = 'Save'
-        TabOrder = 6
-        OnClick = SaveBtnClick
       end
       object SendTestBtn: TButton
         Left = 3
@@ -214,7 +213,7 @@ object EmailConfForm: TEmailConfForm
         Height = 25
         Anchors = [akLeft, akBottom]
         Caption = 'Send Test Mail'
-        TabOrder = 7
+        TabOrder = 5
         OnClick = SendTestBtnClick
       end
       object ToEdit: TEdit
@@ -229,7 +228,7 @@ object EmailConfForm: TEmailConfForm
         Font.Name = 'Tahoma'
         Font.Style = []
         ParentFont = False
-        TabOrder = 8
+        TabOrder = 6
       end
       object UserNameEdit: TEdit
         Left = 64
@@ -243,7 +242,7 @@ object EmailConfForm: TEmailConfForm
         Font.Name = 'Tahoma'
         Font.Style = []
         ParentFont = False
-        TabOrder = 9
+        TabOrder = 7
       end
     end
   end

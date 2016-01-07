@@ -38,8 +38,6 @@ type
     UserNameEdit: TEdit;
     PassEdit: TEdit;
     sLabel1: TLabel;
-    SaveBtn: TButton;
-    CancelBtn: TButton;
     SendTestBtn: TButton;
     IdMessage1: TIdMessage;
     IdSMTP1: TIdSMTP;
@@ -57,10 +55,10 @@ type
     TabSheet1: TTabSheet;
     TabSheet2: TTabSheet;
     TabSheet3: TTabSheet;
-    ComboBox1: TComboBox;
+    LogFilePatterList: TComboBox;
     Label8: TLabel;
+    CheckUpdateBtn: TCheckBox;
     procedure CancelBtnClick(Sender: TObject);
-    procedure SaveBtnClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure SendTestBtnClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -88,33 +86,6 @@ begin
 end;
 
 procedure TEmailConfForm.FormClose(Sender: TObject; var Action: TCloseAction);
-begin
-  MainForm.Enabled := True;
-  MainForm.BringToFront;
-end;
-
-procedure TEmailConfForm.FormCreate(Sender: TObject);
-var
-  LEmailSetFile: TIniFile;
-begin
-  LEmailSetFile := TIniFile.Create(MainForm.AppDataFolder + '\email.ini');
-  try
-    with LEmailSetFile do
-    begin
-      FromEdit.Text := ReadString('EMail', 'From', '');
-      ToEdit.Text := ReadString('Email', 'To', '');
-      HostEdit.Text := ReadString('Email', 'Host', '');
-      PortEdit.Text := ReadString('Email', 'Port', '25');
-      UserNameEdit.Text := ReadString('Email', 'User', '');
-      PassEdit.Text := ReadString('Email', 'Pass', '');
-      ReportTypeList.ItemIndex := ReadInteger('Email', 'ReportType', 2);
-    end;
-  finally
-    LEmailSetFile.Free;
-  end;
-end;
-
-procedure TEmailConfForm.SaveBtnClick(Sender: TObject);
 var
   LEmailSetFile: TIniFile;
 begin
@@ -129,11 +100,36 @@ begin
       WriteString('Email', 'User', UserNameEdit.Text);
       WriteString('Email', 'Pass', PassEdit.Text);
       WriteInteger('Email', 'ReportType', ReportTypeList.ItemIndex);
+      WriteBool('general', 'update', CheckUpdateBtn.Checked);
     end;
   finally
     LEmailSetFile.Free;
   end;
-  Close;
+
+  MainForm.Enabled := True;
+  MainForm.BringToFront;
+end;
+
+procedure TEmailConfForm.FormCreate(Sender: TObject);
+var
+  LEmailSetFile: TIniFile;
+begin
+  LEmailSetFile := TIniFile.Create(MainForm.AppDataFolder + '\settings.ini');
+  try
+    with LEmailSetFile do
+    begin
+      FromEdit.Text := ReadString('EMail', 'From', '');
+      ToEdit.Text := ReadString('Email', 'To', '');
+      HostEdit.Text := ReadString('Email', 'Host', '');
+      PortEdit.Text := ReadString('Email', 'Port', '25');
+      UserNameEdit.Text := ReadString('Email', 'User', '');
+      PassEdit.Text := ReadString('Email', 'Pass', '');
+      ReportTypeList.ItemIndex := ReadInteger('Email', 'ReportType', 2);
+      CheckUpdateBtn.Checked := ReadBool('general', 'update', true);
+    end;
+  finally
+    LEmailSetFile.Free;
+  end;
 end;
 
 procedure TEmailConfForm.SendTestBtnClick(Sender: TObject);

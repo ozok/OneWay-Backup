@@ -651,7 +651,7 @@ begin
   else
   begin
     CheckUpdate := not CheckIfArgumentExists('/nocheckupdate');
-    if CheckUpdate then
+    if CheckUpdate or EmailConfForm.CheckUpdateBtn.Checked then
     begin
       UpdateThread.Execute(nil);
     end;
@@ -1549,11 +1549,11 @@ begin
     // a csv file should always be saved.
     case EmailConfForm.ReportTypeList.ItemIndex of
       0:
-        LLogFilePath := AppDataFolder + '\logs\' + FormatDateTime('ddmmyyyyhhnnss', Now) + '.csv';
+        LLogFilePath := AppDataFolder + '\logs\' + FormatDateTime(EmailConfForm.LogFilePatterList.Text, Now) + '.csv';
       1:
-        LLogFilePath := AppDataFolder + '\logs\' + FormatDateTime('ddmmyyyyhhnnss', Now) + '.html';
+        LLogFilePath := AppDataFolder + '\logs\' + FormatDateTime(EmailConfForm.LogFilePatterList.Text, Now) + '.html';
       2:
-        LLogFilePath := AppDataFolder + '\logs\' + FormatDateTime('ddmmyyyyhhnnss', Now) + '.html';
+        LLogFilePath := AppDataFolder + '\logs\' + FormatDateTime(EmailConfForm.LogFilePatterList.Text, Now) + '.html';
     end;
 
     if FStop then
