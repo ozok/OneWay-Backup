@@ -165,7 +165,7 @@ object EmailConfForm: TEmailConfForm
         Font.Name = 'Tahoma'
         Font.Style = []
         ParentFont = False
-        TabOrder = 1
+        TabOrder = 2
       end
       object PassEdit: TEdit
         Left = 64
@@ -180,7 +180,7 @@ object EmailConfForm: TEmailConfForm
         Font.Style = []
         ParentFont = False
         PasswordChar = '*'
-        TabOrder = 2
+        TabOrder = 5
       end
       object PortEdit: TJvSpinEdit
         Left = 64
@@ -199,7 +199,7 @@ object EmailConfForm: TEmailConfForm
         Height = 21
         Style = csDropDownList
         ItemIndex = 2
-        TabOrder = 4
+        TabOrder = 6
         Text = 'HTML Zipped Attachment'
         Items.Strings = (
           'CSV Zipped Attachment'
@@ -213,7 +213,7 @@ object EmailConfForm: TEmailConfForm
         Height = 25
         Anchors = [akLeft, akBottom]
         Caption = 'Send Test Mail'
-        TabOrder = 5
+        TabOrder = 7
         OnClick = SendTestBtnClick
       end
       object ToEdit: TEdit
@@ -228,7 +228,7 @@ object EmailConfForm: TEmailConfForm
         Font.Name = 'Tahoma'
         Font.Style = []
         ParentFont = False
-        TabOrder = 6
+        TabOrder = 1
       end
       object UserNameEdit: TEdit
         Left = 64
@@ -242,7 +242,7 @@ object EmailConfForm: TEmailConfForm
         Font.Name = 'Tahoma'
         Font.Style = []
         ParentFont = False
-        TabOrder = 7
+        TabOrder = 4
       end
     end
   end
