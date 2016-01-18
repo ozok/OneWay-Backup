@@ -825,6 +825,27 @@ begin
     begin
       SendEmailBtn.Checked := ReadBool('general', 'sendemail', false);
       ShutdownBtn.Checked := ReadBool('general', 'shutdown', false);
+
+      with JobsList do
+      begin
+        Columns[0].Width := ReadInteger('jobcol', '1', 200);
+        Columns[1].Width := ReadInteger('jobcol', '2', 50);
+        Columns[2].Width := ReadInteger('jobcol', '3', 50);
+        Columns[3].Width := ReadInteger('jobcol', '4', 80);
+        Columns[4].Width := ReadInteger('jobcol', '5', 100);
+        Columns[5].Width := ReadInteger('jobcol', '6', 125);
+      end;
+
+      with FullLogList do
+      begin
+        Columns[0].Width := ReadInteger('fulllog', '1', 200);
+        Columns[1].Width := ReadInteger('fulllog', '2', 110);
+        Columns[2].Width := ReadInteger('fulllog', '3', 50);
+        Columns[3].Width := ReadInteger('fulllog', '4', 300);
+        Columns[4].Width := ReadInteger('fulllog', '5', 100);
+        Columns[5].Width := ReadInteger('fulllog', '6', 300);
+        Columns[6].Width := ReadInteger('fulllog', '7', 140);
+      end;
     end;
   finally
     LSettingsFile.Free;
@@ -1827,6 +1848,27 @@ begin
     begin
       WriteBool('general', 'sendemail', SendEmailBtn.Checked);
       WriteBool('general', 'shutdown', ShutdownBtn.Checked);
+
+      with JobsList do
+      begin
+        WriteInteger('jobcol', '1', Columns[0].Width);
+        WriteInteger('jobcol', '2', Columns[1].Width);
+        WriteInteger('jobcol', '3', Columns[2].Width);
+        WriteInteger('jobcol', '4', Columns[3].Width);
+        WriteInteger('jobcol', '5', Columns[4].Width);
+        WriteInteger('jobcol', '6', Columns[5].Width);
+      end;
+
+      with FullLogList do
+      begin
+        WriteInteger('fulllog', '1', Columns[0].Width);
+        WriteInteger('fulllog', '2', Columns[1].Width);
+        WriteInteger('fulllog', '3', Columns[2].Width);
+        WriteInteger('fulllog', '4', Columns[3].Width);
+        WriteInteger('fulllog', '5', Columns[4].Width);
+        WriteInteger('fulllog', '6', Columns[5].Width);
+        WriteInteger('fulllog', '7', Columns[6].Width);
+      end;
     end;
   finally
     LSettingsFile.Free;
