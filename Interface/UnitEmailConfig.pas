@@ -61,7 +61,7 @@ type
     procedure CancelBtnClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure SendTestBtnClick(Sender: TObject);
-    procedure FormCreate(Sender: TObject);
+    procedure FormShow(Sender: TObject);
   private
     { Private declarations }
   public
@@ -110,11 +110,11 @@ begin
   MainForm.BringToFront;
 end;
 
-procedure TEmailConfForm.FormCreate(Sender: TObject);
+procedure TEmailConfForm.FormShow(Sender: TObject);
 var
   LEmailSetFile: TIniFile;
 begin
-  LEmailSetFile := TIniFile.Create(MainForm.AppDataFolder + '\settings.ini');
+  LEmailSetFile := TIniFile.Create(MainForm.AppDataFolder + '\email.ini');
   try
     with LEmailSetFile do
     begin
