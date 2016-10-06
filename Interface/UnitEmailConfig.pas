@@ -153,7 +153,7 @@ begin
       IdSMTP1.UseTLS := utUseExplicitTLS;
       IdSMTP1.Connect;
       IdSMTP1.Send(IdMessage1);
-      Application.MessageBox('Sent test email.', 'Info', MB_ICONINFORMATION);
+      Application.MessageBox('Test maili gönderildi..', 'Info', MB_ICONINFORMATION);
     except
       on E: Exception do
       begin

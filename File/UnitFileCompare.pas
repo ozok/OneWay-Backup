@@ -119,6 +119,7 @@ begin
     except
       on E: Exception do
 
+
     end;
   end;
 end;
@@ -164,21 +165,44 @@ var
   LBuffer1: array of byte;
   LBuffer2: array of byte;
   LBuffer1Readed, LBuffer2Readed, LBlockSize: integer;
+  LMemStream1, LMemStream2: TMemoryStream;
 begin
   Result := False;
   if FileStream1.Size <> FileStream2.Size then
+  begin
     Exit;
+  end;
 
   FileStream1.Position := 0;
   FileStream2.Position := 0;
 
   if BlockSize > 0 then
+  begin
     LBlockSize := BlockSize
+  end
   else
+  begin
     LBlockSize := 4096;
+  end;
 
   SetLength(LBuffer1, LBlockSize);
   SetLength(LBuffer2, LBlockSize);
+
+  if (LBlockSize >= FileStream1.Size) and (LBlockSize >= FileStream2.Size) then
+  begin
+    LMemStream1 := TMemoryStream.Create;
+    LMemStream2 := TMemoryStream.Create;
+    try
+      LMemStream1.LoadFromStream(FileStream1);
+      LMemStream2.LoadFromStream(FileStream2);
+      Result := CompareMem(LMemStream1.Memory, LMemStream2.Memory, FileStream1.Size);
+      Exit;
+    finally
+      LMemStream1.Free;
+      LMemStream2.Free;
+    end;
+  end;
+
 
   LBuffer1Readed := 1; // just for entering while
 

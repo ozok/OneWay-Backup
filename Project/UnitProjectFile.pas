@@ -34,6 +34,7 @@ type
     DeleteFromDest: Boolean;
     BufferSize: integer;
     IgnoredFileTypes: string;
+    IgnoredFolders: string;
     CompareMethod: integer;
   end;
 

@@ -3,7 +3,7 @@ object ProjectSettingsForm: TProjectSettingsForm
   Top = 0
   BorderStyle = bsToolWindow
   Caption = 'Project Settings'
-  ClientHeight = 308
+  ClientHeight = 341
   ClientWidth = 693
   Color = clBtnFace
   DoubleBuffered = True
@@ -18,7 +18,7 @@ object ProjectSettingsForm: TProjectSettingsForm
   OnShow = FormShow
   DesignSize = (
     693
-    308)
+    341)
   PixelsPerInch = 96
   TextHeight = 13
   object Label1: TLabel
@@ -51,17 +51,26 @@ object ProjectSettingsForm: TProjectSettingsForm
   end
   object Label5: TLabel
     Left = 8
-    Top = 216
+    Top = 262
     Width = 98
     Height = 13
     Caption = 'Buffer size (kbytes):'
   end
   object Label6: TLabel
     Left = 25
-    Top = 243
+    Top = 289
     Width = 86
     Height = 13
     Caption = 'Compare method:'
+  end
+  object Label7: TLabel
+    Left = 8
+    Top = 187
+    Width = 349
+    Height = 13
+    Caption = 
+      'Folders to ignore. Separate with ";" (C:\temp;D:\system;E:\Users' +
+      '\user1)'
   end
   object ProjectNameEdit: TEdit
     AlignWithMargins = True
@@ -80,17 +89,18 @@ object ProjectSettingsForm: TProjectSettingsForm
   end
   object SaveProjectBtn: TButton
     Left = 540
-    Top = 275
+    Top = 308
     Width = 145
     Height = 25
     Anchors = [akRight, akBottom]
     Caption = 'Save'
     TabOrder = 7
     OnClick = SaveProjectBtnClick
+    ExplicitTop = 275
   end
   object DeleteFromDestBtn: TCheckBox
     Left = 8
-    Top = 187
+    Top = 233
     Width = 342
     Height = 20
     Caption = 
@@ -115,7 +125,7 @@ object ProjectSettingsForm: TProjectSettingsForm
   end
   object CompareMethodList: TComboBox
     Left = 117
-    Top = 240
+    Top = 286
     Width = 233
     Height = 21
     Style = csDropDownList
@@ -162,7 +172,7 @@ object ProjectSettingsForm: TProjectSettingsForm
   end
   object BufferEdit: TJvSpinEdit
     Left = 117
-    Top = 213
+    Top = 259
     Width = 125
     Height = 21
     CheckMinValue = True
@@ -173,7 +183,7 @@ object ProjectSettingsForm: TProjectSettingsForm
   end
   object Button1: TButton
     Left = 356
-    Top = 238
+    Top = 259
     Width = 25
     Height = 25
     Caption = '?'
@@ -182,11 +192,26 @@ object ProjectSettingsForm: TProjectSettingsForm
   end
   object Button2: TButton
     Left = 248
-    Top = 209
+    Top = 255
     Width = 25
     Height = 25
     Caption = '?'
     TabOrder = 10
     OnClick = Button1Click
+  end
+  object IgnoreFolderEdit: TEdit
+    AlignWithMargins = True
+    Left = 8
+    Top = 206
+    Width = 677
+    Height = 21
+    AutoSize = False
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clBlack
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 11
   end
 end

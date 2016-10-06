@@ -22,7 +22,7 @@ object EmailConfForm: TEmailConfForm
     Top = 0
     Width = 375
     Height = 304
-    ActivePage = TabSheet3
+    ActivePage = TabSheet1
     Align = alClient
     TabOrder = 0
     object TabSheet3: TTabSheet

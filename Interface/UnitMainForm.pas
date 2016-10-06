@@ -40,11 +40,8 @@ uses
 
 type
   TMainForm = class(TForm)
-    JobsList: TListView;
     SearchSourceFiles: TJvSearchFiles;
     ToolBar: TPanel;
-    StateLabel: TLabel;
-    ProjectNameLabel: TLabel;
     OperationThread: TIdThreadComponent;
     SearchDestFiles: TJvSearchFiles;
     Taskbar1: TTaskbar;
@@ -53,10 +50,7 @@ type
     O2: TMenuItem;
     IdSMTP1: TIdSMTP;
     IdMessage1: TIdMessage;
-    ChangesLabel: TLabel;
-    SpeedLabel: TLabel;
     SpeedTimer: TJvThreadTimer;
-    TimeLabel: TLabel;
     PassedTimeTimer: TJvThreadTimer;
     IdSSLIOHandlerSocketOpenSSL1: TIdSSLIOHandlerSocketOpenSSL;
     ProgressTimer: TTimer;
@@ -66,12 +60,8 @@ type
     ImageList1: TImageList;
     MinimizeToTrayBtn: TJvCaptionButton;
     TrayIcon: TJvTrayIcon;
-    GeneralPage: TPageControl;
-    TabSheet4: TTabSheet;
-    TabSheet5: TTabSheet;
     FormStorage: TJvFormStorage;
     AppIniFileStorage: TJvAppIniFileStorage;
-    FullLogList: TListView;
     tlb1: TToolBar;
     AddNewProjectBtn: TToolButton;
     EditProjectBtn: TToolButton;
@@ -112,21 +102,26 @@ type
     S3: TMenuItem;
     S4: TMenuItem;
     R2: TMenuItem;
+    UpdateChecker: TJvHttpUrlGrabber;
+    UpdateThread: TJvThread;
+    OnlineHelp1: TMenuItem;
+    JobsList: TListView;
+    ProgressPanel: TPanel;
+    ProgressBar: TGauge;
+    PercentageLabel: TLabel;
     BottomPanel: TPanel;
+    Bevel3: TBevel;
     BottomClientPanel: TPanel;
+    ChangesLabel: TLabel;
+    ProjectNameLabel: TLabel;
+    SpeedLabel: TLabel;
+    StateLabel: TLabel;
+    TimeLabel: TLabel;
     BottomSummarPanel: TPanel;
     CopiedLabel: TLabel;
     SkippedLabel: TLabel;
     ErrorLabel: TLabel;
-    Bevel3: TBevel;
     DeletedLabel: TLabel;
-    ProgressBar: TGauge;
-    ProgressPanel: TPanel;
-    PercentageLabel: TLabel;
-    Bevel4: TBevel;
-    UpdateChecker: TJvHttpUrlGrabber;
-    UpdateThread: TJvThread;
-    OnlineHelp1: TMenuItem;
     procedure FormCreate(Sender: TObject);
     procedure RunJobsBtnClick(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -186,6 +181,7 @@ type
     FPreview: Boolean;
     FSendEmail: Boolean;
     FIgnoredFileTypesSplitList: TStringList;
+    FIgnoredFoldersSplitList: TStringList;
     FDeletedCount, FCopiedCount, FSkippedCount, FErrorCount: integer;
     FSourceDirectory, FDestDirectory: string;
     FEmailMode: integer;
@@ -213,11 +209,13 @@ type
     procedure SaveSettings;
     procedure LoadSettings;
     function CheckIfFileCanBeAdded(const FilePath: string): Boolean;
+    function CheckIfFolderCanBeAdded(const FolderPath: string): Boolean;
     function CopyFileUsingSHFO(const Source: string; const Dest: string): Boolean;
     function DeleteFileUsingSHFO(const Source: string): Boolean;
     function GenerateEmailShortInfoText(): string;
     procedure UpdateLogItem(const LogType: string; const Source: string; const Dest: string = ''; const Operation: string = ''; const Reason: string = '');
 
+    function GetExeBuild():string;
     // checks if a parameter is passed to the program
     function CheckIfArgumentExists(const Param: string): Boolean;
   public
@@ -266,6 +264,7 @@ begin
   ProjectSettingsForm.BufferEdit.Text := '8192';
   ProjectSettingsForm.DeleteFromDestBtn.Checked := False;
   ProjectSettingsForm.IgnoreTypesEdit.Clear;
+  ProjectSettingsForm.IgnoreFolderEdit.Clear;
   ProjectSettingsForm.Show;
   Self.Enabled := False;
 end;
@@ -318,10 +317,29 @@ begin
       if LFileExt = FIgnoredFileTypesSplitList[i].ToLower then
       begin
         Result := False;
+      end;
+    end;
+  end;
+end;
+
+function TMainForm.CheckIfFolderCanBeAdded(const FolderPath: string): Boolean;
+var
+  I: Integer;
+begin
+  Result := True;
+  if FIgnoredFoldersSplitList.Count > 0 then
+  begin
+    for I := 0 to FIgnoredFoldersSplitList.Count - 1 do
+    begin
+      // if file's extension is in ignore list
+      if IncludeTrailingPathDelimiter(FolderPath) = IncludeTrailingPathDelimiter(FIgnoredFoldersSplitList[i]) then
+      begin
+        Result := False;
         Break;
       end;
     end;
   end;
+
 end;
 
 procedure TMainForm.CloseQueue;
@@ -460,7 +478,6 @@ begin
   Self.Caption := PROGRAM_TITLE;
   DeleteBtn.Enabled := True;
   PreviewBtn.Enabled := True;
-  GeneralPage.ActivePageIndex := 0;
   SelectAllBtn.Enabled := True;
   SelectNoneBtn.Enabled := True;
   SelectReverseBtn.Enabled := True;
@@ -535,12 +552,12 @@ begin
     ForceDirectories(AppDataFolder + '\logs\')
   end;
 
-  GeneralPage.Pages[0].TabVisible := False;
-  GeneralPage.Pages[1].TabVisible := False;
-  GeneralPage.ActivePageIndex := 0;
   FIgnoredFileTypesSplitList := TStringList.Create;
   FIgnoredFileTypesSplitList.StrictDelimiter := True;
   FIgnoredFileTypesSplitList.Delimiter := ';';
+  FIgnoredFoldersSplitList := TStringList.Create;
+  FIgnoredFoldersSplitList.StrictDelimiter := True;
+  FIgnoredFoldersSplitList.Delimiter := ';';
 
   ToolBar.Height := 54;
 end;
@@ -558,6 +575,7 @@ begin
   end;
   FFullLogItems.Free;
   FIgnoredFileTypesSplitList.Free;
+  FIgnoredFoldersSplitList.Free;
 end;
 
 procedure TMainForm.FormResize(Sender: TObject);
@@ -572,6 +590,7 @@ var
   LParamStr: string;
 begin
   Self.Caption := PROGRAM_TITLE;
+  StatusBar1.Panels[0].Text := StatusBar1.Panels[0].Text + '.' +GetExeBuild;
   LoadProjects;
   LoadSettings;
 
@@ -705,7 +724,7 @@ end;
 
 function TMainForm.GenerateEmailShortInfoText: string;
 begin
-  Result := 'Copied: ' + FloatToStr(FCopiedCount) + sLineBreak + 'Deleted: ' + FloatToStr(FDeletedCount) + sLineBreak + 'Skipped: ' + FloatToStr(FSkippedCount) + sLineBreak + 'Errors: ' + FloatToStr(FErrorCount);
+  Result := 'Copied: ' + FloatToStr(FCopiedCount) + sLineBreak + 'Deleted: ' + FloatToStr(FDeletedCount) + sLineBreak + 'Skipped: ' + FloatToStr(FSkippedCount) + sLineBreak + 'Errors: ' + FloatToStr(FErrorCount) + sLineBreak + 'Computer Name: ' + Info.Identification.LocalComputerName;
 end;
 
 procedure TMainForm.JobsListMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
@@ -794,6 +813,10 @@ begin
             LProject.BufferSize := LSplitList[5].ToInteger();
             LProject.IgnoredFileTypes := LSplitList[6];
             LProject.CompareMethod := LSplitList[7].ToInteger();
+            if LSplitList.Count > 8 then
+            begin
+              LProject.IgnoredFolders := LSplitList[8];
+            end;
             FProjects.Add(LProject);
 
             LItem := JobsList.Items.Add;
@@ -835,17 +858,6 @@ begin
         Columns[4].Width := ReadInteger('jobcol', '5', 100);
         Columns[5].Width := ReadInteger('jobcol', '6', 125);
       end;
-
-      with FullLogList do
-      begin
-        Columns[0].Width := ReadInteger('fulllog', '1', 200);
-        Columns[1].Width := ReadInteger('fulllog', '2', 110);
-        Columns[2].Width := ReadInteger('fulllog', '3', 50);
-        Columns[3].Width := ReadInteger('fulllog', '4', 300);
-        Columns[4].Width := ReadInteger('fulllog', '5', 100);
-        Columns[5].Width := ReadInteger('fulllog', '6', 300);
-        Columns[6].Width := ReadInteger('fulllog', '7', 140);
-      end;
     end;
   finally
     LSettingsFile.Free;
@@ -858,11 +870,6 @@ begin
   LogItem.Source := LogItem.Source.Replace(FSourceDirectory, '');
   LogItem.Destination := LogItem.Destination.Replace(FDestDirectory, '');
   FFullLogItems.LogItems.Add(LogItem);
-
-  FullLogList.Items.Count := FFullLogItems.Count;
-  FullLogList.ItemIndex := FullLogList.Items.Count - 1;
-
-  FullLogList.Items[FullLogList.Items.Count - 1].MakeVisible(False);
 end;
 
 procedure TMainForm.LogBtnClick(Sender: TObject);
@@ -989,8 +996,9 @@ begin
         UpdateLogItem(INFO_MSG, 'Listing files');
         OperationThread.Synchronize(AddToFullLog);
 
-        // file types that will be ignored
+        // file types and folders that will be ignored
         FIgnoredFileTypesSplitList.DelimitedText := FProjects[J].IgnoredFileTypes;
+        FIgnoredFoldersSplitList.DelimitedText := FProjects[J].IgnoredFolders;
 
         // reset lists
         FProgress := 0;
@@ -1372,6 +1380,7 @@ begin
                                 UpdateLogItem(SUCCESS_MSG, LFilesToDelete[i], '', 'Delete file at destination');
                                 OperationThread.Synchronize(AddToFullLog);
                                 Inc(FDeletedCount);
+                                Dec(FErrorCount);
                               end
                               else
                               begin
@@ -1551,6 +1560,7 @@ begin
             LFileCopyAgainPairs.Free;
           end;
         end;
+        FStateMsg := 'Finished ' + FProjects[J].ProjectName;
         UpdateLogItem(INFO_MSG, 'Finished ' + FProjects[J].ProjectName);
         OperationThread.Synchronize(AddToFullLog);
 
@@ -1592,6 +1602,7 @@ begin
     // send email
     if (not FPreview) and (SendEmailBtn.Checked or FSendEmail) then
     begin
+      FStateMsg := 'Saving the log, please wait';
       UpdateLogItem(INFO_MSG, 'Saving the log');
       OperationThread.Synchronize(AddToFullLog);
       // write log file for attachment
@@ -1628,6 +1639,7 @@ begin
 
           if (Length(LFrom) > 0) and (Length(LTo) > 0) and (Length(LHost) > 0) and (Length(LPort) > 0) and (Length(LUser) > 0) and (Length(LPass) > 0) then
           begin
+            FStateMsg := 'Sending email';
             UpdateLogItem(INFO_MSG, 'Sending email');
             OperationThread.Synchronize(AddToFullLog);
 
@@ -1675,11 +1687,13 @@ begin
               IdSMTP1.Connect;
               IdSMTP1.Send(IdMessage1);
 
+              FStateMsg := 'Sent email';
               UpdateLogItem(INFO_MSG, 'Sent email');
               OperationThread.Synchronize(AddToFullLog);
             except
               on E: Exception do
               begin
+                FStateMsg := 'Email send error: ' + E.Message;
                 UpdateLogItem(ERROR_MSG, '', '', 'Send email', E.Message);
                 OperationThread.Synchronize(AddToFullLog);
                 Inc(FErrorCount);
@@ -1693,8 +1707,9 @@ begin
           LAttachment.Free;
         except
           on E: Exception do
+          begin
 
-
+          end;
         end;
         try
              // delete temp zip file containing log
@@ -1707,11 +1722,9 @@ begin
           end;
         except
           on E: Exception do
-            // ignored
+          begin
 
-
-
-
+          end;
         end;
       end;
     end;
@@ -1759,7 +1772,6 @@ begin
   FPreview := True;
   PassedTimeTimer.Enabled := True;
   FFullLogItems.LogItems.Clear;
-  FullLogList.Items.Count := 0;
   SpeedLabel.Caption := 'Speed: N/A';
   ChangesLabel.Caption := 'Changes found: 0';
   TimeLabel.Caption := 'Time: 00:00';
@@ -1768,7 +1780,6 @@ begin
 
   FStop := False;
   DisableUI;
-  GeneralPage.ActivePageIndex := 1;
   OperationThread.Start;
 end;
 
@@ -1802,7 +1813,6 @@ begin
   FPreview := False;
   PassedTimeTimer.Enabled := True;
   FFullLogItems.LogItems.Clear;
-  FullLogList.Items.Count := 0;
   SpeedLabel.Caption := 'Speed: N/A';
   ChangesLabel.Caption := 'Changes found: 0';
   TimeLabel.Caption := 'Time: 00:00';
@@ -1811,7 +1821,6 @@ begin
 
   FStop := False;
   DisableUI;
-  GeneralPage.ActivePageIndex := 1;
   OperationThread.Start;
 end;
 
@@ -1829,7 +1838,7 @@ begin
     end;
     for I := 0 to FProjects.Count - 1 do
     begin
-      LLine := FProjects[i].SourceFolder + '|' + FProjects[i].DestFolder + '|' + FProjects[i].ProjectName + '|' + BoolToStr(FProjects[i].Active, True) + '|' + BoolToStr(FProjects[i].DeleteFromDest, True) + '|' + FProjects[i].BufferSize.ToString() + '|' + FProjects[i].IgnoredFileTypes + '|' + FProjects[i].CompareMethod.ToString;
+      LLine := FProjects[i].SourceFolder + '|' + FProjects[i].DestFolder + '|' + FProjects[i].ProjectName + '|' + BoolToStr(FProjects[i].Active, True) + '|' + BoolToStr(FProjects[i].DeleteFromDest, True) + '|' + FProjects[i].BufferSize.ToString() + '|' + FProjects[i].IgnoredFileTypes + '|' + FProjects[i].CompareMethod.ToString + '|' + FProjects[i].IgnoredFolders;
       LProjectFile.Add(LLine);
     end;
   finally
@@ -1858,17 +1867,6 @@ begin
         WriteInteger('jobcol', '5', Columns[4].Width);
         WriteInteger('jobcol', '6', Columns[5].Width);
       end;
-
-      with FullLogList do
-      begin
-        WriteInteger('fulllog', '1', Columns[0].Width);
-        WriteInteger('fulllog', '2', Columns[1].Width);
-        WriteInteger('fulllog', '3', Columns[2].Width);
-        WriteInteger('fulllog', '4', Columns[3].Width);
-        WriteInteger('fulllog', '5', Columns[4].Width);
-        WriteInteger('fulllog', '6', Columns[5].Width);
-        WriteInteger('fulllog', '7', Columns[6].Width);
-      end;
     end;
   finally
     LSettingsFile.Free;
@@ -1877,7 +1875,10 @@ end;
 
 procedure TMainForm.SearchDestFilesFindDirectory(Sender: TObject; const AName: string);
 begin
-  FFolders.Add(AName);
+  if CheckIfFolderCanBeAdded(AName) then
+  begin
+    FFolders.Add(AName);
+  end;
 end;
 
 procedure TMainForm.SearchSourceFilesFindDirectory(Sender: TObject; const AName: string);
@@ -1887,8 +1888,8 @@ end;
 
 procedure TMainForm.SearchSourceFilesFindFile(Sender: TObject; const AName: string);
 begin
-  // for ignore file type options
-  if CheckIfFileCanBeAdded(AName) then
+  // for ignore file and folder type options
+  if CheckIfFileCanBeAdded(AName) and CheckIfFolderCanBeAdded(ExtractFileDir(AName)) then
   begin
     FFiles.Add(AName);
     FStateMsg := 'Found ' + FFiles.Count.ToString + ' files';
@@ -2128,6 +2129,34 @@ begin
   end;
   UpdateThread.CancelExecute;
 end;
+
+function TMainForm.GetExeBuild: string;
+var
+  VerInfoSize: Cardinal;
+  VerValueSize: Cardinal;
+  Dummy: Cardinal;
+  PVerInfo: Pointer;
+  PVerValue: PVSFixedFileInfo;
+begin
+  Result := '';
+  VerInfoSize := GetFileVersionInfoSize(PWideChar(Application.ExeName), Dummy);
+  GetMem(PVerInfo, VerInfoSize);
+  try
+    if GetFileVersionInfo(PWideChar(Application.ExeName), 0, VerInfoSize, PVerInfo) then
+    begin
+      if VerQueryValue(PVerInfo, '\', Pointer(PVerValue), VerValueSize) then
+      begin
+        with PVerValue^ do
+        begin
+          Result := FloatToStr(LoWord(dwFileVersionLS));
+        end;
+      end;
+    end;
+  finally
+    FreeMem(PVerInfo, VerInfoSize);
+  end;
+end;
+
 
 end.
 

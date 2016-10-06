@@ -46,6 +46,8 @@ type
     Label6: TLabel;
     Button1: TButton;
     Button2: TButton;
+    Label7: TLabel;
+    IgnoreFolderEdit: TEdit;
     procedure SaveProjectBtnClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormShow(Sender: TObject);
@@ -90,6 +92,7 @@ begin
     BufferEdit.Value := MainForm.FProjects[FItemIndex].BufferSize;
     IgnoreTypesEdit.Text := MainForm.FProjects[FItemIndex].IgnoredFileTypes;
     CompareMethodList.ItemIndex := MainForm.FProjects[FItemIndex].CompareMethod;
+    IgnoreFolderEdit.Text := MainForm.FProjects[FItemIndex].IgnoredFolders;
   end;
 end;
 
@@ -98,7 +101,7 @@ var
   LProjectFile: TProjectFile;
   LItem: TListItem;
 begin
-  if ContainsText(SourceDirEdit.Text, '|') or ContainsText(DestDirEdit.Text, '|') or ContainsText(ProjectNameEdit.Text, '|') or ContainsText(IgnoreTypesEdit.Text, '|') then
+  if ContainsText(SourceDirEdit.Text, '|') or ContainsText(DestDirEdit.Text, '|') or ContainsText(ProjectNameEdit.Text, '|') or ContainsText(IgnoreTypesEdit.Text, '|') or ContainsText(IgnoreFolderEdit.Text, '|') then
   begin
     Application.MessageBox('None of the text fields can contain "|". Please remove this character.', 'Error', MB_ICONERROR);
     Exit;
@@ -118,6 +121,7 @@ begin
         LProjectFile.BufferSize := Round(BufferEdit.Value);
         LProjectFile.IgnoredFileTypes := IgnoreTypesEdit.Text;
         LProjectFile.CompareMethod := CompareMethodList.ItemIndex;
+        LProjectFile.IgnoredFolders := IgnoreFolderEdit.Text;
         LProjectFile.Active := True;
         if FItemIndex > -1 then
         begin
